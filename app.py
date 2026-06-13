@@ -17,7 +17,7 @@ def index():
 
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
-    return 'prof-feed'
+    return render_template('feed.html') 
    
 
 @app.route('/profile/<int:id>', methods=['GET', 'POST'])
