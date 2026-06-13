@@ -3,7 +3,21 @@
 {% block TITLE %}Professorenprofil{% endblock %}
 
 {% block CONTENT %}
+<div class="card">
+<div class="card-body">
 
-<h1>Professorenprofil</h1>
+<!-- prof daten werden aus db abgerufen-->
+<h1 class="card-title">{{prof.name}}</h1>
+<p class="card-text"><strong>Fachbereich:</strong>{{prof.fachbereich}}</p>
+<p class="card-text"><strong>Themengebiete:</strong>{{prof.themengebiete}}</p>
+<p class="card-text"><strong>Anforderungen:</strong>{{prof.anforderungen}}</p>
+<p class="card-text"><strong>Verfügbarkeit Status:</strong>{{prof.verfugbarkeit}}</p>
+<a href="{{ url_for('feed')}}" class="btn btn-secondary">Zurück</a>
+
+<!--Link zu anfrageseite wenn screen 4 fertig ist -->
+<a href="anfrageflow" class="btn btn-primary">Anfrage stellen</a>
+</div>
+</div>
+
 
 {% endblock %}

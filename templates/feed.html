@@ -9,6 +9,7 @@
 <div class="col-md-4 mb-3">
 <div class="card">
 <div class="card-body">
+<!-- prof daten werden aus db abgerufen-->
 <h5 class="card-title">{{ prof.name}}</h5>
 <p class="card-text">{{ prof.fachbereich }}</p>
 <a href="{{ url_for('profile', id=prof.id)}}" class="btn btn-primary">Profil ansehen</a>
