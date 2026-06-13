@@ -9,6 +9,19 @@
 </head>
 
 <body>
+{% from 'bootstrap5/nav.html' import render_nav_item %}
+
+<nav class="navbar nabar-expand-xl border-bottom mb-3">
+
+<div class="container-fluid">
+<a class="navbar-brand" herf="{{url_for('index')}}">ThesisMatch</a>
+<ulclass="navbar-nav">
+
+{{render_nav_item('feed', 'Professoren')}}
+
+</ul>
+</div>
+</nav>
 
         {% block CONTENT %}{% endblock %}
     
