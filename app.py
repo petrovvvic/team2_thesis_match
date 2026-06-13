@@ -16,7 +16,7 @@ def index():
     return redirect(url_for('feed'))
 
 @app.route('/feed/', methods=['GET', 'POST'])
-def feed():
+def feed(): 
     return render_template('feed.html') 
    
 
