@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, SubmitField, HiddenField, BooleanField, SelectField, SearchField
-from wtforms.validators import InputRequired, Length
+from wtforms.validators import Optional
 
 class ProfSearchForm(FlaskForm):
     search = SearchField(validators=[Optional()])
