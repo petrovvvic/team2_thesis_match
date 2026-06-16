@@ -21,26 +21,28 @@
             <p class="mb-0"><small class="text-muted">{{ sup_request.short_description }}</small></p>
         </div>
 
-        <div class="bg-white p-4 rounded shadow-sm mb-3">
-            {% if sup_request.messages %}
-                {% for m in sup_request.messages %}
-                    {% set mine = (m.sender_id == user.id) %}
-                    <div class="d-flex mb-3 {{ 'justify-content-end' if mine else 'justify-content-start' }}">
-                        <div class="p-2 px-3 rounded {{ 'bg-primary text-white' if mine else 'bg-light border' }}"
-                             style="max-width: 75%;">
-                            <div class="small fw-bold mb-1">
-                                {{ m.sender.first_name }} {{ m.sender.last_name }}
-                            </div>
-                            <div>{{ m.message_text }}</div>
-                            <div class="small {{ 'text-white-50' if mine else 'text-muted' }} mt-1">
-                                {{ m.created_at.strftime('%d.%m.%Y %H:%M') }}
-                            </div>
+        {# Fixed-height scroll box. flex-column-reverse + reversed loop keeps the
+           newest message at the bottom and pins the scrollbar there on load,
+           so after sending you immediately see your message. No JavaScript. #}
+        <div class="bg-white p-3 rounded shadow-sm mb-3 d-flex flex-column-reverse"
+             style="height: 600px; overflow-y: auto;">
+            {% for m in sup_request.messages | reverse %}
+                {% set mine = (m.sender_id == user.id) %}
+                <div class="d-flex mb-3 {{ 'justify-content-end' if mine else 'justify-content-start' }}">
+                    <div class="p-2 px-3 rounded {{ 'bg-primary text-white' if mine else 'bg-light border' }}"
+                         style="max-width: 75%;">
+                        <div class="small fw-bold mb-1">
+                            {{ m.sender.first_name }} {{ m.sender.last_name }}
+                        </div>
+                        <div>{{ m.message_text }}</div>
+                        <div class="small {{ 'text-white-50' if mine else 'text-muted' }} mt-1">
+                            {{ m.created_at.strftime('%d.%m.%Y %H:%M') }}
                         </div>
                     </div>
-                {% endfor %}
+                </div>
             {% else %}
                 <p class="text-muted mb-0">Noch keine Nachrichten. Schreib die erste!</p>
-            {% endif %}
+            {% endfor %}
         </div>
 
         <div class="bg-white p-4 rounded shadow-sm">

@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
 
+MESSAGE_MAX_CHARS = 1000
+
 # Screen 1a: Registrierung
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=50)])
@@ -40,7 +42,12 @@ class StudentProfileForm(FlaskForm):
 # Chat: Nachricht im Anfrage-Verlauf senden
 class MessageForm(FlaskForm):
     message_text = TextAreaField(
-        'Nachricht',
-        validators=[DataRequired(), Length(min=1, max=2000)],
+        f'Nachricht (max. {MESSAGE_MAX_CHARS} Zeichen)',
+        validators=[
+            DataRequired(),
+            Length(max=MESSAGE_MAX_CHARS,
+                   message=f'Maximal {MESSAGE_MAX_CHARS} Zeichen erlaubt.'),
+        ],
+        render_kw={'maxlength': MESSAGE_MAX_CHARS, 'rows': 3},
     )
     submit = SubmitField('Senden')
