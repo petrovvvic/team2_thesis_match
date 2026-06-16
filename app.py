@@ -1,14 +1,25 @@
-from flask import Flask, render_template, redirect, url_for, request, session, flash, jsonify
+import os
+import uuid
+
+from flask import (Flask, render_template, redirect, url_for, request, session,
+                   flash, jsonify, send_from_directory, abort)
 from flask_bootstrap import Bootstrap5
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm
-from db import db, User, StudentProfile, ProfessorProfile, SupervisionRequest, RequestMessage
+from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest,
+                RequestMessage, Attachment)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///thesis_match.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# PDF uploads: files live in instance/uploads, only metadata goes in the DB.
+app.config['UPLOAD_FOLDER'] = os.path.join(app.instance_path, 'uploads')
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # hard backstop (10 MB)
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 db.init_app(app)
 bootstrap = Bootstrap5(app)
@@ -167,13 +178,55 @@ def chat(request_id):
         message = RequestMessage(
             request_id=sup_request.id,
             sender_id=user.id,
-            message_text=form.message_text.data.strip(),
+            message_text=(form.message_text.data or '').strip(),
         )
         db.session.add(message)
+        db.session.flush()  # assign message.id before linking the attachment
+
+        upload = form.attachment.data
+        if upload:
+            stored_name = f"{uuid.uuid4().hex}.pdf"
+            full_path = os.path.join(app.config['UPLOAD_FOLDER'], stored_name)
+            upload.save(full_path)
+            db.session.add(Attachment(
+                request_id=sup_request.id,
+                message_id=message.id,
+                uploaded_by=user.id,
+                attachment_context='message',
+                original_filename=secure_filename(upload.filename) or 'datei.pdf',
+                storage_path=stored_name,
+                mime_type='application/pdf',
+                file_size=os.path.getsize(full_path),
+            ))
+
         db.session.commit()
         return redirect(url_for('chat', request_id=sup_request.id))
 
     return render_template('chat.html', sup_request=sup_request, form=form, user=user)
+
+
+@app.route('/attachments/<int:attachment_id>')
+def download_attachment(attachment_id):
+    """PDF-Anhang herunterladen — nur für Beteiligte der zugehörigen Anfrage."""
+    user = _current_user()
+    if not user:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
+
+    attachment = db.session.get(Attachment, attachment_id)
+    if not attachment:
+        abort(404)
+
+    sup_request = db.session.get(SupervisionRequest, attachment.request_id)
+    if not sup_request or user.id not in (sup_request.student_id, sup_request.professor_id):
+        abort(403)
+
+    return send_from_directory(
+        app.config['UPLOAD_FOLDER'],
+        attachment.storage_path,
+        as_attachment=True,
+        download_name=attachment.original_filename,
+    )
 
 
 # ==================================================================

@@ -34,7 +34,17 @@
                         <div class="small fw-bold mb-1">
                             {{ m.sender.first_name }} {{ m.sender.last_name }}
                         </div>
-                        <div>{{ m.message_text }}</div>
+                        {% if m.message_text %}
+                            <div>{{ m.message_text }}</div>
+                        {% endif %}
+                        {% for a in m.attachments %}
+                            <div class="mt-1">
+                                <a href="{{ url_for('download_attachment', attachment_id=a.id) }}"
+                                   class="{{ 'text-white' if mine else 'text-primary' }}">
+                                    📎 {{ a.original_filename }}
+                                </a>
+                            </div>
+                        {% endfor %}
                         <div class="small {{ 'text-white-50' if mine else 'text-muted' }} mt-1">
                             {{ m.created_at.strftime('%d.%m.%Y %H:%M') }}
                         </div>
@@ -46,7 +56,7 @@
         </div>
 
         <div class="bg-white p-4 rounded shadow-sm">
-            {{ render_form(form) }}
+            {{ render_form(form, enctype='multipart/form-data') }}
         </div>
 
     </div>

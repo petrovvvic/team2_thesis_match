@@ -1,8 +1,10 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
 
 MESSAGE_MAX_CHARS = 1000
+ATTACHMENT_MAX_BYTES = 5 * 1024 * 1024  # 5 MB
 
 # Screen 1a: Registrierung
 class RegistrationForm(FlaskForm):
@@ -44,10 +46,31 @@ class MessageForm(FlaskForm):
     message_text = TextAreaField(
         f'Nachricht (max. {MESSAGE_MAX_CHARS} Zeichen)',
         validators=[
-            DataRequired(),
+            Optional(),
             Length(max=MESSAGE_MAX_CHARS,
                    message=f'Maximal {MESSAGE_MAX_CHARS} Zeichen erlaubt.'),
         ],
         render_kw={'maxlength': MESSAGE_MAX_CHARS, 'rows': 3},
     )
+    attachment = FileField(
+        'PDF anhängen (optional, max. 5 MB)',
+        validators=[
+            Optional(),
+            FileAllowed(['pdf'], 'Nur PDF-Dateien sind erlaubt.'),
+            FileSize(max_size=ATTACHMENT_MAX_BYTES, message='Datei zu groß (max. 5 MB).'),
+        ],
+    )
     submit = SubmitField('Senden')
+
+    def validate(self, extra_validators=None):
+        # A message must carry at least text or a PDF — never both empty.
+        if not super().validate(extra_validators):
+            return False
+        has_text = bool(self.message_text.data and self.message_text.data.strip())
+        has_file = bool(self.attachment.data)
+        if not has_text and not has_file:
+            self.message_text.errors.append(
+                'Bitte eine Nachricht schreiben oder eine PDF anhängen.'
+            )
+            return False
+        return True
