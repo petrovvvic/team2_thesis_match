@@ -1,44 +1,37 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Email, Length, EqualTo
-
+from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, IntegerField, BooleanField
+from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
 
 # Screen 1a: Registrierung
 class RegistrationForm(FlaskForm):
-    # DataRequired stellt sicher, dass das Feld nicht leer abgesendet werden kann
-    name = StringField('Vollständiger Name', validators=[DataRequired(), Length(min=2, max=50)])
-
-    # Email-Validator prüft, ob ein @-Zeichen etc. vorhanden ist
-    email = StringField('HWR E-Mail Adresse', validators=[DataRequired(), Email()])
-
-    password = PasswordField('Passwort', validators=[DataRequired(), Length(min=6)])
-    confirm_password = PasswordField('Passwort bestätigen', validators=[DataRequired(), EqualTo('password')])
-
-    # Hier wählen die Nutzer ihre Rolle (Two-Sided Platform!)
-    role = SelectField('Ich bin...', choices=[('student', 'Studierende/r'), ('professor', 'Professor/in')],
-                       validators=[DataRequired()])
-
-    submit = SubmitField('Registrieren')
+    first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=50)])
+    last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=50)])
+    email = StringField('HWR E-Mail Address', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    role = SelectField('I am a...', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
+    submit = SubmitField('Register')
 
 
 # Screen 1b: Login
 class LoginForm(FlaskForm):
-    email = StringField('HWR E-Mail Adresse', validators=[DataRequired(), Email()])
-    password = PasswordField('Passwort', validators=[DataRequired()])
-    submit = SubmitField('Einloggen')
+    email = StringField('HWR E-Mail Address', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
 
 
-# Screen 7: Profil bearbeiten (Besonders wichtig für Professoren)
-class ProfileUpdateForm(FlaskForm):
-    # Name und E-Mail können hier optional auch geändert werden
-    name = StringField('Vollständiger Name', validators=[DataRequired()])
+# Screen 7: Profil Professor
+class ProfessorProfileForm(FlaskForm):
+    title = StringField('Academic Title', validators=[Optional()])
+    research_areas = TextAreaField('Research Areas', validators=[Optional(), Length(max=500)])
+    requirements = TextAreaField('Requirements for Students', validators=[Optional(), Length(max=500)])
+    max_supervisions = IntegerField('Max. Active Supervisions', validators=[DataRequired()])
+    accepting_requests = BooleanField('Currently Accepting Requests')
+    submit = SubmitField('Update Profile')
 
-    # Diese Felder sind z.B. nur für Professoren relevant
-    themenfelder = TextAreaField('Meine Themenfelder', validators=[Length(max=500)])
-    anforderungen = TextAreaField('Anforderungen an Studierende', validators=[Length(max=500)])
-
-    # Kapazitäten (z.B. wie viele Plätze noch frei sind)
-    freie_plaetze = SelectField('Verfügbare Betreuungsplätze',
-                                choices=[('0', '0'), ('1', '1'), ('2', '2'), ('3+', '3 oder mehr')])
-
-    submit = SubmitField('Profil aktualisieren')
+# Screen 7: Profil Student
+class StudentProfileForm(FlaskForm):
+    matriculation_number = StringField('Matriculation Number', validators=[Optional(), Length(max=20)])
+    semester = IntegerField('Current Semester', validators=[Optional()])
+    study_focus = TextAreaField('Study Focus / Interests', validators=[Optional(), Length(max=200)])
+    submit = SubmitField('Update Profile')
