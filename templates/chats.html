@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <h2 class="mb-4">Meine Chats</h2>
+
+        {% if conversations %}
+            <div class="list-group shadow-sm">
+                {% for c in conversations %}
+                    {% set partner = c.professor if user.id == c.student_id else c.student %}
+                    <a href="{{ url_for('chat', request_id=c.id) }}"
+                       class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ c.proposed_title }}</h6>
+                            <span class="badge bg-secondary align-self-start">{{ c.status }}</span>
+                        </div>
+                        <p class="mb-1 text-muted">
+                            mit {{ partner.first_name }} {{ partner.last_name }}
+                        </p>
+                        <small class="text-muted">
+                            {{ c.messages|length }} Nachricht(en)
+                        </small>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                Du hast noch keine Anfragen mit Nachrichtenverlauf.
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

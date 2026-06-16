@@ -1,8 +1,9 @@
-from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask import Flask, render_template, redirect, url_for, request, session, flash, jsonify
 from flask_bootstrap import Bootstrap5
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm
-from db import db, User, StudentProfile, ProfessorProfile
+from sqlalchemy import func
+from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm
+from db import db, User, StudentProfile, ProfessorProfile, SupervisionRequest, RequestMessage
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
@@ -113,3 +114,104 @@ def profile():
             form.study_focus.data = profile_data.study_focus
 
     return render_template('profile.html', form=form, user=user)
+
+
+# ==================================================================
+# Chat — Anfragebezogener Nachrichtenverlauf (request_messages)
+# ==================================================================
+
+def _current_user():
+    """Return the logged-in User or None."""
+    if 'user_id' not in session:
+        return None
+    return db.session.get(User, session['user_id'])
+
+
+@app.route('/chats')
+def chats():
+    """Übersicht aller Anfragen, an denen der Nutzer beteiligt ist (Chat-Einstieg)."""
+    user = _current_user()
+    if not user:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
+
+    requests_q = db.select(SupervisionRequest).where(
+        (SupervisionRequest.student_id == user.id)
+        | (SupervisionRequest.professor_id == user.id)
+    ).order_by(SupervisionRequest.updated_at.desc())
+    conversations = db.session.execute(requests_q).scalars().all()
+
+    return render_template('chats.html', conversations=conversations, user=user)
+
+
+@app.route('/chats/<int:request_id>', methods=['GET', 'POST'])
+def chat(request_id):
+    """Nachrichtenverlauf einer Anfrage anzeigen und neue Nachricht senden."""
+    user = _current_user()
+    if not user:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
+
+    sup_request = db.session.get(SupervisionRequest, request_id)
+    if not sup_request:
+        flash('Anfrage nicht gefunden.', 'danger')
+        return redirect(url_for('chats'))
+
+    # Nur Student oder Professor dieser Anfrage dürfen den Verlauf sehen.
+    if user.id not in (sup_request.student_id, sup_request.professor_id):
+        flash('Kein Zugriff auf diesen Nachrichtenverlauf.', 'danger')
+        return redirect(url_for('chats'))
+
+    form = MessageForm()
+    if form.validate_on_submit():
+        message = RequestMessage(
+            request_id=sup_request.id,
+            sender_id=user.id,
+            message_text=form.message_text.data.strip(),
+        )
+        db.session.add(message)
+        db.session.commit()
+        return redirect(url_for('chat', request_id=sup_request.id))
+
+    return render_template('chat.html', sup_request=sup_request, form=form, user=user)
+
+
+# ==================================================================
+# API — Top-Betreuer Rangliste (Screen 8), nach Anfragevolumen (MVP)
+# ==================================================================
+
+@app.route('/api/top-supervisors')
+def api_top_supervisors():
+    """JSON-Rangliste der meistgefragten Professoren nach Anzahl der Anfragen."""
+    limit = request.args.get('limit', default=10, type=int)
+    limit = max(1, min(limit, 100))
+
+    rows = db.session.execute(
+        db.select(
+            User.id,
+            User.first_name,
+            User.last_name,
+            ProfessorProfile.title,
+            ProfessorProfile.research_areas,
+            func.count(SupervisionRequest.id).label('request_count'),
+        )
+        .join(ProfessorProfile, ProfessorProfile.user_id == User.id)
+        .outerjoin(SupervisionRequest, SupervisionRequest.professor_id == User.id)
+        .where(User.role == 'professor')
+        .group_by(User.id)
+        .order_by(func.count(SupervisionRequest.id).desc(), User.last_name.asc())
+        .limit(limit)
+    ).all()
+
+    ranking = [
+        {
+            'rank': index,
+            'professor_id': row.id,
+            'name': f"{row.title + ' ' if row.title else ''}{row.first_name} {row.last_name}",
+            'research_areas': row.research_areas,
+            'request_count': row.request_count,
+        }
+        for index, row in enumerate(rows, start=1)
+    ]
+
+    return jsonify({'count': len(ranking), 'ranking': ranking})

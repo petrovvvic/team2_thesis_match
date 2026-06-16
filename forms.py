@@ -35,3 +35,12 @@ class StudentProfileForm(FlaskForm):
     semester = IntegerField('Current Semester', validators=[Optional()])
     study_focus = TextAreaField('Study Focus / Interests', validators=[Optional(), Length(max=200)])
     submit = SubmitField('Update Profile')
+
+
+# Chat: Nachricht im Anfrage-Verlauf senden
+class MessageForm(FlaskForm):
+    message_text = TextAreaField(
+        'Nachricht',
+        validators=[DataRequired(), Length(min=1, max=2000)],
+    )
+    submit = SubmitField('Senden')
