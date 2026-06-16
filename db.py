@@ -88,3 +88,59 @@ class RequestMessage(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     sender = db.relationship('User', foreign_keys=[sender_id])
+    attachments = db.relationship(
+        'Attachment',
+        backref='message',
+        cascade='all, delete-orphan',
+    )
+
+class Attachment(db.Model):
+    __tablename__ = 'attachments'
+    id = db.Column(db.Integer, primary_key=True)
+    request_id = db.Column(db.Integer, db.ForeignKey('supervision_requests.id'), nullable=False)
+    message_id = db.Column(db.Integer, db.ForeignKey('request_messages.id'), nullable=True)
+    uploaded_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # 'initial' = attached to the request itself (Anfrage-Flow);
+    # 'message' = attached to a chat message (chat feature).
+    attachment_context = db.Column(db.String(10), nullable=False)
+    original_filename = db.Column(db.String(255), nullable=False)
+    storage_path = db.Column(db.String(255), nullable=False, unique=True)
+    mime_type = db.Column(db.String(50), nullable=False, default='application/pdf')
+    file_size = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    uploader = db.relationship('User', foreign_keys=[uploaded_by])
+
+# ------------------------------------------------------------------
+# Thesis topics + status history (added to complete the data model;
+# owned by the request-flow / topic-management tasks).
+# ------------------------------------------------------------------
+
+class ThesisTopic(db.Model):
+    __tablename__ = 'thesis_topics'
+    id = db.Column(db.Integer, primary_key=True)
+    professor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    requirements = db.Column(db.Text, nullable=True)
+    topic_area = db.Column(db.String(100), nullable=False)
+    # allowed values: 'open', 'archived'
+    status = db.Column(db.String(20), nullable=False, default='open')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    professor = db.relationship('User', foreign_keys=[professor_id])
+
+class RequestStatusHistory(db.Model):
+    __tablename__ = 'request_status_history'
+    id = db.Column(db.Integer, primary_key=True)
+    request_id = db.Column(db.Integer, db.ForeignKey('supervision_requests.id'), nullable=False)
+    # status values: 'submitted', 'in_review', 'needs_info', 'accepted', 'rejected', 'withdrawn'
+    old_status = db.Column(db.String(20), nullable=True)
+    new_status = db.Column(db.String(20), nullable=False)
+    changed_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    comment = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    request = db.relationship('SupervisionRequest', foreign_keys=[request_id])
+    editor = db.relationship('User', foreign_keys=[changed_by])
