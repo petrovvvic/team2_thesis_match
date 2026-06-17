@@ -10,6 +10,10 @@ class Faculty(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    professors = db.relationship('ProfessorProfile', back_populates='faculty')
+    
+    students = db.relationship('StudentProfile', back_populates='faculty')
+
 class DegreeProgram(db.Model):
     __tablename__ = 'degree_programs'
     id = db.Column(db.Integer, primary_key=True)
@@ -39,6 +43,9 @@ class StudentProfile(db.Model):
     semester = db.Column(db.Integer, nullable=True)
     study_focus = db.Column(db.String(200), nullable=True)
 
+    user = db.relationship('User', back_populates='student_profile')
+    faculty = db.relationship('Faculty', back_populates='students')
+
 class ProfessorProfile(db.Model):
     __tablename__ = 'professor_profiles'
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
@@ -48,6 +55,9 @@ class ProfessorProfile(db.Model):
     requirements = db.Column(db.Text, nullable=True)
     max_supervisions = db.Column(db.Integer, default=0)
     accepting_requests = db.Column(db.Integer, default=1)
+
+    user = db.relationship( 'User', back_populates='professor_profile')
+    faculty = db.relationship('Faculty', back_populates='professors')
 
 # ------------------------------------------------------------------
 # Supervision requests + chat (owner: Andrei – chat feature)
