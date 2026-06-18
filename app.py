@@ -137,6 +137,37 @@ def _current_user():
         return None
     return db.session.get(User, session['user_id'])
 
+@app.route('/dashboard')
+def dashboard():
+    """Role-based dashboard for students and professors."""
+    user = _current_user()
+    if not user:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
+
+    if user.role == 'student':
+        requests_q = db.select(SupervisionRequest).where(
+            SupervisionRequest.student_id == user.id
+        ).order_by(SupervisionRequest.updated_at.desc())
+    elif user.role == 'professor':
+        requests_q = db.select(SupervisionRequest).where(
+            SupervisionRequest.professor_id == user.id
+        ).order_by(SupervisionRequest.updated_at.desc())
+    else:
+        requests_q = db.select(SupervisionRequest).where(False)
+
+    dashboard_requests = db.session.execute(requests_q).scalars().all()
+
+    status_counts = {}
+    for sup_request in dashboard_requests:
+        status_counts[sup_request.status] = status_counts.get(sup_request.status, 0) + 1
+
+    return render_template(
+        'dashboard.html',
+        user=user,
+        dashboard_requests=dashboard_requests,
+        status_counts=status_counts,
+    )
 
 @app.route('/chats')
 def chats():
