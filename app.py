@@ -9,7 +9,7 @@ app.config.from_mapping(
     BOOTSTRAP_BOOTSWATCH_THEME = 'pulse'
 )
 
-from db import db, ProfessorProfile
+from db import db, ProfessorProfile, Faculty
 from forms import ProfSearchForm
 
 bootstrap = Bootstrap5(app)
@@ -21,13 +21,31 @@ def index():
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
     form = forms.ProfSearchForm()
+    faculties = db.session.execute(db.select(Faculty)).scalars().all()
+    form.faculty.choices = [('', 'Alle Fachbereiche')] + [(f.id,f.name) for f in faculties]
     professors = db.session.execute(db.select(ProfessorProfile)).scalars().all()
+
     if request.method == 'POST' and form.validate():
-        suchbegriff = form.search.data.lower()
+        suchbegriff = (form.search.data or "").lower()
+        faculty = form.faculty.data
+        availabilty = form.availibilty.data
+
+        filtered = []
+        for prof in professors:
+            match_search = (
+                suchbegriff == "" or
+                suchbegriff in f"{prof.user.first_name} {prof.user.last_name}".lower() or
+                (prof.research_areas and suchbegriff in prof.research_areas.lower())
+            )
+
+            match_faculty = (not faculty or str(prof.faculty_id)== str(faculty))
+            match_availibilty = (not availabilty or str(prof.accepting_requests) == str(availabilty))
+
+            if match_search and match_faculty and match_availibilty: 
+                filtered.append(prof)
+          professors = filtered      
+                       
     
-    professors =[ prof for prof in professors
-                    if suchbegriff in f"{prof.user.first_name} {prof.user.last_name}".lower()
-                    or (prof.research_areas and suchbegriff in prof.research_areas.lower())]
     return render_template('feed.html', form=form, professoren=professors)
     
 
