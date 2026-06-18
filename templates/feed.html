@@ -12,6 +12,7 @@
      <div class="col">
          {{ form.search(class='form-control', placeholder='Suche') }}
      </div>
+
      <div class="col-auto">
           {{ form.submit(class='btn btn-primary') }}
      </div>
@@ -24,9 +25,10 @@
 <div class="card">
 <div class="card-body">
 <!-- prof daten werden aus db abgerufen-->
-<h5 class="card-title">{{ prof.name}}</h5>
-<p class="card-text">{{ prof.fachbereich }}</p>
-<a href="{{ url_for('profile', id=prof.id)}}" class="btn btn-primary">Profil ansehen</a>
+<h5 class="card-title">{{ prof.user.first_name}} {{ prof.user.last_name }}</h5>
+<p class="card-text">{{ prof.faculty.name}}</p>
+<p class="card-text">{{ prof.research_areas }}</p>
+<a href="{{ url_for('profile', id=prof.user_id)}}" class="btn btn-primary">Profiel ansehen</a>
 
 </div>
     </div>

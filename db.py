@@ -1,7 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from app import app
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///thesis_match.sqlite' 
 
 db = SQLAlchemy()
+db.init_app(app)
 
 class Faculty(db.Model):
     __tablename__ = 'faculties'
@@ -31,8 +35,8 @@ class User(db.Model):
     role = db.Column(db.String(20), nullable=False)
     account_status = db.Column(db.String(20), default='active')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    student_profile = db.relationship('StudentProfile', backref='user', uselist=False)
-    professor_profile = db.relationship('ProfessorProfile', backref='user', uselist=False)
+    student_profile = db.relationship('StudentProfile', back_populates='user', uselist=False)
+    professor_profile = db.relationship('ProfessorProfile', back_populates='user', uselist=False)
 
 class StudentProfile(db.Model):
     __tablename__ = 'student_profiles'
