@@ -43,3 +43,25 @@ How I checked it:
 * I registered and logged in as a student.
 * I opened the dashboard page and confirmed that it loaded correctly.
 * I restored the local SQLite database file afterward using `git restore instance/thesis_match.sqlite`so that my test user data was not committed.
+
+## 2026-06-18 — Added supervision request creation flow
+
+Branch:
+- feature/db-dashboard-basics
+
+What changed:
+- Added a request form in `forms.py`
+- Added the `/requests/new` route in `app.py`
+- Added `templates/request_new.html`
+- Added a dashboard button for students to create a new request
+
+Why:
+- Students need a way to create supervision requests from the web app.
+- The request is saved through the existing `SupervisionRequest` SQLAlchemy model.
+
+How I checked it:
+- I ran the app locally with `python -m flask --app app run --debug`.
+- I opened the dashboard as a student.
+- I created a test supervision request.
+- The request appeared on the dashboard with status `submitted`.
+- I restored `instance/thesis_match.sqlite` afterward so local test data was not committed.
