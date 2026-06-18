@@ -22,7 +22,7 @@ def index():
 def feed():
     form = forms.ProfSearchForm()
     faculties = db.session.execute(db.select(Faculty)).scalars().all()
-    form.faculty.choices = [('', 'Alle Fachbereiche')] + [(f.id,f.name) for f in faculties]
+    form.faculty.choices = [('', 'Alle Fachbereiche')] + [(str(f.id),f.name) for f in faculties]
     professors = db.session.execute(db.select(ProfessorProfile)).scalars().all()
 
     if request.method == 'POST' and form.validate():
@@ -43,7 +43,7 @@ def feed():
 
             if match_search and match_faculty and match_availibilty: 
                 filtered.append(prof)
-          professors = filtered      
+        professors = filtered      
                        
     
     return render_template('feed.html', form=form, professoren=professors)

@@ -5,7 +5,7 @@ from wtforms.validators import Optional
 class ProfSearchForm(FlaskForm):
     search = SearchField(validators=[Optional()])
 
-    faculty = SelectField(coerce=int, choices=[], validate_choice=False)
+    faculty = SelectField(coerce=str, choices=[], validate_choice=False)
 
     availibilty = SelectField(coerce=str,choices=[('', 'Alle'), ('1', 'Verfügbar'), ('0', 'Nicht verfügbar')], validate_choice=False)
     
