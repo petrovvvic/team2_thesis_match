@@ -5,14 +5,23 @@
     <div class="col-md-10">
 
         <div class="bg-white p-4 rounded shadow-sm mb-4">
-            <h2 class="mb-2">Dashboard</h2>
-            <p class="text-muted mb-0">
-                Eingeloggt als {{ user.first_name }} {{ user.last_name }}
-                <span class="badge bg-secondary">{{ user.role.upper() }}</span>
-            </p>
-        </div>
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h2 class="mb-2">Dashboard</h2>
+                    <p class="text-muted mb-0">
+                        Eingeloggt als {{ user.first_name }} {{ user.last_name }}
+                        <span class="badge bg-secondary">{{ user.role.upper() }}</span>
+                    </p>
+                </div>
 
-        <div class="row mb-4">
+                {% if user.role == 'student' %}
+                    <a class="btn btn-primary" href="{{ url_for('create_request') }}">
+                        Neue Anfrage erstellen
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        
             <div class="col-md-3">
                 <div class="bg-white p-3 rounded shadow-sm text-center">
                     <h5 class="mb-1">{{ dashboard_requests|length }}</h5>

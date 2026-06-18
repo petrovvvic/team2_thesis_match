@@ -7,7 +7,7 @@ from flask_bootstrap import Bootstrap5
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
-from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm
+from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest,
                 RequestMessage, Attachment)
 
@@ -168,6 +168,64 @@ def dashboard():
         dashboard_requests=dashboard_requests,
         status_counts=status_counts,
     )
+@app.route('/requests/new', methods=['GET', 'POST'])
+def create_request():
+    """Create a new supervision request as a student."""
+    user = _current_user()
+    if not user:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
+
+    if user.role != 'student':
+        flash('Nur Studierende können Betreuungsanfragen erstellen.', 'danger')
+        return redirect(url_for('dashboard'))
+
+    form = RequestForm()
+
+    professors = db.session.execute(
+        db.select(User)
+        .join(ProfessorProfile, ProfessorProfile.user_id == User.id)
+        .where(
+            User.role == 'professor',
+            ProfessorProfile.accepting_requests == 1
+        )
+        .order_by(User.last_name.asc(), User.first_name.asc())
+    ).scalars().all()
+
+    form.professor_id.choices = [
+        (
+            professor.id,
+            f"{(professor.professor_profile.title + ' ') if professor.professor_profile and professor.professor_profile.title else ''}{professor.first_name} {professor.last_name}"
+        )
+        for professor in professors
+    ]
+
+    if not professors:
+        flash('Aktuell sind keine Professor/innen für Anfragen verfügbar.', 'info')
+
+    if form.validate_on_submit():
+        selected_professor = db.session.get(User, form.professor_id.data)
+
+        if not selected_professor or selected_professor.role != 'professor':
+            flash('Ausgewählte/r Professor/in wurde nicht gefunden.', 'danger')
+            return redirect(url_for('create_request'))
+
+        new_request = SupervisionRequest(
+            student_id=user.id,
+            professor_id=selected_professor.id,
+            proposed_title=form.proposed_title.data.strip(),
+            short_description=form.short_description.data.strip(),
+            preferred_period=form.preferred_period.data.strip(),
+            status='submitted'
+        )
+
+        db.session.add(new_request)
+        db.session.commit()
+
+        flash('Betreuungsanfrage wurde erfolgreich erstellt.', 'success')
+        return redirect(url_for('dashboard'))
+
+    return render_template('request_new.html', form=form, user=user)
 
 @app.route('/chats')
 def chats():
