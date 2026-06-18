@@ -10,4 +10,3 @@ Team: Andrei Piatrouski, Nikita Pasichnyk, Aya Madarati, Abdulhamid Suliman
 |Nikita   | Verbesserung der eigenen Python-Skills sowie das Erstellen einer robusten und voll funktionsfähigen Web-Applikation  | 1,0 |
 |Aya      | Verbesserung der Python Skills + Projekt Management Skills | 1,0 |
 |Abdulhamid | Verbesserung der Python Skills + Projekt Management Skills | 1,0 |
-
