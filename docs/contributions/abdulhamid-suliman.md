@@ -80,6 +80,16 @@ Mir ist weiterhin bewusst, dass ich, sofern ich zur Erstellung dieser Arbeit KI-
 
 | #   | AI Tool | Purpose of Use | Affected Sections (Code + Docs) | Remarks, Procedure, Prompts |
 | :-- | :--     | :--            | :--                             | :--                         |
-| 01  |         |                |                                 |                             |
-| 02  |         |                |                                 |                             |
-| ... |         |                |                                 |                             |
+| 01 | ChatGPT | Learning and implementation support | Git, DB cleanup, data model docs, dashboard | Used for explanations, debugging support, and guidance. |
+
+
+
+### Details for AI entry 01
+
+ChatGPT was used as learning and support tool for:
+
+- understanding the Git workflow with clone, branch, status, add, commit, restore, and pull request preparation
+- structuring the data model documentation
+- it helpped with adding and testing the first role-based dashboard route and template
+
+All commands, file edits, local testing, file review, and commits were done manually by me.

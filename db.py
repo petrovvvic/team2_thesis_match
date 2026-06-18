@@ -1,21 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-from app import app
+from datetime import datetime, timezone
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///thesis_match.sqlite' 
-
+# Clean initialization to prevent circular imports
 db = SQLAlchemy()
-db.init_app(app)
 
 class Faculty(db.Model):
     __tablename__ = 'faculties'
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(10), unique=True, nullable=False)
     name = db.Column(db.String(100), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     professors = db.relationship('ProfessorProfile', back_populates='faculty')
-    
     students = db.relationship('StudentProfile', back_populates='faculty')
 
 class DegreeProgram(db.Model):
@@ -34,7 +30,8 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     role = db.Column(db.String(20), nullable=False)
     account_status = db.Column(db.String(20), default='active')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    
     student_profile = db.relationship('StudentProfile', back_populates='user', uselist=False)
     professor_profile = db.relationship('ProfessorProfile', back_populates='user', uselist=False)
 
@@ -60,16 +57,11 @@ class ProfessorProfile(db.Model):
     max_supervisions = db.Column(db.Integer, default=0)
     accepting_requests = db.Column(db.Integer, default=1)
 
-    user = db.relationship( 'User', back_populates='professor_profile')
+    user = db.relationship('User', back_populates='professor_profile')
     faculty = db.relationship('Faculty', back_populates='professors')
 
 # ------------------------------------------------------------------
 # Supervision requests + chat (owner: Andrei – chat feature)
-#
-# NOTE: This is a MINIMAL version of supervision_requests, added only so the
-# chat (request_messages) has something to attach to. The full request flow
-# (Screen 4 Anfrage-Flow, Screen 5 Meine Anfragen, Screen 6 Dashboard) is a
-# separate task; columns here follow schema.sql so they stay compatible.
 # ------------------------------------------------------------------
 
 class SupervisionRequest(db.Model):
@@ -81,8 +73,8 @@ class SupervisionRequest(db.Model):
     short_description = db.Column(db.Text, nullable=False)
     preferred_period = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(20), nullable=False, default='submitted')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     student = db.relationship('User', foreign_keys=[student_id])
     professor = db.relationship('User', foreign_keys=[professor_id])
@@ -99,7 +91,7 @@ class RequestMessage(db.Model):
     request_id = db.Column(db.Integer, db.ForeignKey('supervision_requests.id'), nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     message_text = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     sender = db.relationship('User', foreign_keys=[sender_id])
     attachments = db.relationship(
@@ -114,20 +106,17 @@ class Attachment(db.Model):
     request_id = db.Column(db.Integer, db.ForeignKey('supervision_requests.id'), nullable=False)
     message_id = db.Column(db.Integer, db.ForeignKey('request_messages.id'), nullable=True)
     uploaded_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    # 'initial' = attached to the request itself (Anfrage-Flow);
-    # 'message' = attached to a chat message (chat feature).
     attachment_context = db.Column(db.String(10), nullable=False)
     original_filename = db.Column(db.String(255), nullable=False)
     storage_path = db.Column(db.String(255), nullable=False, unique=True)
     mime_type = db.Column(db.String(50), nullable=False, default='application/pdf')
     file_size = db.Column(db.Integer, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     uploader = db.relationship('User', foreign_keys=[uploaded_by])
 
 # ------------------------------------------------------------------
-# Thesis topics + status history (added to complete the data model;
-# owned by the request-flow / topic-management tasks).
+# Thesis topics + status history 
 # ------------------------------------------------------------------
 
 class ThesisTopic(db.Model):
@@ -138,10 +127,9 @@ class ThesisTopic(db.Model):
     description = db.Column(db.Text, nullable=False)
     requirements = db.Column(db.Text, nullable=True)
     topic_area = db.Column(db.String(100), nullable=False)
-    # allowed values: 'open', 'archived'
     status = db.Column(db.String(20), nullable=False, default='open')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     professor = db.relationship('User', foreign_keys=[professor_id])
 
@@ -149,12 +137,11 @@ class RequestStatusHistory(db.Model):
     __tablename__ = 'request_status_history'
     id = db.Column(db.Integer, primary_key=True)
     request_id = db.Column(db.Integer, db.ForeignKey('supervision_requests.id'), nullable=False)
-    # status values: 'submitted', 'in_review', 'needs_info', 'accepted', 'rejected', 'withdrawn'
     old_status = db.Column(db.String(20), nullable=True)
     new_status = db.Column(db.String(20), nullable=False)
     changed_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     comment = db.Column(db.Text, nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     request = db.relationship('SupervisionRequest', foreign_keys=[request_id])
     editor = db.relationship('User', foreign_keys=[changed_by])

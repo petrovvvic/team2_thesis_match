@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+
+        <div class="bg-white p-4 rounded shadow-sm mb-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h2 class="mb-2">Dashboard</h2>
+                    <p class="text-muted mb-0">
+                        Eingeloggt als {{ user.first_name }} {{ user.last_name }}
+                        <span class="badge bg-secondary">{{ user.role.upper() }}</span>
+                    </p>
+                </div>
+
+                {% if user.role == 'student' %}
+                    <a class="btn btn-primary" href="{{ url_for('create_request') }}">
+                        Neue Anfrage erstellen
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        
+            <div class="col-md-3">
+                <div class="bg-white p-3 rounded shadow-sm text-center">
+                    <h5 class="mb-1">{{ dashboard_requests|length }}</h5>
+                    <small class="text-muted">Alle Anfragen</small>
+                </div>
+            </div>
+
+            {% for status, count in status_counts.items() %}
+                <div class="col-md-3 mb-2">
+                    <div class="bg-white p-3 rounded shadow-sm text-center">
+                        <h5 class="mb-1">{{ count }}</h5>
+                        <small class="text-muted">{{ status }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="bg-white p-4 rounded shadow-sm">
+            {% if user.role == 'student' %}
+                <h4 class="mb-3">Meine Betreuungsanfragen</h4>
+            {% elif user.role == 'professor' %}
+                <h4 class="mb-3">Eingegangene Betreuungsanfragen</h4>
+            {% else %}
+                <h4 class="mb-3">Anfragen</h4>
+            {% endif %}
+
+            {% if dashboard_requests %}
+                <div class="list-group">
+                    {% for req in dashboard_requests %}
+                        {% set other_user = req.professor if user.role == 'student' else req.student %}
+                        <a href="{{ url_for('chat', request_id=req.id) }}"
+                           class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ req.proposed_title }}</h6>
+                                <span class="badge bg-secondary">{{ req.status }}</span>
+                            </div>
+                            <p class="mb-1 text-muted">
+                                {% if user.role == 'student' %}
+                                    Professor/in:
+                                {% else %}
+                                    Student/in:
+                                {% endif %}
+                                {{ other_user.first_name }} {{ other_user.last_name }}
+                            </p>
+                            <small class="text-muted">
+                                Aktualisiert: {{ req.updated_at.strftime('%d.%m.%Y %H:%M') }}
+                            </small>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info mb-0">
+                    Aktuell sind keine Betreuungsanfragen vorhanden.
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
