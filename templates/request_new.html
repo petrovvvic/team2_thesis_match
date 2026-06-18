@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <div class="bg-white p-4 rounded shadow-sm">
+            <h2 class="mb-4">Neue Betreuungsanfrage</h2>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.professor_id.label(class="form-label") }}
+                    {{ form.professor_id(class="form-select") }}
+                    {% for error in form.professor_id.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.proposed_title.label(class="form-label") }}
+                    {{ form.proposed_title(class="form-control") }}
+                    {% for error in form.proposed_title.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.short_description.label(class="form-label") }}
+                    {{ form.short_description(class="form-control") }}
+                    {% for error in form.short_description.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.preferred_period.label(class="form-label") }}
+                    {{ form.preferred_period(class="form-control", placeholder="z. B. SoSe 2026") }}
+                    {% for error in form.preferred_period.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                        Abbrechen
+                    </a>
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -74,3 +74,25 @@ class MessageForm(FlaskForm):
             )
             return False
         return True
+    
+# Screen 4: Neue Betreuungsanfrage erstellen
+class RequestForm(FlaskForm):
+    professor_id = SelectField(
+        'Professor/in auswählen',
+        coerce=int,
+        validators=[DataRequired()]
+    )
+    proposed_title = StringField(
+        'Arbeitstitel der Bachelorarbeit',
+        validators=[DataRequired(), Length(max=200)]
+    )
+    short_description = TextAreaField(
+        'Kurzbeschreibung',
+        validators=[DataRequired(), Length(max=1000)],
+        render_kw={'rows': 5}
+    )
+    preferred_period = StringField(
+        'Gewünschter Betreuungszeitraum',
+        validators=[DataRequired(), Length(max=100)]
+    )
+    submit = SubmitField('Anfrage senden')
