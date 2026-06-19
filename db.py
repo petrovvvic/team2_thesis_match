@@ -158,3 +158,5 @@ class RequestStatusHistory(db.Model):
 
     request = db.relationship('SupervisionRequest', foreign_keys=[request_id])
     editor = db.relationship('User', foreign_keys=[changed_by])
+
+    
