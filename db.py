@@ -14,9 +14,18 @@ class Faculty(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    facheinheiten = db.relationship('Facheinheit', back_populates='faculty')
     professors = db.relationship('ProfessorProfile', back_populates='faculty')
-    
     students = db.relationship('StudentProfile', back_populates='faculty')
+
+class Facheinheit(db.Model):
+    __tablename__ = 'facheinheiten'
+    id = db.Column(db.Integer, primary_key=True)
+    faculty_id = db.Column(db.Integer, db.ForeignKey('faculties.id'), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+
+    faculty = db.relationship('Faculty', back_populates='facheinheiten')
+    professors = db.relationship('ProfessorProfile', back_populates='facheinheit')
 
 class DegreeProgram(db.Model):
     __tablename__ = 'degree_programs'
@@ -62,6 +71,7 @@ class ProfessorProfile(db.Model):
 
     user = db.relationship( 'User', back_populates='professor_profile')
     faculty = db.relationship('Faculty', back_populates='professors')
+    facheinheit = db.relationship('Facheinheit', back_populates='professors')
 
 # ------------------------------------------------------------------
 # Supervision requests + chat (owner: Andrei – chat feature)
