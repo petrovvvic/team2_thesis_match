@@ -9,7 +9,7 @@ app.config.from_mapping(
     BOOTSTRAP_BOOTSWATCH_THEME = 'pulse'
 )
 
-from db import db, ProfessorProfile, Faculty
+from db import db, ProfessorProfile, Faculty, Facheinheit
 from forms import ProfSearchForm
 
 bootstrap = Bootstrap5(app)
@@ -25,9 +25,14 @@ def feed():
     form.faculty.choices = [('', 'Alle Fachbereiche')] + [(str(f.id),f.name) for f in faculties]
     professors = db.session.execute(db.select(ProfessorProfile)).scalars().all()
 
+    facheinheit = db.session.execute(db.select(Facheinheit)).scalars().all()
+    form.facheinheit.choices = [('', 'Alle Facheinheiten')] + [(str(e.id),e.name) for e in facheinheit]
+    professors = db.session.execute(db.select(ProfessorProfile)).scalars().all()
+
     if request.method == 'POST' and form.validate():
         suchbegriff = (form.search.data or "").lower()
         faculty = form.faculty.data
+        facheinheit = form.facheinheit.data
         availabilty = form.availibilty.data
 
         filtered = []
@@ -39,9 +44,10 @@ def feed():
             )
 
             match_faculty = (not faculty or str(prof.faculty_id)== str(faculty))
+            match_facheinheit = (not facheinheit or str(prof.facheinheit_id)== str(facheinheit))
             match_availibilty = (not availabilty or str(prof.accepting_requests) == str(availabilty))
 
-            if match_search and match_faculty and match_availibilty: 
+            if match_search and match_faculty and match_availibilty and match_facheinheit: 
                 filtered.append(prof)
         professors = filtered      
                        
