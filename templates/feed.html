@@ -16,6 +16,10 @@
      <div class="col">
          {{ form.faculty(class='form-select') }}
     </div>
+
+    <div class="col">
+         {{ form.facheinheit(class='form-select') }}
+    </div>
    
      <div class="col">
          {{ form.availibilty(class='form-select') }}
@@ -35,7 +39,7 @@
 <div class="card-body">
 <!-- prof daten werden aus db abgerufen-->
 <h5 class="card-title">{{ prof.user.first_name}} {{ prof.user.last_name }}</h5>
-<p class="card-text">{{ prof.faculty.name}}</p>
+<p class="card-text">{{ prof.facheinheit.faculty.name }}</p>
 <p class="card-text">{{ prof.research_areas }}</p>
 <a href="{{ url_for('profile', id=prof.user_id)}}" class="btn btn-primary">Profiel ansehen</a>
 

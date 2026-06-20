@@ -14,9 +14,9 @@ class Faculty(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    facheinheit = db.relationship('Facheinheit', back_populates='faculty')
-    professors = db.relationship('ProfessorProfile', back_populates='faculty')
+    facheinheiten = db.relationship('Facheinheit', back_populates='faculty')
     students = db.relationship('StudentProfile', back_populates='faculty')
+    degree_programs = db.relationship('DegreeProgram', back_populates='faculty') 
 
 class Facheinheit(db.Model):
     __tablename__ = 'facheinheiten'
@@ -24,7 +24,7 @@ class Facheinheit(db.Model):
     faculty_id = db.Column(db.Integer, db.ForeignKey('faculties.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
 
-    faculty = db.relationship('Faculty', back_populates='facheinheit')
+    faculty = db.relationship('Faculty', back_populates='facheinheiten')
     professors = db.relationship('ProfessorProfile', back_populates='facheinheit')
     thesis_topics = db.relationship('ThesisTopic', back_populates='facheinheit')
     
@@ -68,7 +68,7 @@ class StudentProfile(db.Model):
 class ProfessorProfile(db.Model):
     __tablename__ = 'professor_profiles'
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    facheinheit_id = db.Column(db.Integer, db.ForeignKey('facheinheit.id'), nullable=True)
+    facheinheit_id = db.Column(db.Integer, db.ForeignKey('facheinheiten.id'), nullable=True)
     title = db.Column(db.String(50), nullable=True)
     research_areas = db.Column(db.Text, nullable=True)
     requirements = db.Column(db.Text, nullable=True)
@@ -76,7 +76,6 @@ class ProfessorProfile(db.Model):
     accepting_requests = db.Column(db.Integer, default=1)
 
     user = db.relationship( 'User', back_populates='professor_profile')
-    faculty = db.relationship('Faculty', back_populates='professors')
     facheinheit = db.relationship('Facheinheit', back_populates='professors')
 
 # ------------------------------------------------------------------

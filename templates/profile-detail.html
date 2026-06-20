@@ -9,6 +9,7 @@
 <!-- prof daten werden aus db abgerufen-->
 <h1 class="card-title">{{prof.user.first_name}} {{prof.user.last_name}}</h1>
 <p class="card-text"><strong>Fachbereich:</strong>{{prof.faculty.name}}</p>
+<p class="card-text"><strong>Fachbereich:</strong>{{ prof.facheinheit.faculty.name }}</p>
 <p class="card-text"><strong>Themengebiete:</strong>{{prof.research_areas}}</p>
 <p class="card-text"><strong>Anforderungen:</strong>{{prof.requirements}}</p>
 <p class="card-text"><strong>Verfügbarkeit Status:</strong>{% if prof.accepting_requests == 1 %} Verfügbar {% else %} Nicht verfügbar {% endif %}</p>
