@@ -63,7 +63,7 @@ class MessageForm(FlaskForm):
     submit = SubmitField('Senden')
 
     def validate(self, extra_validators=None):
-        # A message must carry at least text or a PDF — never both empty.
+        # Entweder Text oder PDF, nicht leer.
         if not super().validate(extra_validators):
             return False
         has_text = bool(self.message_text.data and self.message_text.data.strip())
