@@ -27,6 +27,7 @@ bootstrap = Bootstrap5(app)
 with app.app_context():
     db.create_all()
 
+
 @app.route('/')
 def index():
     return redirect(url_for('login'))
@@ -354,14 +355,38 @@ def api_top_supervisors():
 
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
-    form = ProfSearchForm()
+    form = forms.ProfSearchForm()
+    faculties = db.session.execute(db.select(Faculty)).scalars().all()
+    form.faculty.choices = [('', 'Alle Fachbereiche')] + [(str(f.id),f.name) for f in faculties]
+
+    facheinheiten = db.session.execute(db.select(Facheinheit)).scalars().all()
+    form.facheinheit.choices = [('', 'Alle Facheinheiten')] + [(str(e.id),e.name) for e in facheinheiten]
+
     professors = db.session.execute(db.select(ProfessorProfile)).scalars().all()
+
     if request.method == 'POST' and form.validate():
-        search_term = form.search.data.lower()
+        suchbegriff = (form.search.data or "").lower()
+        faculty = form.faculty.data
+        facheinheit = form.facheinheit.data
+        availabilty = form.availibilty.data
+
+        filtered = []
+        for prof in professors:
+            match_search = (
+                suchbegriff == "" or
+                suchbegriff in f"{prof.user.first_name} {prof.user.last_name}".lower() or
+                (prof.research_areas and suchbegriff in prof.research_areas.lower())
+            )
+
+            match_faculty = (not faculty or str(prof.facheinheit.faculty_id)== str(faculty))
+            match_facheinheit = (not facheinheit or str(prof.facheinheit_id)== str(facheinheit))
+            match_availibilty = (not availabilty or str(prof.accepting_requests) == str(availabilty))
+
+            if match_search and match_faculty and match_availibilty and match_facheinheit: 
+                filtered.append(prof)
+        professors = filtered      
+                       
     
-    professors =[ prof for prof in professors
-                    if search_term in f"{prof.user.first_name} {prof.user.last_name}".lower()
-                    or (prof.research_areas and search_term in prof.research_areas.lower())]
     return render_template('feed.html', form=form, professoren=professors)
     
 

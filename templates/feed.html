@@ -13,6 +13,19 @@
          {{ form.search(class='form-control', placeholder='Suche') }}
      </div>
 
+     <div class="col">
+         {{ form.faculty(class='form-select') }}
+    </div>
+
+    <div class="col">
+         {{ form.facheinheit(class='form-select') }}
+    </div>
+   
+     <div class="col">
+         {{ form.availibilty(class='form-select') }}
+     </div>
+    
+
      <div class="col-auto">
           {{ form.submit(class='btn btn-primary') }}
      </div>
@@ -22,11 +35,12 @@
 <div class="row">
 {% for prof in professoren %}
 <div class="col-md-4 mb-3">
+<div class="card{% if prof.accepting_arquests !=1 %} bg-light text-muted{% endif %}">
 <div class="card">
 <div class="card-body">
 <!-- prof daten werden aus db abgerufen-->
 <h5 class="card-title">{{ prof.user.first_name}} {{ prof.user.last_name }}</h5>
-<p class="card-text">{{ prof.faculty.name}}</p>
+<p class="card-text">{{ prof.facheinheit.faculty.name }}</p>
 <p class="card-text">{{ prof.research_areas }}</p>
 <a href="{{ url_for('profile', id=prof.user_id)}}" class="btn btn-primary">Profiel ansehen</a>
 
