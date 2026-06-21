@@ -158,12 +158,9 @@ class RequestStatusHistory(db.Model):
     editor = db.relationship('User', foreign_keys=[changed_by])
 
 def insert_sample():
-
-        db.session.execute(db.delete(Facheinheit))
-        db.session.execute(db.delete(Faculty))
-        db.session.commit():
-        
-        fb1 =Faculty(code='FB1', name='Wirtschaftswissenschaften')
+    fb1 = db.session.execute(db.select(Faculty).filter_by(code='FB1')).scalar_one_or_none()
+    if fb1 is None:
+        fb1 = Faculty(code='FB1', name='Wirtschaftswissenschaften')
         db.session.add(fb1)
         db.session.commit()
 
@@ -184,3 +181,4 @@ def insert_sample():
     db.session.commit()
     
 
+ 
