@@ -8,28 +8,29 @@ ATTACHMENT_MAX_BYTES = 5 * 1024 * 1024  # 5 MB
 
 # Screen 1a: Registrierung
 class RegistrationForm(FlaskForm):
-    first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=50)])
-    last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=50)])
-    email = StringField('HWR E-Mail Address', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    role = SelectField('I am a...', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
+    first_name = StringField('Vorname', validators=[DataRequired(), Length(min=2, max=50)])
+    last_name = StringField('Nachname', validators=[DataRequired(), Length(min=2, max=50)])
+    email = StringField('HWR E-Mail Addresse', validators=[DataRequired(), Email()])
+    password = PasswordField('Passwort', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Passwort Bestätigen', validators=[DataRequired(), EqualTo('password')])
+    role = SelectField('An der HWR bin ich...', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
+    facheinheit_id = SelectField('Facheinheit (Nur für Professor/innen)', coerce=int, validators=[Optional()])
     submit = SubmitField('Register')
 
 
 # Screen 1b: Login
 class LoginForm(FlaskForm):
-    email = StringField('HWR E-Mail Address', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('HWR E-Mail Addresse', validators=[DataRequired(), Email()])
+    password = PasswordField('Passwort', validators=[DataRequired()])
     submit = SubmitField('Login')
 
 
 # Screen 7: Profil Professor
 class ProfessorProfileForm(FlaskForm):
     facheinheit_id = SelectField('Facheinheit', coerce=int, validators=[Optional()])
-    title = StringField('Academic Title', validators=[Optional()])
-    research_areas = TextAreaField('Research Areas', validators=[Optional(), Length(max=500)])
-    requirements = TextAreaField('Requirements for Students', validators=[Optional(), Length(max=500)])
+    title = StringField('Akademische(r) Titel', validators=[Optional()])
+    research_areas = TextAreaField('Forschungsbereich(e)', validators=[Optional(), Length(max=500)])
+    requirements = TextAreaField('Voraussetzungen für Studierende', validators=[Optional(), Length(max=500)])
     supervision_status = SelectField(
         'Betreuungskapazität & Status',
         coerce=int,
@@ -49,9 +50,9 @@ class ProfessorProfileForm(FlaskForm):
 
 # Screen 7: Profil Student
 class StudentProfileForm(FlaskForm):
-    matriculation_number = StringField('Matriculation Number', validators=[Optional(), Length(max=20)])
-    semester = IntegerField('Current Semester', validators=[Optional()])
-    study_focus = TextAreaField('Study Focus / Interests', validators=[Optional(), Length(max=200)])
+    matriculation_number = StringField('Matrikelnummer', validators=[Optional(), Length(max=20)])
+    semester = IntegerField('Aktuelles Semester', validators=[Optional()])
+    study_focus = TextAreaField('Studienschwerpunkt / Interessen', validators=[Optional(), Length(max=200)])
     submit = SubmitField('Update Profile')
 
 

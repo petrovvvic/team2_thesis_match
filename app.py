@@ -50,9 +50,13 @@ def login():
             flash('Login fehlgeschlagen. Bitte überprüfe E-Mail und Passwort.', 'danger')
     return render_template('login.html', form=form)
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+    facheinheiten = db.session.execute(db.select(Facheinheit)).scalars().all()
+    form.facheinheit_id.choices = [(0, '— Keine, weil ich bin Student —')] + [(f.id, f.name) for f in facheinheiten]
+
     if form.validate_on_submit():
         hashed_pw = generate_password_hash(form.password.data)
         new_user = User(
@@ -65,14 +69,16 @@ def register():
         )
         db.session.add(new_user)
         db.session.flush()
-
         if new_user.role == 'student':
             new_profile = StudentProfile(user_id=new_user.id)
             db.session.add(new_profile)
         elif new_user.role == 'professor':
-            new_profile = ProfessorProfile(user_id=new_user.id)
+            gewaehlte_facheinheit = form.facheinheit_id.data if form.facheinheit_id.data != 0 else None
+            new_profile = ProfessorProfile(
+                user_id=new_user.id,
+                facheinheit_id=gewaehlte_facheinheit
+            )
             db.session.add(new_profile)
-
         db.session.commit()
         session['just_registered'] = True
         flash('Registration successful! You can now log in.', 'success')
