@@ -181,12 +181,6 @@ Relationships:
 - Belongs to one `SupervisionRequest`
 - Stores which user changed the status
 
-  
-
-  ![erm](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/assets/images/Screenshot%202026-06-21%20205638.png)
-
-  
-
 ## ER diagram
 
 ```mermaid

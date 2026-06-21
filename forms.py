@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, IntegerField, BooleanField, SearchField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
+from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, InputRequired
 
 MESSAGE_MAX_CHARS = 1000
 ATTACHMENT_MAX_BYTES = 5 * 1024 * 1024  # 5 MB
@@ -30,8 +30,21 @@ class ProfessorProfileForm(FlaskForm):
     title = StringField('Academic Title', validators=[Optional()])
     research_areas = TextAreaField('Research Areas', validators=[Optional(), Length(max=500)])
     requirements = TextAreaField('Requirements for Students', validators=[Optional(), Length(max=500)])
-    max_supervisions = IntegerField('Max. Active Supervisions', validators=[DataRequired()])
-    accepting_requests = BooleanField('Currently Accepting Requests')
+    supervision_status = SelectField(
+        'Betreuungskapazität & Status',
+        coerce=int,
+        choices=[
+            (-1, 'Keine Anfrage möglich zur Zeit'),
+            (0, '0 Plätze'),
+            (1, '1 Platz'),
+            (2, '2 Plätze'),
+            (3, '3 Plätze'),
+            (4, '4 Plätze'),
+            (5, '5 Plätze'),
+            (6, 'Anfragen sind zur Zeit möglich ')
+        ],
+        validators=[InputRequired(message="Bitte wähle einen Status aus.")]
+    )
     submit = SubmitField('Update Profile')
 
 # Screen 7: Profil Student
@@ -102,6 +115,7 @@ class RequestForm(FlaskForm):
 # Screen 2: Professor-Feed Suche/Filter
 class ProfSearchForm(FlaskForm):
     search = SearchField(validators=[Optional()])
+    faculty = SelectField(coerce=str, choices=[], validate_choice=False)
     facheinheit = SelectField(coerce=str, choices=[], validate_choice=False)
     availibilty = SelectField(coerce=str, choices=[('', 'Alle'), ('1', 'Verfügbar'), ('0', 'Nicht verfügbar')], validate_choice=False)
     submit = SubmitField('Suchen')

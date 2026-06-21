@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, ProfSearchForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest,
-                RequestMessage, Attachment, Faculty, Facheinheit, insert_sample)
+                RequestMessage, Attachment, Faculty, Facheinheit)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
@@ -100,9 +100,13 @@ def profile():
             profile_data.title = form.title.data
             profile_data.research_areas = form.research_areas.data
             profile_data.requirements = form.requirements.data
-            profile_data.max_supervisions = form.max_supervisions.data
-            profile_data.accepting_requests = form.accepting_requests.data
             profile_data.facheinheit_id = form.facheinheit_id.data or None
+            if form.supervision_status.data == -1:
+                profile_data.accepting_requests = 0
+                profile_data.max_supervisions = 0
+            else:
+                profile_data.accepting_requests = 1
+                profile_data.max_supervisions = form.supervision_status.data
             db.session.commit()
             flash('Professor profile successfully updated!', 'success')
             return redirect(url_for('profile'))
@@ -110,9 +114,11 @@ def profile():
             form.title.data = profile_data.title
             form.research_areas.data = profile_data.research_areas
             form.requirements.data = profile_data.requirements
-            form.max_supervisions.data = profile_data.max_supervisions
-            form.accepting_requests.data = profile_data.accepting_requests
             form.facheinheit_id.data = profile_data.facheinheit_id or 0
+            if profile_data.accepting_requests == 0:
+                form.supervision_status.data = -1
+            else:
+                form.supervision_status.data = profile_data.max_supervisions
 
     elif user.role == 'student':
         form = StudentProfileForm()
@@ -353,7 +359,9 @@ def api_top_supervisors():
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
     form = ProfSearchForm()
-    
+    faculties = db.session.execute(db.select(Faculty)).scalars().all()
+    form.faculty.choices = [('', 'Alle Fachbereiche')] + [(str(f.id),f.name) for f in faculties]
+
     facheinheiten = db.session.execute(db.select(Facheinheit)).scalars().all()
     form.facheinheit.choices = [('', 'Alle Facheinheiten')] + [(str(e.id),e.name) for e in facheinheiten]
 
@@ -361,6 +369,7 @@ def feed():
 
     if request.method == 'POST' and form.validate():
         suchbegriff = (form.search.data or "").lower()
+        faculty = form.faculty.data
         facheinheit = form.facheinheit.data
         availabilty = form.availibilty.data
 
@@ -372,10 +381,11 @@ def feed():
                 (prof.research_areas and suchbegriff in prof.research_areas.lower())
             )
 
+            match_faculty = (not faculty or str(prof.facheinheit.faculty_id)== str(faculty))
             match_facheinheit = (not facheinheit or str(prof.facheinheit_id)== str(facheinheit))
             match_availibilty = (not availabilty or str(prof.accepting_requests) == str(availabilty))
 
-            if match_search and match_availibilty and match_facheinheit: 
+            if match_search and match_faculty and match_availibilty and match_facheinheit: 
                 filtered.append(prof)
         professors = filtered      
                        
@@ -389,11 +399,6 @@ def view_professor(id):
     if not prof:
         abort(404)
     return render_template('profile-detail.html', prof=prof)
-
-@app.route('/insert/sample')
-def run_insert_sample():
-    insert_sample()
-    return 'Facheinheiten wurden eigefügt'
 
 @app.errorhandler(404)
 def not_found(e):

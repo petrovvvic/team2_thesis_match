@@ -21,7 +21,8 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 {{ render_nav_item('feed', 'Professoren') }}
-    
+            </ul>
+            <ul class="navbar-nav ms-auto">
                 {% if 'user_id' in session %}
                     {{ render_nav_item('dashboard', 'Dashboard') }}
                     {{ render_nav_item('profile', 'Mein Profil') }}
