@@ -32,6 +32,7 @@ with app.app_context():
 def index():
     return redirect(url_for('login'))
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -41,7 +42,10 @@ def login():
             session['user_id'] = user.id
             session['user_role'] = user.role
             flash('Erfolgreich eingeloggt!', 'success')
-            return redirect(url_for('profile'))
+            if session.pop('just_registered', False):
+                return redirect(url_for('profile'))
+            else:
+                return redirect(url_for('dashboard'))
         else:
             flash('Login fehlgeschlagen. Bitte überprüfe E-Mail und Passwort.', 'danger')
     return render_template('login.html', form=form)
@@ -70,6 +74,7 @@ def register():
             db.session.add(new_profile)
 
         db.session.commit()
+        session['just_registered'] = True
         flash('Registration successful! You can now log in.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
