@@ -75,10 +75,6 @@ class ProfessorProfile(db.Model):
     user = db.relationship('User', back_populates='professor_profile')
     facheinheit = db.relationship('Facheinheit', back_populates='professors')
 
-# ------------------------------------------------------------------
-# Supervision requests + chat (owner: Andrei – chat feature)
-# ------------------------------------------------------------------
-
 class SupervisionRequest(db.Model):
     __tablename__ = 'supervision_requests'
     id = db.Column(db.Integer, primary_key=True)
@@ -130,10 +126,7 @@ class Attachment(db.Model):
 
     uploader = db.relationship('User', foreign_keys=[uploaded_by])
 
-# ------------------------------------------------------------------
-# Thesis topics + status history 
-# ------------------------------------------------------------------
-
+# Themen für Thesissschreiben
 class ThesisTopic(db.Model):
     __tablename__ = 'thesis_topics'
     id = db.Column(db.Integer, primary_key=True)

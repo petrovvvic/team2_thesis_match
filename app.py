@@ -136,7 +136,6 @@ def _current_user():
 
 @app.route('/dashboard')
 def dashboard():
-    """Role-based dashboard for students and professors."""
     user = _current_user()
     if not user:
         flash('Access denied. Please log in first.', 'danger')
@@ -167,7 +166,6 @@ def dashboard():
     )
 @app.route('/requests/new', methods=['GET', 'POST'])
 def create_request():
-    """Create a new supervision request as a student."""
     user = _current_user()
     if not user:
         flash('Access denied. Please log in first.', 'danger')
@@ -226,7 +224,6 @@ def create_request():
 
 @app.route('/chats')
 def chats():
-    """Übersicht aller Anfragen, an denen der Nutzer beteiligt ist (Chat-Einstieg)."""
     user = _current_user()
     if not user:
         flash('Access denied. Please log in first.', 'danger')
@@ -243,7 +240,6 @@ def chats():
 
 @app.route('/chats/<int:request_id>', methods=['GET', 'POST'])
 def chat(request_id):
-    """Nachrichtenverlauf einer Anfrage anzeigen und neue Nachricht senden."""
     user = _current_user()
     if not user:
         flash('Access denied. Please log in first.', 'danger')
@@ -293,7 +289,6 @@ def chat(request_id):
 
 @app.route('/attachments/<int:attachment_id>')
 def download_attachment(attachment_id):
-    """PDF-Anhang herunterladen — nur für Beteiligte der zugehörigen Anfrage."""
     user = _current_user()
     if not user:
         flash('Access denied. Please log in first.', 'danger')
@@ -319,7 +314,6 @@ def download_attachment(attachment_id):
 
 @app.route('/api/top-supervisors')
 def api_top_supervisors():
-    """JSON-Rangliste der meistgefragten Professoren nach Anzahl der Anfragen."""
     limit = request.args.get('limit', default=10, type=int)
     limit = max(1, min(limit, 100))
 
