@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
 
-# Clean initialization to prevent circular imports
+
 db = SQLAlchemy()
 
 class Faculty(db.Model):

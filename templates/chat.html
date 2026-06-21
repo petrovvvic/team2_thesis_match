@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-{# Auto-reload the thread every 10s so new messages from the other person
-   appear without a manual refresh. No JavaScript involved. #}
-{% block extra_head %}<meta http-equiv="refresh" content="10">{% endblock %}
-
 {% block content %}
 {% set partner = sup_request.professor if user.id == sup_request.student_id else sup_request.student %}
 <div class="row justify-content-center">
@@ -21,9 +17,6 @@
             <p class="mb-0"><small class="text-muted">{{ sup_request.short_description }}</small></p>
         </div>
 
-        {# Fixed-height scroll box. flex-column-reverse + reversed loop keeps the
-           newest message at the bottom and pins the scrollbar there on load,
-           so after sending you immediately see your message. No JavaScript. #}
         <div class="bg-white p-3 rounded shadow-sm mb-3 d-flex flex-column-reverse"
              style="height: 600px; overflow-y: auto;">
             {% for m in sup_request.messages | reverse %}

@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, ProfSearchForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest,
-                RequestMessage, Attachment)
+                RequestMessage, Attachment, Faculty, Facheinheit)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
@@ -18,7 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # PDF uploads: files live in instance/uploads, only metadata goes in the DB.
 app.config['UPLOAD_FOLDER'] = os.path.join(app.instance_path, 'uploads')
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # hard backstop (10 MB)
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024 # max 10 mb dateien
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 db.init_app(app)
@@ -94,12 +94,15 @@ def profile():
     if user.role == 'professor':
         form = ProfessorProfileForm()
         profile_data = user.professor_profile
+        facheinheiten = db.session.execute(db.select(Facheinheit)).scalars().all()
+        form.facheinheit_id.choices = [(0, '— keine —')] + [(f.id, f.name) for f in facheinheiten]
         if form.validate_on_submit():
             profile_data.title = form.title.data
             profile_data.research_areas = form.research_areas.data
             profile_data.requirements = form.requirements.data
             profile_data.max_supervisions = form.max_supervisions.data
             profile_data.accepting_requests = form.accepting_requests.data
+            profile_data.facheinheit_id = form.facheinheit_id.data or None
             db.session.commit()
             flash('Professor profile successfully updated!', 'success')
             return redirect(url_for('profile'))
@@ -109,6 +112,7 @@ def profile():
             form.requirements.data = profile_data.requirements
             form.max_supervisions.data = profile_data.max_supervisions
             form.accepting_requests.data = profile_data.accepting_requests
+            form.facheinheit_id.data = profile_data.facheinheit_id or 0
 
     elif user.role == 'student':
         form = StudentProfileForm()
@@ -129,7 +133,6 @@ def profile():
 
 ## CHAT
 def _current_user():
-    """Return the logged-in User or None."""
     if 'user_id' not in session:
         return None
     return db.session.get(User, session['user_id'])
@@ -263,7 +266,7 @@ def chat(request_id):
             message_text=(form.message_text.data or '').strip(),
         )
         db.session.add(message)
-        db.session.flush()  # assign message.id before linking the attachment
+        db.session.flush()  # id für den anhang
 
         upload = form.attachment.data
         if upload:
@@ -349,7 +352,7 @@ def api_top_supervisors():
 
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
-    form = forms.ProfSearchForm()
+    form = ProfSearchForm()
     faculties = db.session.execute(db.select(Faculty)).scalars().all()
     form.faculty.choices = [('', 'Alle Fachbereiche')] + [(str(f.id),f.name) for f in faculties]
 
@@ -384,7 +387,17 @@ def feed():
     return render_template('feed.html', form=form, professoren=professors)
     
 
-@app.route('/profile/<int:id>', methods=['GET', 'POST'])
-def profile(id):
+@app.route('/professor/<int:id>')
+def view_professor(id):
     prof = db.session.get(ProfessorProfile, id)
+    if not prof:
+        abort(404)
     return render_template('profile-detail.html', prof=prof)
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('500.html'), 500

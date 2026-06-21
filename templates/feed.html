@@ -2,7 +2,7 @@
 
 {% block TITLE %} Professor Feed{% endblock %}
 
-{% block CONTENT %}
+{% block content %}
 
 <h1>Professoren</h1>
 
@@ -40,9 +40,9 @@
 <div class="card-body">
 <!-- prof daten werden aus db abgerufen-->
 <h5 class="card-title">{{ prof.user.first_name}} {{ prof.user.last_name }}</h5>
-<p class="card-text">{{ prof.facheinheit.faculty.name }}</p>
+<p class="card-text">{% if prof.facheinheit %}{{ prof.facheinheit.faculty.name }}{% endif %}</p>
 <p class="card-text">{{ prof.research_areas }}</p>
-<a href="{{ url_for('profile', id=prof.user_id)}}" class="btn btn-primary">Profiel ansehen</a>
+<a href="{{ url_for('view_professor', id=prof.user_id)}}" class="btn btn-primary">Profil ansehen</a>
 
 </div>
     </div>

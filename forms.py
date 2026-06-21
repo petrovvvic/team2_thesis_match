@@ -26,6 +26,7 @@ class LoginForm(FlaskForm):
 
 # Screen 7: Profil Professor
 class ProfessorProfileForm(FlaskForm):
+    facheinheit_id = SelectField('Facheinheit', coerce=int, validators=[Optional()])
     title = StringField('Academic Title', validators=[Optional()])
     research_areas = TextAreaField('Research Areas', validators=[Optional(), Length(max=500)])
     requirements = TextAreaField('Requirements for Students', validators=[Optional(), Length(max=500)])
