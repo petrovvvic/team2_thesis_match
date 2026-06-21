@@ -157,4 +157,30 @@ class RequestStatusHistory(db.Model):
     request = db.relationship('SupervisionRequest', foreign_keys=[request_id])
     editor = db.relationship('User', foreign_keys=[changed_by])
 
+def insert_sample():
+
+        db.session.execute(db.delete(Facheinheit))
+        db.session.execute(db.delete(Faculty))
+        db.session.commit():
+        
+        fb1 =Faculty(code='FB1', name='Wirtschaftswissenschaften')
+        db.session.add(fb1)
+        db.session.commit()
+
+    facheinheiten = [
+        Facheinheit(faculty_id=fb1.id, name='Unternehmensführung / Personal / Organisation'),
+        Facheinheit(faculty_id=fb1.id, name='Marketing'),
+        Facheinheit(faculty_id=fb1.id, name='Finanzwirtschaft'),
+        Facheinheit(faculty_id=fb1.id, name='Steuern'),
+        Facheinheit(faculty_id=fb1.id, name='Rechnungswesen'),
+        Facheinheit(faculty_id=fb1.id, name='Supply Chain und Operations Management'),
+        Facheinheit(faculty_id=fb1.id, name='Quantitative Methoden'),
+        Facheinheit(faculty_id=fb1.id, name='Wirtschaftsinformatik'),
+        Facheinheit(faculty_id=fb1.id, name='Volkswirtschaftslehre'),
+        Facheinheit(faculty_id=fb1.id, name='Gesellschaftswissenschaften'),
+        Facheinheit(faculty_id=fb1.id, name='Wirtschaftsrecht'),
+    ]
+    db.session.add_all(facheinheiten)
+    db.session.commit()
     
+

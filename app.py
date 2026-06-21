@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, ProfSearchForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest,
-                RequestMessage, Attachment, Faculty, Facheinheit)
+                RequestMessage, Attachment, Faculty, Facheinheit, insert_sample)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
@@ -353,9 +353,7 @@ def api_top_supervisors():
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
     form = ProfSearchForm()
-    faculties = db.session.execute(db.select(Faculty)).scalars().all()
-    form.faculty.choices = [('', 'Alle Fachbereiche')] + [(str(f.id),f.name) for f in faculties]
-
+    
     facheinheiten = db.session.execute(db.select(Facheinheit)).scalars().all()
     form.facheinheit.choices = [('', 'Alle Facheinheiten')] + [(str(e.id),e.name) for e in facheinheiten]
 
@@ -363,7 +361,6 @@ def feed():
 
     if request.method == 'POST' and form.validate():
         suchbegriff = (form.search.data or "").lower()
-        faculty = form.faculty.data
         facheinheit = form.facheinheit.data
         availabilty = form.availibilty.data
 
@@ -375,11 +372,10 @@ def feed():
                 (prof.research_areas and suchbegriff in prof.research_areas.lower())
             )
 
-            match_faculty = (not faculty or str(prof.facheinheit.faculty_id)== str(faculty))
             match_facheinheit = (not facheinheit or str(prof.facheinheit_id)== str(facheinheit))
             match_availibilty = (not availabilty or str(prof.accepting_requests) == str(availabilty))
 
-            if match_search and match_faculty and match_availibilty and match_facheinheit: 
+            if match_search and match_availibilty and match_facheinheit: 
                 filtered.append(prof)
         professors = filtered      
                        
@@ -393,6 +389,11 @@ def view_professor(id):
     if not prof:
         abort(404)
     return render_template('profile-detail.html', prof=prof)
+
+@app.route('/insert/sample')
+def run_insert_sample():
+    insert_sample()
+    return 'Facheinheiten wurden eigefügt'
 
 @app.errorhandler(404)
 def not_found(e):
