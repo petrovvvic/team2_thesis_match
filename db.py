@@ -34,6 +34,7 @@ class DegreeProgram(db.Model):
     degree = db.Column(db.String(20), nullable=False)
 
     faculty = db.relationship('Faculty', back_populates='degree_programs')
+    students = db.relationship('StudentProfile', back_populates='degree_program')
 
 
 class User(db.Model):
@@ -61,6 +62,7 @@ class StudentProfile(db.Model):
 
     user = db.relationship('User', back_populates='student_profile')
     faculty = db.relationship('Faculty', back_populates='students')
+    degree_program = db.relationship('DegreeProgram', back_populates='students')
 
 class ProfessorProfile(db.Model):
     __tablename__ = 'professor_profiles'
