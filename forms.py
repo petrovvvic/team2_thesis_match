@@ -51,6 +51,7 @@ class ProfessorProfileForm(FlaskForm):
 # Screen 7: Profil Student
 class StudentProfileForm(FlaskForm):
     matriculation_number = StringField('Matrikelnummer', validators=[Optional(), Length(max=20)])
+    degree_program_id = SelectField('Studiengang', coerce=int, validators=[Optional()])
     semester = IntegerField('Aktuelles Semester', validators=[Optional()])
     study_focus = TextAreaField('Studienschwerpunkt / Interessen', validators=[Optional(), Length(max=200)])
     submit = SubmitField('Update Profile')

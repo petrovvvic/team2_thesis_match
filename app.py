@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, ProfSearchForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest,
-                RequestMessage, Attachment, Faculty, Facheinheit)
+                RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
@@ -134,15 +134,48 @@ def profile():
     elif user.role == 'student':
         form = StudentProfileForm()
         profile_data = user.student_profile
+
+        degree_programs = db.session.execute(
+            db.select(DegreeProgram)
+            .join(Faculty)
+            .where(Faculty.code == 'FB1')
+            .order_by(DegreeProgram.name)
+        ).scalars().all()
+
+        form.degree_program_id.choices = [
+            (0, '— Studiengang auswählen —')
+        ] + [
+            (
+                degree_program.id,
+                f'{degree_program.name} ({degree_program.degree})'
+            )
+            for degree_program in degree_programs
+        ]
+
         if form.validate_on_submit():
+            selected_program_id = form.degree_program_id.data or None
+
             profile_data.matriculation_number = form.matriculation_number.data
+            profile_data.degree_program_id = selected_program_id
             profile_data.semester = form.semester.data
             profile_data.study_focus = form.study_focus.data
+
+            if selected_program_id is None:
+                profile_data.faculty_id = None
+            else:
+                selected_program = db.session.get(
+                    DegreeProgram,
+                    selected_program_id
+                )
+                profile_data.faculty_id = selected_program.faculty_id
+
             db.session.commit()
             flash('Student profile successfully updated!', 'success')
             return redirect(url_for('profile'))
+
         elif request.method == 'GET':
             form.matriculation_number.data = profile_data.matriculation_number
+            form.degree_program_id.data = profile_data.degree_program_id or 0
             form.semester.data = profile_data.semester
             form.study_focus.data = profile_data.study_focus
 
