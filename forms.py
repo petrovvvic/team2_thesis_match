@@ -8,20 +8,19 @@ ATTACHMENT_MAX_BYTES = 5 * 1024 * 1024  # 5 MB
 
 # Screen 1a: Registrierung
 class RegistrationForm(FlaskForm):
-    first_name = StringField('Vorname', validators=[DataRequired(), Length(min=2, max=50)])
-    last_name = StringField('Nachname', validators=[DataRequired(), Length(min=2, max=50)])
-    email = StringField('HWR E-Mail Addresse', validators=[DataRequired(), Email()])
-    password = PasswordField('Passwort', validators=[DataRequired(), Length(min=6)])
-    confirm_password = PasswordField('Passwort Bestätigen', validators=[DataRequired(), EqualTo('password')])
-    role = SelectField('An der HWR bin ich...', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
-    facheinheit_id = SelectField('Facheinheit (Nur für Professor/innen)', coerce=int, validators=[Optional()])
+    first_name = StringField('Vorname*', validators=[DataRequired(), Length(min=2, max=50)])
+    last_name = StringField('Nachname*', validators=[DataRequired(), Length(min=2, max=50)])
+    email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(), Email()])
+    password = PasswordField('Passwort*', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Passwort Bestätigen*', validators=[DataRequired(), EqualTo('password')])
+    role = SelectField('An der HWR bin ich...*', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
     submit = SubmitField('Register')
 
 
 # Screen 1b: Login
 class LoginForm(FlaskForm):
-    email = StringField('HWR E-Mail Addresse', validators=[DataRequired(), Email()])
-    password = PasswordField('Passwort', validators=[DataRequired()])
+    email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(), Email()])
+    password = PasswordField('Passwort*', validators=[DataRequired()])
     submit = SubmitField('Login')
 
 
@@ -94,21 +93,21 @@ class MessageForm(FlaskForm):
 # Screen 4: Neue Betreuungsanfrage erstellen
 class RequestForm(FlaskForm):
     professor_id = SelectField(
-        'Professor/in auswählen',
+        'Professor/in auswählen*',
         coerce=int,
         validators=[DataRequired()]
     )
     proposed_title = StringField(
-        'Arbeitstitel der Bachelorarbeit',
+        'Arbeitstitel der Bachelorarbeit*',
         validators=[DataRequired(), Length(max=200)]
     )
     short_description = TextAreaField(
-        'Kurzbeschreibung',
+        'Kurzbeschreibung*',
         validators=[DataRequired(), Length(max=1000)],
         render_kw={'rows': 5}
     )
     preferred_period = StringField(
-        'Gewünschter Betreuungszeitraum',
+        'Gewünschter Betreuungszeitraum*',
         validators=[DataRequired(), Length(max=100)]
     )
     submit = SubmitField('Anfrage senden')
