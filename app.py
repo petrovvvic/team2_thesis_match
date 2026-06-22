@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, ProfSearchForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest,
-                RequestMessage, Attachment, Faculty, Facheinheit, insert_sample)
+                RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
@@ -32,6 +32,7 @@ with app.app_context():
 def index():
     return redirect(url_for('login'))
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -41,10 +42,14 @@ def login():
             session['user_id'] = user.id
             session['user_role'] = user.role
             flash('Erfolgreich eingeloggt!', 'success')
-            return redirect(url_for('profile'))
+            if session.pop('just_registered', False):
+                return redirect(url_for('profile'))
+            else:
+                return redirect(url_for('dashboard'))
         else:
             flash('Login fehlgeschlagen. Bitte überprüfe E-Mail und Passwort.', 'danger')
     return render_template('login.html', form=form)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -60,8 +65,7 @@ def register():
             account_status='active'
         )
         db.session.add(new_user)
-        db.session.flush()
-
+        db.session.flush()  # ID generieren
         if new_user.role == 'student':
             new_profile = StudentProfile(user_id=new_user.id)
             db.session.add(new_profile)
@@ -70,6 +74,7 @@ def register():
             db.session.add(new_profile)
 
         db.session.commit()
+        session['just_registered'] = True
         flash('Registration successful! You can now log in.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
@@ -100,9 +105,13 @@ def profile():
             profile_data.title = form.title.data
             profile_data.research_areas = form.research_areas.data
             profile_data.requirements = form.requirements.data
-            profile_data.max_supervisions = form.max_supervisions.data
-            profile_data.accepting_requests = form.accepting_requests.data
             profile_data.facheinheit_id = form.facheinheit_id.data or None
+            if form.supervision_status.data == -1:
+                profile_data.accepting_requests = 0
+                profile_data.max_supervisions = 0
+            else:
+                profile_data.accepting_requests = 1
+                profile_data.max_supervisions = form.supervision_status.data
             db.session.commit()
             flash('Professor profile successfully updated!', 'success')
             return redirect(url_for('profile'))
@@ -110,22 +119,57 @@ def profile():
             form.title.data = profile_data.title
             form.research_areas.data = profile_data.research_areas
             form.requirements.data = profile_data.requirements
-            form.max_supervisions.data = profile_data.max_supervisions
-            form.accepting_requests.data = profile_data.accepting_requests
             form.facheinheit_id.data = profile_data.facheinheit_id or 0
+            if profile_data.accepting_requests == 0:
+                form.supervision_status.data = -1
+            else:
+                form.supervision_status.data = profile_data.max_supervisions
 
     elif user.role == 'student':
         form = StudentProfileForm()
         profile_data = user.student_profile
+
+        degree_programs = db.session.execute(
+            db.select(DegreeProgram)
+            .join(Faculty)
+            .where(Faculty.code == 'FB1')
+            .order_by(DegreeProgram.name)
+        ).scalars().all()
+
+        form.degree_program_id.choices = [
+            (0, '— Studiengang auswählen —')
+        ] + [
+            (
+                degree_program.id,
+                f'{degree_program.name} ({degree_program.degree})'
+            )
+            for degree_program in degree_programs
+        ]
+
         if form.validate_on_submit():
+            selected_program_id = form.degree_program_id.data or None
+
             profile_data.matriculation_number = form.matriculation_number.data
+            profile_data.degree_program_id = selected_program_id
             profile_data.semester = form.semester.data
             profile_data.study_focus = form.study_focus.data
+
+            if selected_program_id is None:
+                profile_data.faculty_id = None
+            else:
+                selected_program = db.session.get(
+                    DegreeProgram,
+                    selected_program_id
+                )
+                profile_data.faculty_id = selected_program.faculty_id
+
             db.session.commit()
             flash('Student profile successfully updated!', 'success')
             return redirect(url_for('profile'))
+
         elif request.method == 'GET':
             form.matriculation_number.data = profile_data.matriculation_number
+            form.degree_program_id.data = profile_data.degree_program_id or 0
             form.semester.data = profile_data.semester
             form.study_focus.data = profile_data.study_focus
 
@@ -353,7 +397,9 @@ def api_top_supervisors():
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
     form = ProfSearchForm()
-    
+    faculties = db.session.execute(db.select(Faculty)).scalars().all()
+    form.faculty.choices = [('', 'Alle Fachbereiche')] + [(str(f.id),f.name) for f in faculties]
+
     facheinheiten = db.session.execute(db.select(Facheinheit)).scalars().all()
     form.facheinheit.choices = [('', 'Alle Facheinheiten')] + [(str(e.id),e.name) for e in facheinheiten]
 
@@ -361,6 +407,7 @@ def feed():
 
     if request.method == 'POST' and form.validate():
         suchbegriff = (form.search.data or "").lower()
+        faculty = form.faculty.data
         facheinheit = form.facheinheit.data
         availabilty = form.availibilty.data
 
@@ -372,10 +419,11 @@ def feed():
                 (prof.research_areas and suchbegriff in prof.research_areas.lower())
             )
 
+            match_faculty = (not faculty or str(prof.facheinheit.faculty_id)== str(faculty))
             match_facheinheit = (not facheinheit or str(prof.facheinheit_id)== str(facheinheit))
             match_availibilty = (not availabilty or str(prof.accepting_requests) == str(availabilty))
 
-            if match_search and match_availibilty and match_facheinheit: 
+            if match_search and match_faculty and match_availibilty and match_facheinheit: 
                 filtered.append(prof)
         professors = filtered      
                        
@@ -389,11 +437,6 @@ def view_professor(id):
     if not prof:
         abort(404)
     return render_template('profile-detail.html', prof=prof)
-
-@app.route('/insert/sample')
-def run_insert_sample():
-    insert_sample()
-    return 'Facheinheiten wurden eigefügt'
 
 @app.errorhandler(404)
 def not_found(e):

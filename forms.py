@@ -1,44 +1,58 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, IntegerField, BooleanField, SearchField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional
+from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, InputRequired
 
 MESSAGE_MAX_CHARS = 1000
 ATTACHMENT_MAX_BYTES = 5 * 1024 * 1024  # 5 MB
 
 # Screen 1a: Registrierung
 class RegistrationForm(FlaskForm):
-    first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=50)])
-    last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=50)])
-    email = StringField('HWR E-Mail Address', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    role = SelectField('I am a...', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
+    first_name = StringField('Vorname*', validators=[DataRequired(), Length(min=2, max=50)])
+    last_name = StringField('Nachname*', validators=[DataRequired(), Length(min=2, max=50)])
+    email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(), Email()])
+    password = PasswordField('Passwort*', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Passwort Bestätigen*', validators=[DataRequired(), EqualTo('password')])
+    role = SelectField('An der HWR bin ich...*', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
     submit = SubmitField('Register')
 
 
 # Screen 1b: Login
 class LoginForm(FlaskForm):
-    email = StringField('HWR E-Mail Address', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(), Email()])
+    password = PasswordField('Passwort*', validators=[DataRequired()])
     submit = SubmitField('Login')
 
 
 # Screen 7: Profil Professor
 class ProfessorProfileForm(FlaskForm):
     facheinheit_id = SelectField('Facheinheit', coerce=int, validators=[Optional()])
-    title = StringField('Academic Title', validators=[Optional()])
-    research_areas = TextAreaField('Research Areas', validators=[Optional(), Length(max=500)])
-    requirements = TextAreaField('Requirements for Students', validators=[Optional(), Length(max=500)])
-    max_supervisions = IntegerField('Max. Active Supervisions', validators=[DataRequired()])
-    accepting_requests = BooleanField('Currently Accepting Requests')
+    title = StringField('Akademische(r) Titel', validators=[Optional()])
+    research_areas = TextAreaField('Forschungsbereich(e)', validators=[Optional(), Length(max=500)])
+    requirements = TextAreaField('Voraussetzungen für Studierende', validators=[Optional(), Length(max=500)])
+    supervision_status = SelectField(
+        'Betreuungskapazität & Status',
+        coerce=int,
+        choices=[
+            (-1, 'Keine Anfrage möglich zur Zeit'),
+            (0, '0 Plätze'),
+            (1, '1 Platz'),
+            (2, '2 Plätze'),
+            (3, '3 Plätze'),
+            (4, '4 Plätze'),
+            (5, '5 Plätze'),
+            (6, 'Anfragen sind zur Zeit möglich ')
+        ],
+        validators=[InputRequired(message="Bitte wähle einen Status aus.")]
+    )
     submit = SubmitField('Update Profile')
 
 # Screen 7: Profil Student
 class StudentProfileForm(FlaskForm):
-    matriculation_number = StringField('Matriculation Number', validators=[Optional(), Length(max=20)])
-    semester = IntegerField('Current Semester', validators=[Optional()])
-    study_focus = TextAreaField('Study Focus / Interests', validators=[Optional(), Length(max=200)])
+    matriculation_number = StringField('Matrikelnummer', validators=[Optional(), Length(max=20)])
+    degree_program_id = SelectField('Studiengang', coerce=int, validators=[Optional()])
+    semester = IntegerField('Aktuelles Semester', validators=[Optional()])
+    study_focus = TextAreaField('Studienschwerpunkt / Interessen', validators=[Optional(), Length(max=200)])
     submit = SubmitField('Update Profile')
 
 
@@ -79,21 +93,21 @@ class MessageForm(FlaskForm):
 # Screen 4: Neue Betreuungsanfrage erstellen
 class RequestForm(FlaskForm):
     professor_id = SelectField(
-        'Professor/in auswählen',
+        'Professor/in auswählen*',
         coerce=int,
         validators=[DataRequired()]
     )
     proposed_title = StringField(
-        'Arbeitstitel der Bachelorarbeit',
+        'Arbeitstitel der Bachelorarbeit*',
         validators=[DataRequired(), Length(max=200)]
     )
     short_description = TextAreaField(
-        'Kurzbeschreibung',
+        'Kurzbeschreibung*',
         validators=[DataRequired(), Length(max=1000)],
         render_kw={'rows': 5}
     )
     preferred_period = StringField(
-        'Gewünschter Betreuungszeitraum',
+        'Gewünschter Betreuungszeitraum*',
         validators=[DataRequired(), Length(max=100)]
     )
     submit = SubmitField('Anfrage senden')
@@ -102,6 +116,7 @@ class RequestForm(FlaskForm):
 # Screen 2: Professor-Feed Suche/Filter
 class ProfSearchForm(FlaskForm):
     search = SearchField(validators=[Optional()])
+    faculty = SelectField(coerce=str, choices=[], validate_choice=False)
     facheinheit = SelectField(coerce=str, choices=[], validate_choice=False)
     availibilty = SelectField(coerce=str, choices=[('', 'Alle'), ('1', 'Verfügbar'), ('0', 'Nicht verfügbar')], validate_choice=False)
     submit = SubmitField('Suchen')

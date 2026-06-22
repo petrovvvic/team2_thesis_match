@@ -34,6 +34,7 @@ class DegreeProgram(db.Model):
     degree = db.Column(db.String(20), nullable=False)
 
     faculty = db.relationship('Faculty', back_populates='degree_programs')
+    students = db.relationship('StudentProfile', back_populates='degree_program')
 
 
 class User(db.Model):
@@ -61,6 +62,7 @@ class StudentProfile(db.Model):
 
     user = db.relationship('User', back_populates='student_profile')
     faculty = db.relationship('Faculty', back_populates='students')
+    degree_program = db.relationship('DegreeProgram', back_populates='students')
 
 class ProfessorProfile(db.Model):
     __tablename__ = 'professor_profiles'
@@ -157,28 +159,4 @@ class RequestStatusHistory(db.Model):
     request = db.relationship('SupervisionRequest', foreign_keys=[request_id])
     editor = db.relationship('User', foreign_keys=[changed_by])
 
-def insert_sample():
-    fb1 = db.session.execute(db.select(Faculty).filter_by(code='FB1')).scalar_one_or_none()
-    if fb1 is None:
-        fb1 = Faculty(code='FB1', name='Wirtschaftswissenschaften')
-        db.session.add(fb1)
-        db.session.commit()
-
-    facheinheiten = [
-        Facheinheit(faculty_id=fb1.id, name='Unternehmensführung / Personal / Organisation'),
-        Facheinheit(faculty_id=fb1.id, name='Marketing'),
-        Facheinheit(faculty_id=fb1.id, name='Finanzwirtschaft'),
-        Facheinheit(faculty_id=fb1.id, name='Steuern'),
-        Facheinheit(faculty_id=fb1.id, name='Rechnungswesen'),
-        Facheinheit(faculty_id=fb1.id, name='Supply Chain und Operations Management'),
-        Facheinheit(faculty_id=fb1.id, name='Quantitative Methoden'),
-        Facheinheit(faculty_id=fb1.id, name='Wirtschaftsinformatik'),
-        Facheinheit(faculty_id=fb1.id, name='Volkswirtschaftslehre'),
-        Facheinheit(faculty_id=fb1.id, name='Gesellschaftswissenschaften'),
-        Facheinheit(faculty_id=fb1.id, name='Wirtschaftsrecht'),
-    ]
-    db.session.add_all(facheinheiten)
-    db.session.commit()
     
-
- 

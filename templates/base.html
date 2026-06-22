@@ -35,12 +35,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 {{ render_nav_item('feed', 'Professoren') }}
-    
+            </ul>
+            <ul class="navbar-nav ms-auto">
                 {% if 'user_id' in session %}
                     {{ render_nav_item('dashboard', 'Dashboard') }}
                     {{ render_nav_item('profile', 'Mein Profil') }}
                     {{ render_nav_item('chats', 'Meine Chats') }}
-                    {{ render_nav_item('logout', 'Logout') }}
+                    {{ render_nav_item('logout', 'Ausloggen') }}
                 {% else %}
                     {{ render_nav_item('login', 'Login') }}
                     {{ render_nav_item('register', 'Registrieren') }}
