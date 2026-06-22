@@ -30,21 +30,7 @@ class ProfessorProfileForm(FlaskForm):
     title = StringField('Akademische(r) Titel', validators=[Optional()])
     research_areas = TextAreaField('Forschungsbereich(e)', validators=[Optional(), Length(max=500)])
     requirements = TextAreaField('Voraussetzungen für Studierende', validators=[Optional(), Length(max=500)])
-    supervision_status = SelectField(
-        'Betreuungskapazität & Status',
-        coerce=int,
-        choices=[
-            (-1, 'Keine Anfrage möglich zur Zeit'),
-            (0, '0 Plätze'),
-            (1, '1 Platz'),
-            (2, '2 Plätze'),
-            (3, '3 Plätze'),
-            (4, '4 Plätze'),
-            (5, '5 Plätze'),
-            (6, 'Anfragen sind zur Zeit möglich ')
-        ],
-        validators=[InputRequired(message="Bitte wähle einen Status aus.")]
-    )
+    accepting_requests = BooleanField('Anfragen erhalten?')
     submit = SubmitField('Update Profile')
 
 # Screen 7: Profil Student

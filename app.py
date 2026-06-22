@@ -101,29 +101,27 @@ def profile():
         profile_data = user.professor_profile
         facheinheiten = db.session.execute(db.select(Facheinheit)).scalars().all()
         form.facheinheit_id.choices = [(0, '— keine —')] + [(f.id, f.name) for f in facheinheiten]
+
         if form.validate_on_submit():
             profile_data.title = form.title.data
             profile_data.research_areas = form.research_areas.data
             profile_data.requirements = form.requirements.data
             profile_data.facheinheit_id = form.facheinheit_id.data or None
-            if form.supervision_status.data == -1:
-                profile_data.accepting_requests = 0
-                profile_data.max_supervisions = 0
-            else:
+
+            if form.accepting_requests.data:
                 profile_data.accepting_requests = 1
-                profile_data.max_supervisions = form.supervision_status.data
+            else:
+                profile_data.accepting_requests = 0
+
             db.session.commit()
             flash('Professor profile successfully updated!', 'success')
             return redirect(url_for('profile'))
+
         elif request.method == 'GET':
             form.title.data = profile_data.title
             form.research_areas.data = profile_data.research_areas
             form.requirements.data = profile_data.requirements
-            form.facheinheit_id.data = profile_data.facheinheit_id or 0
-            if profile_data.accepting_requests == 0:
-                form.supervision_status.data = -1
-            else:
-                form.supervision_status.data = profile_data.max_supervisions
+            form.accepting_requests.data = bool(profile_data.accepting_requests)
 
     elif user.role == 'student':
         form = StudentProfileForm()
