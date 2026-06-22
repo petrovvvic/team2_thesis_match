@@ -30,14 +30,14 @@
 
 <div class="row">
 {% for prof in professoren %}
-<div class="col-md-4 mb-3">
-<div class="card{% if prof.accepting_requests !=1 %} bg-light text-muted{% endif %}">
-<div class="card-body">
+<div class="col-md-4 mb-3" d-flex>
+<div class="card h-100{% if prof.accepting_requests !=1 %} bg-light text-muted{% endif %}" style="width: 100%;">
+<div class="card-body d-flex flex-column">
 <!-- prof daten werden aus db abgerufen-->
 <h5 class="card-title">{{ prof.user.first_name}} {{ prof.user.last_name }}</h5>
 <p class="card-text">{% if prof.facheinheit %}{{ prof.facheinheit.faculty.name }}{% endif %}</p>
 <p class="card-text">{{ prof.research_areas or '' }}</p>
-<a href="{{ url_for('view_professor', id=prof.user_id)}}" class="btn btn-primary">Profil ansehen</a>
+<a href="{{ url_for('view_professor', id=prof.user_id)}}" class="btn btn-primary mt-auto">Profil ansehen</a>
 
 </div>
     </div>

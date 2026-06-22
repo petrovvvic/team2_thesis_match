@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Thesis Match{% endblock %}</title>
     {{ bootstrap.load_css() }}
+    <style>
+        :root {
+            --bs-primary: #C8102E;
+            --bs-primary-rgb: 200, 16, 46;
+        }
+        btn-primary {
+        --bs-btn-bg: var(--bs-primary);
+        --bs-btn-border-color: var(--bs-primary);
+        --bs-btn-hover-bg: #a50d26;
+        --bs-btn-hover-border-color: #a50d26;
+        --bs-btn-active-bg: #8a0b20;
+        --bs-btn-active-border-color: #8a0b20;
+        }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-light">
