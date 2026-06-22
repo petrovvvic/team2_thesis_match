@@ -394,6 +394,9 @@ def api_top_supervisors():
 
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
+    if 'user_id' not in session:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
     form = ProfSearchForm()
     faculties = db.session.execute(db.select(Faculty)).scalars().all()
     form.faculty.choices = [('', 'Alle Fachbereiche')] + [(str(f.id),f.name) for f in faculties]
