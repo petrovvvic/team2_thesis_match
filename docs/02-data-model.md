@@ -1,3 +1,7 @@
+
+![erm](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/assets/images/Screenshot%202026-06-21%20205638.png)
+
+
 # Data Model
 
 The application uses SQLite as the database technology and Flask-SQLAlchemy as the ORM layer.  
@@ -180,6 +184,7 @@ Important fields:
 Relationships:
 - Belongs to one `SupervisionRequest`
 - Stores which user changed the status
+
 
 ## ER diagram
 
