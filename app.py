@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, RequestStatusForm, ProfSearchForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest, RequestStatusHistory,
-                RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram)
+                RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram, insert_sample)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
@@ -526,6 +526,11 @@ def view_professor(id):
     if not prof:
         abort(404)
     return render_template('profile-detail.html', prof=prof)
+
+@app.route('/insert/sample')
+def run_insert_sample():
+    insert_sample()
+    return 'Facheinheiten wurden eingefügt.'
 
 @app.errorhandler(404)
 def not_found(e):
