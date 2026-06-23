@@ -71,6 +71,6 @@ Alle Nutzer sehen ihr Profil. Professorinnen und Professoren können zusätzlich
 
 ## Screen 8 — Top-Betreuer Rangliste
 
-API-gestützte Rangliste der meistgefragten Professorinnen und Professoren nach Anfragevolumen und Bewertung. 
+API-gestützte Rangliste der meistgefragten Professorinnen und Professoren nach Anfragevolumen. 
 
 ![Screen 6 - Rangliste](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201545.png)

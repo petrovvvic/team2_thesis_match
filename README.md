@@ -39,3 +39,12 @@ Voraussetzung: **Python 3** muss installiert sein.
    ```
    Danach im Browser `http://127.0.0.1:5000` öffnen.
    (macOS: Port 5000 ist oft durch AirPlay belegt — dann `flask --app app run --port 5050` und `http://127.0.0.1:5050`.)
+
+
+
+
+
+# TODO
+- api dokus am ende:   
+- http://127.0.0.1:5050/api/top-supervisors
+- http://127.0.0.1:5050/api/top-supervisors?limit=5

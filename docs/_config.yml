@@ -7,7 +7,7 @@ remote_theme: just-the-docs/just-the-docs
 timezone: Europe/Berlin
 
 mermaid:
-  version: "11.14.0" # Pick version from https://cdn.jsdelivr.net/npm/mermaid/
+  version: "9.4.3" # Pick version from https://cdn.jsdelivr.net/npm/mermaid/
 
 color_scheme: light
 
