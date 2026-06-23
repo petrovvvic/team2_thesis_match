@@ -20,5 +20,5 @@ Diese Design Challenge basiert auf zwei kurzen Umfragen unter Studierenden (n=10
 
 Die Design Challenge basiert auf zwei kurzen Umfragen im Fachbereich 1 der HWR Berlin:
 
-- Studierende (n=10): [Umfrage (PDF)](material/01-stud-survey/studenten%20umfrage.pdf), [Ergebnisse (CSV)](material/01-stud-survey/Studenten_Formular_ergebnisse.csv)
+- Studierende (n=17): [Umfrage (PDF)](material/01-stud-survey/studenten%20umfrage.pdf), [Ergebnisse (CSV)](material/01-stud-survey/Studenten_Formular_ergebnisse.csv)
 - Professor:innen (n=5): [Umfrage-Ergebnisse (CSV)](material/02-prof-survey/ThesisMatch%20—%20Umfrage%20für%20Dozentinnen%20und%20Dozenten.csv)
