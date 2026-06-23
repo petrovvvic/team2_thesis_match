@@ -16,11 +16,9 @@ Diese Design Challenge basiert auf zwei kurzen Umfragen unter Studierenden (n=10
 
 ---
 
-## [Raw Material]
+## Raw Material
 
-Umfrage Studierende (n=10)
-Umfrage Professor (n=5)
+Die Design Challenge basiert auf zwei kurzen Umfragen im Fachbereich 1 der HWR Berlin:
 
-[List / link / paste any material that you created or referenced while working on the **Design Challenge** definition.
-
-Ideally, put any material that you created on your own in the folder `📁 docs/product-discovery/material/01-dc/` (e.g., a scribble as .png image file), and link it on this page.]
+- Studierende (n=10): [Umfrage (PDF)](material/01-stud-survey/studenten%20umfrage.pdf), [Ergebnisse (CSV)](material/01-stud-survey/Studenten_Formular_ergebnisse.csv)
+- Professor:innen (n=5): [Umfrage-Ergebnisse (CSV)](material/02-prof-survey/ThesisMatch%20—%20Umfrage%20für%20Dozentinnen%20und%20Dozenten.csv)

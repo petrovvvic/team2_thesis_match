@@ -28,7 +28,7 @@ Eine Plattform wo Professoren der HWR aktiv Betreuungsangebote einstellen (Theme
 
 **Professor/in-Feed:** durchsuchbare Übersicht aller Professoren die aktiv Betreuungsplätze anbieten, filterbar nach Fachbereich und Themenfeld.--> Kein Überblick wer Betreuungen anbietet.
 
-**Profil-Detailseite:** jeder Professor/in hat eine Profilseite mit Themenfeldern, Anforderungen, aktuell verfügbaren Plätzen und Bewertungen anderer Studierender. 
+**Profil-Detailseite:** jeder Professor/in hat eine Profilseite mit Themenfeldern, Anforderungen und aktuell verfügbaren Plätzen. 
 
 **Anfrage-Flow:** Studis stellen eine strukturierte Anfrage mit Thema, Typ, Zeitraum und Kurzbeschreibung direkt über die Plattform
 
@@ -48,13 +48,33 @@ Eine Plattform wo Professoren der HWR aktiv Betreuungsangebote einstellen (Theme
 - Studis die aktiv einen Betreuer für ihre Abschlussarbeit (BA) suchen, besonders solche ohne persönliche Kontakte zu Professoren.
 - Professorinen und Professoren der HWR die ihr Betreuungsangebot transparent kommunizieren und eingehende Anfragen strukturiert verwalten möchten.
 
+## Value Proposition Canvas
+
+Der Canvas fasst zusammen, welche Aufgaben, Frustrationen und Ziele (Customer Profile) die App mit welchen Funktionen adressiert (Value Map). Die Pains und Jobs stammen aus den Umfragen (siehe [Product Discovery](product-discovery/02-users-problems.md)).
+
+### Studierende (primäres Segment)
+
+| Customer Profile | Value Map (App) |
+| --- | --- |
+| **Customer Jobs:** passende Betreuung finden, Thema fachlich klären, Anfrage stellen, Überblick behalten | **Products & Services:** Professor-Feed, Profil-Detailseite, strukturierte Anfrage, „Meine Anfragen", Chat |
+| **Pains:** kennt keine passenden Professor:innen, keine Info zu Themen/Kapazität, lange Wartezeit, mehrfache Absagen, Zeitverlust durch fachlich unpassende Themen | **Pain Relievers:** Feed zeigt Professor:innen, Themenfelder und Verfügbarkeit vorab; Filter nach Fachbereich; strukturierte Anfrage verhindert Missverständnisse; Statusübersicht |
+| **Gains:** schnell eine passende Betreuung, Transparenz über Verfügbarkeit, weniger Absagen | **Gain Creators:** gezielte, passende Anfragen; schnellere Rückmeldung; kein E-Mail-Chaos |
+
+### Professor:innen (sekundäres Segment)
+
+| Customer Profile | Value Map (App) |
+| --- | --- |
+| **Customer Jobs:** fachlich passende, gut vorbereitete Anfragen erhalten, Anfragen verwalten, Aufwand senken | **Products & Services:** Profil mit Themenfeldern/Kapazität, Anfrageformular mit Pflichtfeldern, Betreuer-Dashboard |
+| **Pains:** unstrukturierte und fachlich unpassende Anfragen, Verwaltungsaufwand, kein Überblick | **Pain Relievers:** strukturierte Pflicht-Anfragen, Dashboard mit Annehmen/Ablehnen und Statusverwaltung |
+| **Gains:** weniger Fehl-Anfragen, Studierende schneller einschätzen | **Gain Creators:** vollständige, vergleichbare Anfragen; klare Übersicht |
+
 ## Happy Path
 
 ### Studi sucht einen Betreuer
 
 1. **Registrierung:** Studi gibt Name, HWR-E-Mail, Passwort ein und wählt Rolle "Studierende/r"
 2. **Professor-Feed:** Studi sieht alle verfügbaren Betreuer, filtert nach Fachbereich
-3. **Profil-Detailseite:** Studi klickt auf einen Professorprofil, liest Themenfelder, Anforderungen und Bewertungen
+3. **Profil-Detailseite:** Studi klickt auf einen Professorprofil, liest Themenfelder und Anforderungen
 4. **Anfrage-Flow:** Studi füllt strukturierte Anfrage aus (Thema, Zeitplan, Kurzbeschreibung) und sendet ab
 5. **Meine Anfragen:** Studi verfolgt den Status seiner Anfrage
    
@@ -109,14 +129,14 @@ Bestehende Nutzer/in loggen sich mit E-Mail und Passwort ein.
 
 Durchsuchbare Übersicht aller Professorinnen und Professoren der HWR die aktiv 
 Betreuungsplätze anbieten. Filterbar nach Fachbereich. 
-Jede Karte zeigt Name, Fachbereich, freie Plätze und Bewertung.
+Jede Karte zeigt Name, Fachbereich und freie Plätze.
 
 ![Screen 2](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201412.png)
 
 ## Screen 3 — Profil-Detailseite
 
 Jeder Professor/in hat eine eigene Seite mit Themenfeldern, 
-Anforderungen, verfügbaren Plätzen und Bewertungen. 
+Anforderungen und verfügbaren Plätzen. 
 Direkte Möglichkeit eine Anfrage zu stellen.
 
 ![Screen 3 - Profil-Detailseite](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201428.png)
@@ -156,7 +176,7 @@ Alle Nutzer sehen ihr Profil. Professorinnen und Professoren können zusätzlich
 
 ## Screen 8 — Top-Betreuer Rangliste
 
-API-gestützte Rangliste der meistgefragten Professorinnen und Professoren nach Anfragevolumen und Bewertung. 
+API-gestützte Rangliste der meistgefragten Professorinnen und Professoren nach Anfragevolumen. 
 
 ![Screen 6 - Rangliste](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201545.png)
 
