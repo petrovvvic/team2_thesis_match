@@ -27,7 +27,7 @@ Die Spalte *Quelle* unterscheidet zwischen **Umfrage** (durch die Studi-/Prof-Um
 
 ## Ideenfindung (Brainstorming)
 
-Im Brainstorming entstanden mehr Ideen, als am Ende umgesetzt wurden. Neben den oben gewählten Lösungen wurden u. a. ein **Bewertungssystem für Professor:innen** und eine **Tinder-artige Swipe-UI** für das Matching diskutiert. Beide wurden nach der Evaluation bewusst verworfen — die Begründung steht unter [Tests](04-tests.md).
+Im Brainstorming entstanden mehr Ideen, als am Ende umgesetzt wurden. Neben den oben gewählten Lösungen wurden u. a. ein **Bewertungssystem für Professor:innen** und eine **Tinder-artige Swipe-UI** für das Matching diskutiert. Beide wurden nach der Evaluation bewusst verworfen.Die Begründung steht unter [Tests](04-tests.md).
 
 ## Prototypen / Wireframes
 
