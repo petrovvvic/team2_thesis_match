@@ -35,7 +35,7 @@ Ich möchte verstehen wie eine Web-Applikation von der Idee bis zur Umsetzung en
 
 ## Eidesstattliche Erklärung: 
 
-**[Jane Dane, Matrikelnr.: 1234567]**
+**[Aya Madarati, Matrikelnr.: 77204158016]**
 
 Ich erkläre an Eides statt:
 
