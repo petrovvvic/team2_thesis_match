@@ -7,10 +7,6 @@ nav_order: 2
 {: .no_toc }
 # Target Users + Problems
 
-## Raw Material
-
-- Studierenden-Umfrage (n=10): [Umfrage (PDF)](material/01-stud-survey/studenten%20umfrage.pdf), [Ergebnisse (CSV)](material/01-stud-survey/Studenten_Formular_ergebnisse.csv)
-- Professor:innen-Umfrage (n=5): [Ergebnisse (CSV)](material/02-prof-survey/ThesisMatch%20—%20Umfrage%20für%20Dozentinnen%20und%20Dozenten.csv)
 
 Zur Untersuchung des Problems wurden zwei kurze Umfragen durchgeführt. Befragt wurden Bachelor-Studierende sowie Professorinnen und Professoren des Fachbereichs 1 der HWR Berlin.
 
@@ -56,6 +52,13 @@ Die häufigsten Ablehnungsgründe waren fehlende Betreuungskapazitäten und fach
 
 
 **Kernproblem:** Professor:innen  erhalten regelmäßig Anfragen, die fachlich nicht passen oder zu wenig Informationen enthalten.
+
+
+## Raw Material
+
+- Studierenden-Umfrage (n=10): [Umfrage (PDF)](material/01-stud-survey/studenten%20umfrage.pdf), [Ergebnisse (CSV)](material/01-stud-survey/Studenten_Formular_ergebnisse.csv)
+- Professor:innen-Umfrage (n=5): [Ergebnisse (CSV)](material/02-prof-survey/ThesisMatch%20—%20Umfrage%20für%20Dozentinnen%20und%20Dozenten.csv)
+
 
 
 
