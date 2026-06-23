@@ -7,7 +7,7 @@ nav_order: 1
 
 **Was:** Webplattform, die Bachelor-Studierende und Professor:innen der HWR (Fachbereich 1) für die Betreuung von Abschlussarbeiten zusammenbringt.
 
-**Problem (belegt durch 2 Umfragen: Studierende n=10, Professor:innen n=5):** Studierende finden nur schwer eine fachlich passende, verfügbare Betreuung; Professor:innen erhalten unstrukturierte und unpassende Anfragen per E-Mail.
+**Problem (belegt durch 2 Umfragen: Studierende n=17, Professor:innen n=5):** Studierende finden nur schwer eine fachlich passende, verfügbare Betreuung; Professor:innen erhalten unstrukturierte und unpassende Anfragen per E-Mail.
 
 **Lösung:** Professor:innen machen ihr Betreuungsangebot sichtbar (Themenfelder, Verfügbarkeit); Studierende suchen gezielt, sehen die Verfügbarkeit vorab und stellen strukturierte Anfragen — inklusive Chat und PDF-Anhängen.
 

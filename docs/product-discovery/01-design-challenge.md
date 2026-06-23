@@ -11,7 +11,7 @@ nav_order: 1
 
 Wie können wir Bachelor-Studierenden des Fachbereichs 1 der HWR Berlin helfen, einen fachlich passenden und verfügbaren Betreuer für ihre Abschlussarbeit zu finden, während Professorinnen und Professoren strukturierte und passende Anfragen erhalten?
 
-Diese Design Challenge basiert auf zwei kurzen Umfragen unter Studierenden (n=10) und Professor:innen (n=5) des Fachbereichs 1, siehe 02-users-problems.md. Beide Gruppen beschrieben unabhängig voneinander dasselbe Grundproblem: fehlende Transparenz über Verfügbarkeit und fachliche Passung, bevor eine Anfrage gestellt wird.
+Diese Design Challenge basiert auf zwei kurzen Umfragen unter Studierenden (n=17) und Professor:innen (n=5) des Fachbereichs 1, siehe 02-users-problems.md. Beide Gruppen beschrieben unabhängig voneinander dasselbe Grundproblem: fehlende Transparenz über Verfügbarkeit und fachliche Passung, bevor eine Anfrage gestellt wird.
 
 
 ---

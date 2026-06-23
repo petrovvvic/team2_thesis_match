@@ -516,7 +516,7 @@ def feed():
             match_facheinheit = (not facheinheit or str(prof.facheinheit_id)== str(facheinheit))
             match_availibilty = (not availabilty or str(prof.accepting_requests) == str(availabilty))
 
-            if match_search and match_faculty and match_availibilty and match_facheinheit: 
+            if match_search and match_availibilty and match_facheinheit:
                 filtered.append(prof)
         professors = filtered      
                        
