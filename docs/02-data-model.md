@@ -2,7 +2,7 @@
 
 
 
-![erm](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/assets/images/Screenshot%202026-06-21%20205638.png)
+![erm](https://github.com/petrovvvic/team2_thesis_match/raw/main/docs/assets/images/Screenshot%202026-06-21%20205638.png)
 
 
 
@@ -213,3 +213,4 @@ erDiagram
     USERS ||--o{ THESIS_TOPICS : creates
     SUPERVISION_REQUESTS ||--o{ REQUEST_STATUS_HISTORY : has
     USERS ||--o{ REQUEST_STATUS_HISTORY : changes
+```
