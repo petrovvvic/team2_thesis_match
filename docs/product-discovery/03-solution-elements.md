@@ -9,7 +9,7 @@ nav_order: 3
 
 ## Vorgehen
 
-Aus den in der Need-Finding-Phase identifizierten Problemen (siehe [Target Users + Problems](02-users-problems.md)) haben wir konkrete **Sub-Probleme** abgeleitet. Für jedes Sub-Problem wurde ein **Solution Element** entwickelt, das sich direkt in einem **Screen** der App widerspiegelt. So lässt sich jede Funktion auf ein reales Nutzerproblem zurückführen.
+Aus den in der Need-Finding-Phase identifizierten Problemen (siehe [Target Users + Problems](02-users-problems.md)) haben wir konkrete Sub-Probleme abgeleitet. Für jedes Sub-Problem wurde ein Solution Element entwickelt, das sich direkt in einem Screen der App widerspiegelt. So lässt sich jede Funktion auf ein reales Nutzerproblem zurückführen.
 
 Die Spalte *Quelle* unterscheidet zwischen Umfrage (durch die Studi-/Prof-Umfragen belegt) und Annahme (von uns angenommen, nicht direkt belegt).
 
