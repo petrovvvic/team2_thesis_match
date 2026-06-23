@@ -11,7 +11,7 @@ nav_order: 3
 
 Aus den in der Need-Finding-Phase identifizierten Problemen (siehe [Target Users + Problems](02-users-problems.md)) haben wir konkrete **Sub-Probleme** abgeleitet. Für jedes Sub-Problem wurde ein **Solution Element** entwickelt, das sich direkt in einem **Screen** der App widerspiegelt. So lässt sich jede Funktion auf ein reales Nutzerproblem zurückführen.
 
-Die Spalte *Quelle* unterscheidet zwischen **Umfrage** (durch die Studi-/Prof-Umfragen belegt) und **Annahme** (von uns angenommen, nicht direkt belegt).
+Die Spalte *Quelle* unterscheidet zwischen Umfrage (durch die Studi-/Prof-Umfragen belegt) und Annahme (von uns angenommen, nicht direkt belegt).
 
 ## Sub-Problem → Solution → Screen
 
@@ -27,7 +27,7 @@ Die Spalte *Quelle* unterscheidet zwischen **Umfrage** (durch die Studi-/Prof-Um
 
 ## Ideenfindung (Brainstorming)
 
-Im Brainstorming entstanden mehr Ideen, als am Ende umgesetzt wurden. Neben den oben gewählten Lösungen wurden u. a. ein **Bewertungssystem für Professor:innen** und eine **Tinder-artige Swipe-UI** für das Matching diskutiert. Beide wurden nach der Evaluation bewusst verworfen.Die Begründung steht unter [Tests](04-tests.md).
+Im Brainstorming entstanden mehr Ideen, als am Ende umgesetzt wurden. Neben den oben gewählten Lösungen wurden u. a. ein Bewertungssystem für Professor:innen und eine Tinder-artige Swipe-UI für das Matching diskutiert. Beide wurden nach der Evaluation bewusst verworfen.Die Begründung steht unter [Tests](04-tests.md).
 
 ## Prototypen / Wireframes
 
