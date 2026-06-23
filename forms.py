@@ -99,6 +99,10 @@ class RequestForm(FlaskForm):
     submit = SubmitField('Anfrage senden')
 
 
+class RequestStatusForm(FlaskForm):
+    accept = SubmitField('Annehmen')
+    reject = SubmitField('Ablehnen')
+
 # Screen 2: Professor-Feed Suche/Filter
 class ProfSearchForm(FlaskForm):
     search = SearchField(validators=[Optional()])

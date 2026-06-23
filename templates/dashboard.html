@@ -52,24 +52,58 @@
                 <div class="list-group">
                     {% for req in dashboard_requests %}
                         {% set other_user = req.professor if user.role == 'student' else req.student %}
-                        <a href="{{ url_for('chat', request_id=req.id) }}"
-                           class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
+
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between align-items-start">
                                 <h6 class="mb-1">{{ req.proposed_title }}</h6>
-                                <span class="badge bg-secondary">{{ req.status }}</span>
+                                <span class="badge bg-secondary">
+                                    {{ req.status }}
+                                </span>
                             </div>
+
                             <p class="mb-1 text-muted">
                                 {% if user.role == 'student' %}
                                     Professor/in:
                                 {% else %}
                                     Student/in:
                                 {% endif %}
-                                {{ other_user.first_name }} {{ other_user.last_name }}
+
+                                {{ other_user.first_name }}
+                                {{ other_user.last_name }}
                             </p>
+
                             <small class="text-muted">
-                                Aktualisiert: {{ req.updated_at.strftime('%d.%m.%Y %H:%M') }}
+                                Aktualisiert:
+                                {{ req.updated_at.strftime('%d.%m.%Y %H:%M') }}
                             </small>
-                        </a>
+
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                <a
+                                    href="{{ url_for('chat', request_id=req.id) }}"
+                                    class="btn btn-outline-secondary btn-sm"
+                                >
+                                    Chat öffnen
+                                </a>
+
+                                {% if user.role == 'professor' and req.status == 'submitted' %}
+                                    <form
+                                        method="post"
+                                        action="{{ url_for('update_request_status', request_id=req.id) }}"
+                                        class="d-inline-flex gap-2"
+                                    >
+                                        {{ status_forms[req.id].hidden_tag() }}
+
+                                        {{ status_forms[req.id].accept(
+                                            class_='btn btn-success btn-sm'
+                                        ) }}
+
+                                        {{ status_forms[req.id].reject(
+                                            class_='btn btn-danger btn-sm'
+                                        ) }}
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
                     {% endfor %}
                 </div>
             {% else %}

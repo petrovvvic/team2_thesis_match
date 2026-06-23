@@ -7,8 +7,8 @@ from flask_bootstrap import Bootstrap5
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
-from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, ProfSearchForm
-from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest,
+from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, RequestStatusForm, ProfSearchForm
+from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest, RequestStatusHistory,
                 RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram)
 
 app = Flask(__name__)
@@ -199,6 +199,17 @@ def dashboard():
 
     dashboard_requests = db.session.execute(requests_q).scalars().all()
 
+    status_forms = {}
+
+    if user.role == 'professor':
+        status_forms = {
+            sup_request.id: RequestStatusForm(
+                prefix=f'request-{sup_request.id}-'
+            )
+            for sup_request in dashboard_requests
+            if sup_request.status == 'submitted'
+        }
+
     status_counts = {}
     for sup_request in dashboard_requests:
         status_counts[sup_request.status] = status_counts.get(sup_request.status, 0) + 1
@@ -208,7 +219,9 @@ def dashboard():
         user=user,
         dashboard_requests=dashboard_requests,
         status_counts=status_counts,
+        status_forms=status_forms,
     )
+
 @app.route('/requests/new', methods=['GET', 'POST'])
 def create_request():
     user = _current_user()
@@ -266,6 +279,83 @@ def create_request():
         return redirect(url_for('dashboard'))
 
     return render_template('request_new.html', form=form, user=user)
+
+@app.route('/requests/<int:request_id>/status', methods=['POST'])
+def update_request_status(request_id):
+    user = _current_user()
+
+    if not user:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
+
+    if user.role != 'professor':
+        flash(
+            'Nur Professor/innen dürfen Betreuungsanfragen bearbeiten.',
+            'danger'
+        )
+        return redirect(url_for('dashboard'))
+
+    supervision_request = db.session.get(
+        SupervisionRequest,
+        request_id
+    )
+
+    if supervision_request is None:
+        abort(404)
+
+    if supervision_request.professor_id != user.id:
+        abort(403)
+
+    form = RequestStatusForm(
+        prefix=f'request-{request_id}-'
+    )
+
+    if not form.validate_on_submit():
+        flash(
+            'Die Anfrage konnte nicht verarbeitet werden.',
+            'danger'
+        )
+        return redirect(url_for('dashboard'))
+
+    if supervision_request.status != 'submitted':
+        flash(
+            'Diese Anfrage wurde bereits bearbeitet.',
+            'warning'
+        )
+        return redirect(url_for('dashboard'))
+
+    if form.accept.data:
+        new_status = 'accepted'
+        flash_message = 'Betreuungsanfrage wurde angenommen.'
+        flash_category = 'success'
+
+    elif form.reject.data:
+        new_status = 'rejected'
+        flash_message = 'Betreuungsanfrage wurde abgelehnt.'
+        flash_category = 'info'
+
+    else:
+        flash(
+            'Es wurde keine gültige Aktion ausgewählt.',
+            'danger'
+        )
+        return redirect(url_for('dashboard'))
+
+    old_status = supervision_request.status
+    supervision_request.status = new_status
+
+    status_history = RequestStatusHistory(
+        request_id=supervision_request.id,
+        old_status=old_status,
+        new_status=new_status,
+        changed_by=user.id,
+    )
+
+    db.session.add(status_history)
+    db.session.commit()
+
+    flash(flash_message, flash_category)
+    return redirect(url_for('dashboard'))
 
 @app.route('/chats')
 def chats():
