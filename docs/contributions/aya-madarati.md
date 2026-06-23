@@ -53,7 +53,7 @@ Mir ist weiterhin bewusst, dass ich, sofern ich zur Erstellung dieser Arbeit KI-
 | :-- | :-- | :-- | :-- |
 | 1 | Implementierung des Professor-Feeds: Suche, Filterlogik (Facheinheit, Verfügbarkeit) und Anbindung an die Datenbank | Der Feed funktioniert vollständig dynamisch mit Live-Daten aus der Datenbank statt Platzhaltern | Verstehen wie man mehrere Filterkriterien gleichzeitig korrekt kombiniert |
 | 2 | Implementierung der Profil-Detailseite inkl. bedingter Darstellung (ausgegraut, deaktivierter Button) je nach Verfügbarkeitsstatus | Die Seite verknüpft mehrere zusammenhängende Datenbanktabellen korrekt in einer übersichtlichen Ansicht und gibt Studierenden sofort sichtbares Feedback zur Verfügbarkeit | Verstehen wie verknüpfte Datenbank-Beziehungen korrekt in Jinja2-Templates dargestellt werden |
-| 3 | An der Value Proposition und den UI-Screens gearbeitet und in GitHub Pages dokumentiert | Jeder Screen ist nachvollziehbar aus einem konkreten Problem der Value Proposition abgeleitet | Die Inhalte mehrfach an neues Feedback angepasst, ohne den roten Faden zu verlieren |
+| 3 | An der Value Proposition und den UI-Screens gearbeitet und in GitHub Pages dokumentiert. Mitarbeit an der Dokumentation für First submission.| Jeder Screen ist nachvollziehbar aus einem konkreten Problem der Value Proposition abgeleitet | Die Inhalte mehrfach an neues Feedback angepasst, ohne den roten Faden zu verlieren |
 
 
 ## Design Decisions that I led
