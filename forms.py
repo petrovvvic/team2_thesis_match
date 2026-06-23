@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, IntegerField, BooleanField, SearchField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, InputRequired
+from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, InputRequired, NumberRange
 
 MESSAGE_MAX_CHARS = 1000
 ATTACHMENT_MAX_BYTES = 5 * 1024 * 1024  # 5 MB
@@ -37,7 +37,7 @@ class ProfessorProfileForm(FlaskForm):
 class StudentProfileForm(FlaskForm):
     matriculation_number = StringField('Matrikelnummer', validators=[Optional(), Length(max=20)])
     degree_program_id = SelectField('Studiengang', coerce=int, validators=[Optional()])
-    semester = IntegerField('Aktuelles Semester', validators=[Optional()])
+    semester = IntegerField('Aktuelles Semester',validators=[Optional(),NumberRange(min=1, message="Das Semester muss mindestens 1 sein.")],render_kw={'min': 1})
     study_focus = TextAreaField('Studienschwerpunkt / Interessen', validators=[Optional(), Length(max=200)])
     submit = SubmitField('Update Profile')
 
