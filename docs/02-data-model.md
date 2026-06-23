@@ -57,7 +57,7 @@ The `ProfessorProfile` model stores professor-specific profile information.
 
 Important fields:
 - `user_id`
-- `faculty_id`
+- `facheinheit_id`
 - `title`
 - `research_areas`
 - `requirements`
@@ -66,7 +66,7 @@ Important fields:
 
 Relationships:
 - Belongs to one `User`
-- Can reference one `Faculty`
+- Can reference one `Facheinheit`
 
 ### Faculty
 
@@ -79,8 +79,9 @@ Important fields:
 - `created_at`
 
 Relationships:
-- One faculty can belong to many degree programs
-- Student and professor profiles can reference a faculty
+- One faculty can have many degree programs
+- One faculty can have many Facheinheiten
+- Student profiles reference a faculty directly; professor profiles reference a faculty indirectly via their Facheinheit
 
 ### DegreeProgram
 
@@ -95,6 +96,20 @@ Important fields:
 Relationships:
 - Belongs to one `Faculty`
 - Can be referenced by student profiles
+
+### Facheinheit
+
+The `Facheinheit` model stores the academic units (sub-departments) within a faculty. Professors are assigned to a Facheinheit, and the professor feed can be filtered by it.
+
+Important fields:
+- `id`
+- `faculty_id`
+- `name`
+
+Relationships:
+- Belongs to one `Faculty`
+- Can be referenced by many professor profiles
+- Can be referenced by many thesis topics
 
 ### SupervisionRequest
 
@@ -159,6 +174,7 @@ The `ThesisTopic` model stores thesis topics proposed by professors.
 Important fields:
 - `id`
 - `professor_id`
+- `facheinheit_id`
 - `title`
 - `description`
 - `requirements`
@@ -169,6 +185,7 @@ Important fields:
 
 Relationships:
 - Belongs to one professor user
+- Can reference one `Facheinheit`
 
 ### RequestStatusHistory
 
@@ -196,9 +213,11 @@ erDiagram
     USERS ||--o| PROFESSOR_PROFILES : has
 
     FACULTIES ||--o{ DEGREE_PROGRAMS : contains
+    FACULTIES ||--o{ FACHEINHEITEN : contains
     FACULTIES ||--o{ STUDENT_PROFILES : selected_by
-    FACULTIES ||--o{ PROFESSOR_PROFILES : selected_by
     DEGREE_PROGRAMS ||--o{ STUDENT_PROFILES : selected_by
+    FACHEINHEITEN ||--o{ PROFESSOR_PROFILES : selected_by
+    FACHEINHEITEN ||--o{ THESIS_TOPICS : categorized_by
 
     USERS ||--o{ SUPERVISION_REQUESTS : student
     USERS ||--o{ SUPERVISION_REQUESTS : professor

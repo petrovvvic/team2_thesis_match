@@ -37,6 +37,8 @@ Eine Plattform wo Professoren der HWR aktiv Betreuungsangebote einstellen (Theme
 
 **Betreuer-Dashboard:** Professoren sehen alle eingegangenen Anfragen übersichtlich und können annehmen oder ablehnen und ihren Status verwalten  
 
+**Chat:** Studierende und Professor:innen kommunizieren pro Anfrage direkt über einen Nachrichtenverlauf inklusive PDF-Anhängen — strukturiert statt per E-Mail.
+
 **Profil:** alle Nutzer verwalten ihr Profil; Professoren pflegen zusätzlich Themenfelder, Anforderungen und Kapazitäten
 
 **Top-Betreuer Rangliste:** API-gestützte Rangliste der meistgefragten Professoren nach Anfragevolumen

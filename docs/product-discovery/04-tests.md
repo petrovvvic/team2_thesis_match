@@ -37,6 +37,6 @@ Dieses Feedback ist für uns strategisch wichtig. Thesis Match ist eine **zweise
 
 ## Raw Material
 
-<!-- TODO Andrei: Feedback-Notizen / Screenshots / weitere Test-Ergebnisse hier ergänzen oder verlinken. -->
+<!-- TODO : Feedback-Notizen / Screenshots / weitere Test-Ergebnisse hier ergänzen oder verlinken. -->
 
 [Feedback-Notizen und weitere Test-Ergebnisse — folgen.]

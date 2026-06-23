@@ -24,14 +24,14 @@ Bestehende Nutzer/in loggen sich mit E-Mail und Passwort ein.
 
 Durchsuchbare Übersicht aller Professorinnen und Professoren der HWR die aktiv 
 Betreuungsplätze anbieten. Filterbar nach Fachbereich. 
-Jede Karte zeigt Name, Fachbereich, freie Plätze und Bewertung.
+Jede Karte zeigt Name, Fachbereich und freie Plätze.
 
 ![Screen 2](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201412.png)
 
 ## Screen 3 — Profil-Detailseite
 
 Jeder Professor/in hat eine eigene Seite mit Themenfeldern, 
-Anforderungen, verfügbaren Plätzen und Bewertungen. 
+Anforderungen und verfügbaren Plätzen. 
 Direkte Möglichkeit eine Anfrage zu stellen.
 
 ![Screen 3 - Profil-Detailseite](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201428.png)

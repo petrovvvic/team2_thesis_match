@@ -1,6 +1,7 @@
 ---
 title: IGNORE_DD-00_Vorlage
 parent: Design Decisions
+nav_exclude: true
 ---
 
 {: .no_toc }
