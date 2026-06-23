@@ -55,10 +55,11 @@ Mir ist weiterhin bewusst, dass ich, sofern ich zur Erstellung dieser Arbeit KI-
 | 2 | Implementierung der Profil-Detailseite inkl. bedingter Darstellung (ausgegraut, deaktivierter Button) je nach Verfügbarkeitsstatus | Die Seite verknüpft mehrere zusammenhängende Datenbanktabellen korrekt in einer übersichtlichen Ansicht und gibt Studierenden sofort sichtbares Feedback zur Verfügbarkeit | Verstehen wie verknüpfte Datenbank-Beziehungen korrekt in Jinja2-Templates dargestellt werden |
 | 3 | An der Value Proposition und den UI-Screens gearbeitet und in GitHub Pages dokumentiert | Jeder Screen ist nachvollziehbar aus einem konkreten Problem der Value Proposition abgeleitet | Die Inhalte mehrfach an neues Feedback angepasst, ohne den roten Faden zu verlieren |
 
+
 ## Design Decisions that I led
 
-1. [DD #00](../design-decisions/dd-00.md)
-2. [DD #01](../design-decisions/dd-01.md)
+1. [DD #04](../design-decisions/dd-04.md)
+2. [DD #05](../design-decisions/dd-05.md)
 ---
 
 ## Contributions
