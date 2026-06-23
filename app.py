@@ -30,6 +30,8 @@ with app.app_context():
 
 @app.route('/')
 def index():
+    if 'user_id' in session:
+        return redirect(url_for('feed'))
     return redirect(url_for('login'))
 
 
