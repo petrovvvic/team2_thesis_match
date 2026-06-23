@@ -1,0 +1,43 @@
+---
+title: DD-06
+parent: Design Decisions
+---
+
+{: .no_toc }
+# 06: Datenbank-Interaktion — ORM (SQLAlchemy) vs. Raw SQL
+
+## Meta
+
+Status
+: Work in progress - **Decided** - Obsolete
+
+Updated
+: 23-Jun-2026
+
+## Problem Statement
+
+Für die Webanwendung musste eine Entscheidung über die Interaktion mit der zugrunde liegenden SQLite-Datenbank getroffen werden. 
+
+Im initialen MVP (Version 1.0) wurde die Datenbankanbindung über rohe SQL-Befehle (mittels des `sqlite3`-Moduls) direkt in der `app.py` umgesetzt. Mit der wachsenden Komplexität der Plattform (1:1-Beziehungen zwischen User und rollenspezifischen Profilen, sowie 1:n-Beziehungen zu Fakultäten) wurde der Code unübersichtlich und fehleranfällig. 
+
+Es musste entschieden werden, ob die bestehende Raw-SQL-Architektur beibehalten und ausgebaut wird, oder ob ein Wechsel auf einen Object-Relational Mapper (ORM) stattfindet.
+
+## Decision
+
+Die Architektur wurde vollständig auf den Object-Relational Mapper **SQLAlchemy** refaktorisiert. 
+
+Die Datenbankstruktur wird nun in Python-Klassen (`db.py`) modelliert. Die Abfragen in der `app.py` erfolgen strikt objektorientiert. Diese Lösung wurde gewählt, weil sie nativen Schutz vor SQL-Injection durch parametrisierte Queries bietet, die Wartbarkeit durch das ORM-Muster massiv erhöht und die komplexe Modellierung von Fremdschlüsseln (Foreign Keys) deutlich sicherer macht.
+
+Die Entscheidung wurde von Nikita Pasichnyk vorbereitet, im Team abgestimmt und im Branch `feature/screens-v1.1` umgesetzt.
+
+## Regarded Options
+
+| Kriterium | Raw SQL (`sqlite3`) | ORM (`SQLAlchemy`) |
+| :--- | :--- | :--- |
+| **Sicherheit (SQL-Injection)** | Erfordert manuelle Parametrisierung | Nativer Schutz out-of-the-box |
+| **Wartbarkeit & Lesbarkeit** | Gering bei komplexen Joins | Sehr hoch (Objektorientiert) |
+| **Entwicklungsgeschwindigkeit** | Anfangs hoch, später stark abfallend | Anfangs Lernkurve, danach sehr effizient |
+| **Datenbankwechsel** | Schwer (SQL-Dialekt-abhängig) | Leicht (ORM abstrahiert den Dialekt) |
+
+### Belege und Artefakte
+* Der Wechsel lässt sich im Repository durch den Vergleich der Branches `archive/screens-v1.0-initial` (Raw SQL) und `feature/screens-v1.1` (SQLAlchemy) nachvollziehen.
