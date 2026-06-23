@@ -42,7 +42,7 @@ class StudentProfileForm(FlaskForm):
     submit = SubmitField('Update Profile')
 
 
-# Chat: Nachricht im Anfrage-Verlauf senden
+# Chat: Nachricht im Anfrage-Verlauf sendenf
 class MessageForm(FlaskForm):
     message_text = TextAreaField(
         f'Nachricht (max. {MESSAGE_MAX_CHARS} Zeichen)',

@@ -37,6 +37,8 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'user_id' in session:
+        return redirect(url_for('feed'))
     form = LoginForm()
     if form.validate_on_submit():
         user = db.session.execute(db.select(User).filter_by(email=form.email.data)).scalar_one_or_none()
@@ -55,6 +57,8 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if 'user_id' in session:
+        return redirect(url_for('feed'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_pw = generate_password_hash(form.password.data)
