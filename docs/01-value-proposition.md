@@ -39,13 +39,13 @@ Eine Plattform wo Professoren der HWR aktiv Betreuungsangebote einstellen (Theme
 
 **Profil:** alle Nutzer verwalten ihr Profil; Professoren pflegen zusätzlich Themenfelder, Anforderungen und Kapazitäten
 
-**Top-Betreuer Rangliste:** API-gestützte Rangliste der meistgefragten Professoren nach Anfragevolumen und Bewertung
+**Top-Betreuer Rangliste:** API-gestützte Rangliste der meistgefragten Professoren nach Anfragevolumen
 
 
 
 ## Target User(s)
 
-- Studis die aktiv einen Betreuer für ihre Abschlussarbeit (BA/MA) suchen, besonders solche ohne persönliche Kontakte zu Professoren.
+- Studis die aktiv einen Betreuer für ihre Abschlussarbeit (BA) suchen, besonders solche ohne persönliche Kontakte zu Professoren.
 - Professorinen und Professoren der HWR die ihr Betreuungsangebot transparent kommunizieren und eingehende Anfragen strukturiert verwalten möchten.
 
 ## Happy Path
@@ -83,6 +83,7 @@ Geplante Kernfunktionen:
 - Profil-Detailseite
 - Anfrage-Flow 
 - Meine Anfragen 
+- Chat mit dem Prof
 - Betreuer-Dashboard 
 - Profil 
 - Top-Betreuer Rangliste via JSON-API

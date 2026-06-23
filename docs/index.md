@@ -7,7 +7,6 @@ nav_order: 0
 
 
 Dieser App verbindet Studenten und Dozente, um einen schnellen Match für eine Bachelorarbeit zu ermöglichen
-[Include a short project description. Below, include a representative, attractive screenshot of your final web app.]
 
 ## Sample App Screen
 
@@ -17,7 +16,7 @@ Dieser App verbindet Studenten und Dozente, um einen schnellen Match für eine B
 
 ## Improvements / Refinements since First Submission
 
-[Assess implementation of improvements / refinements since First Submission (as presented during Oral Examination).]
+TBD: [Assess implementation of improvements / refinements since First Submission (as presented during Oral Examination).]
 
 
 {: .fs-2 }

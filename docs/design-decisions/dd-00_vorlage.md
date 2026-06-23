@@ -1,5 +1,5 @@
 ---
-title: DD-00
+title: IGNORE_DD-00_Vorlage
 parent: Design Decisions
 ---
 
