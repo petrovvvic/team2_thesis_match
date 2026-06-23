@@ -18,17 +18,17 @@ nav_order: 1
 
 ### Target grade
 
-[Hier deine Zielnote eintragen, z.B. 1,0 - 1,3]
+[Hier deine Zielnote eintragen, 1,0]
 
 ### Personal goals
 
-[Hier persönliche Ziele eintragen, z.B.: Mein Ziel war es, tiefes Verständnis für Backend-Architekturen (SQLAlchemy) und sicheres Session-Management in Flask zu entwickeln, sowie einen sauberen, agilen Git-Workflow im Team zu etablieren.]
+Verbesserung der eigenen Python-Skills sowie das Erstellen einer robusten und voll funktionsfähigen Web-Applikation
 
 ---
 
 ## Eidesstattliche Erklärung
 
-**Nikita Pasichnyk, Matrikelnr.: [DEINE MATRIKELNUMMER HIER EINTRAGEN]**
+**Nikita Pasichnyk, Matrikelnr.: 	77202191909**
 
 Ich erkläre an Eides statt:
 
