@@ -77,7 +77,17 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 * **Option B:** Verschiebung der Abfrage in das spätere Profil-Dashboard und radikale Kürzung der Pflichtfelder im Anmeldeprozess (Frictionless Onboarding).
 * **Entscheidung:** Ich habe mich für Option B entschieden. Option A hätte zwingend den Einsatz von JavaScript erfordert, was gegen die Projektrichtlinien ("Forbidden Technology") verstoßen hätte. Die technische Compliance hatte absolute Priorität. Spezifische Profil-Eigenschaften werden nun sicher erst nach dem initialen Login im rollenspezifischen Profil-Bereich erhoben.
 
----
+### DD #04: Wahrung der referenziellen Integrität (Foreign Keys)
+* **Option A:** Speichern von Null-Werten (z.B. Default `0` aus dem HTML-Select-Feld) für irrelevante Relationen (z.B. Facheinheit bei Studenten).
+* **Option B:** Serverseitige Konvertierung von ungenutzten Default-Werten in SQL-konforme `NULL`-Werte.
+* **Entscheidung:** Ich wählte Option B. Das blinde Übernehmen von Frontend-Werten (`0`) hätte in SQLAlchemy zu Foreign-Key-Fehlern geführt, da keine Facheinheit mit der ID `0` existiert. Durch Backend-Validierung (`form.facheinheit_id.data or None`) wird die Datenbankstruktur sauber gehalten.
+
+### DD #05: Sicherheitskonzept der Authentifizierung
+* **Option A:** Klartext-Passwörter im Prototypen (MVP) für schnelleres Testing im Team.
+* **Option B:** Direkte Implementierung kryptografischer Hash-Funktionen (`werkzeug.security`).
+* **Entscheidung:** Entscheidung für Option B. Obwohl Option A den Entwicklungsstart beschleunigt hätte, wollte ich "Security by Design" etablieren. Ein nachträglicher Wechsel hätte zudem alle bisher angelegten Test-Accounts invalidiert.
+
+-
 
 ## 4. Contributions
 
@@ -86,6 +96,8 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 | **Architektur-Upgrade (Version 1.1)**<br>Refaktorierung des Codes auf SQLAlchemy, WTForms Validatoren und Session-Logik. | Branch: `feature/screens-v1.1` (und final im `main`).<br>Commit: `feat: Vollständiges Update 1.1 - Neue Architektur, HTML-Profile & JS-Fix` | [SQLAlchemy Docs](https://docs.sqlalchemy.org/en/20/), [Flask-WTF Docs](https://flask-wtf.readthedocs.io/) |
 | **Initiale Prototypen (Version 1.0)**<br>Erster Aufbau der Registrierungs- und Login-Screens mit nativer SQLite Datenbank. | Branch: `archive/screens-v1.0-initial` | Flask Official Documentation |
 | **UX-Fixes & Route-Guarding**<br>Einbau von Redirects für eingeloggte User und Frontend-Validatoren (z.B. Semester Minimum). | Commits im `main`-Branch (Trunk-Based Development) | WTForms Documentation |
+| **Security & Form Validation**<br>Implementierung von `werkzeug.security` (Password Hashing) und Formular-Validierung (CSRF-Schutz via WTForms). | Siehe Validierungs-Logik in `forms.py` und Hash-Generierung in der `/register` Route (`app.py`). | [Werkzeug Security API](https://werkzeug.palletsprojects.com/en/3.0.x/utils/#module-werkzeug.security) |
+| **Relationales Datenbank-Design**<br>Aufbau der komplexen 1:1 und 1:n Beziehungen zwischen `User`, `StudentProfile`, `ProfessorProfile` sowie Fakultäten. | Siehe Model-Definitionen und Foreign-Keys in der `db.py` | SQLAlchemy Relationship Patterns |
 
 ---
 
@@ -96,3 +108,5 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 | 01 | Gemini | Sparringspartner für Code-Refactoring & Debugging | `app.py` (Route Guarding, SQLAlchemy Models), `forms.py` | Iteratives Prompting zur Fehlerbehebung (z.B. Lösung von HTTP 500 Errors bei fehlenden Formular-Choices) und Optimierung von Datenbank-Queries. |
 | 02 | Gemini | Strategische UX- und Compliance-Beratung | `register.html`, Formulardesign | Prompting zur Findung von Alternativen für dynamisches UI-Rendering, um streng konform mit der "Forbidden Technology" (Verzicht auf JavaScript) zu bleiben. |
 | 03 | Gemini | Strukturierung der Dokumentation | `nikita-pasichnyk.md` | Unterstützung bei der Formatierung der Markdown-Tabelle und Ausformulierung technischer Design-Entscheidungen für das Kolloquium. |
+| 04 | DeepSeek | Logik-Optimierung und Query-Design | `app.py` (Filterlogik im `/feed` und API-Abfragen) | Einsatz zur Optimierung der Python-Suchlogik (`suchbegriff in f"{prof.user.first_name}..."`) und Evaluierung von SQLAlchemy-Listenabfragen. |
+| 05 | DeepSeek | Security Best-Practices & Architektur | `app.py`, `db.py` | Recherche-Prompts bezüglich Best-Practices für die Handhabung von `werkzeug.security` Hashes beim Registrierungsprozess und strukturelle Trennung von DB-Models. |
