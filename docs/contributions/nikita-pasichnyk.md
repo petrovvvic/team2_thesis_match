@@ -18,17 +18,17 @@ nav_order: 1
 
 ### Target grade
 
-[Hier deine Zielnote eintragen, 1,0]
+1,0
 
 ### Personal goals
 
-Verbesserung der eigenen Python-Skills sowie das Erstellen einer robusten und voll funktionsfähigen Web-Applikation
+Verbesserung der eigenen Python-Skills im Bereich Backend-Architektur, der sichere Umgang mit ORM-Modellen (SQLAlchemy) sowie die Etablierung einer agilen und störungsfreien Kollaboration im Team.
 
 ---
 
 ## Eidesstattliche Erklärung
 
-**Nikita Pasichnyk, Matrikelnr.: 	77202191909**
+**Nikita Pasichnyk, Matrikelnr.: 77202191909**
 
 Ich erkläre an Eides statt:
 
@@ -42,9 +42,9 @@ Mir ist weiterhin bewusst, dass ich, sofern ich zur Erstellung dieser Arbeit KI-
 
 ## 1. Meine Rolle & Git-Workflow
 
-Nach der Definition unserer Value Proposition für "Thesis Match", ging es darum die festen technische Hürden zu benennen und sich Lösungen zu überlegen. Es war klar, dass eine Two-Sided Platform mit einer robusten Nutzerverwaltung und klaren Profilen steht und fällt. Ich habe daher die Verantwortung für den Einstieg in unsere App übernommen: **Die Registrierung, den Login und das dynamische Profil-Dashboard (Screens 1a, 1b, 7).**
+Nach der Definition unserer Value Proposition für "Thesis Match" ging es darum, die festen technischen Hürden zu benennen und sich Lösungen zu überlegen. Es war klar, dass eine Two-Sided Platform mit einer robusten Nutzerverwaltung und klaren Profilen steht und fällt. Ich habe daher die Verantwortung für den Einstieg in unsere App übernommen: **Die Registrierung, den Login und das dynamische Profil-Dashboard (Screens 1a, 1b, 7).**
 
-Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sondern ein iterativer Prozess, den ich in unserem Git-Repository über verschiedene Branches dokumentiert habe. Um "Unrelated Histories"-Konflikte durch lokale ZIP-Downloads zu vermeiden und die Teamgeschwindigkeit zu erhöhen, habe ich zudem für kleine bis mittlere Fixes einen agilen **"Trunk-Based Development"**-Ansatz im Team etabliert (`git clone` und direkte Pushes ins `main`-Branch nach vorherigem Pull).
+Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sondern ein iterativer Prozess, den ich in unserem Git-Repository über verschiedene Branches dokumentiert habe. Um "Unrelated Histories"-Konflikte durch lokale ZIP-Downloads zu vermeiden und die Teamgeschwindigkeit zu erhöhen, habe ich zudem für kleine bis mittlere Fixes einen agilen **"Trunk-Based Development"**-Ansatz im Team etabliert (`git clone` und direkte Pushes in den `main`-Branch nach vorherigem Pull).
 
 ---
 
@@ -60,7 +60,7 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 
 ## 3. Design Decisions that I led
 
-*(Hinweis: Die detaillierten Erläuterungen wurden direkt in diesem Dokument festgehalten, um den Lesefluss zu gewährleisten.)*
+*(Hinweis: Um den Lesefluss der Prüfenden zu gewährleisten und den Kontext zu wahren, wurden die detaillierten Erläuterungen abweichend vom Template direkt in dieses Dokument integriert, anstatt in separate Unterordner ausgelagert zu werden.)*
 
 ### DD #01: Datenbank-Interaktion (ORM vs. Raw SQL)
 * **Option A:** Direkte Ausführung von rohen SQL-Queries über das `sqlite3` Modul in der `app.py` (Mein initialer Ansatz in Version 1.0 zur simplen Darstellung und für Team-Tests).
@@ -87,17 +87,17 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 * **Option B:** Direkte Implementierung kryptografischer Hash-Funktionen (`werkzeug.security`).
 * **Entscheidung:** Entscheidung für Option B. Obwohl Option A den Entwicklungsstart beschleunigt hätte, wollte ich "Security by Design" etablieren. Ein nachträglicher Wechsel hätte zudem alle bisher angelegten Test-Accounts invalidiert.
 
--
+---
 
 ## 4. Contributions
 
 | Contribution | Proof, e.g., git commits | Sources used |
 | :-- | :-- | :-- |
-| **Architektur-Upgrade (Version 1.1)**<br>Refaktorierung des Codes auf SQLAlchemy, WTForms Validatoren und Session-Logik. | Branch: `feature/screens-v1.1` (und final im `main`).<br>Commit: `feat: Vollständiges Update 1.1 - Neue Architektur, HTML-Profile & JS-Fix` | [SQLAlchemy Docs](https://docs.sqlalchemy.org/en/20/), [Flask-WTF Docs](https://flask-wtf.readthedocs.io/) |
-| **Initiale Prototypen (Version 1.0)**<br>Erster Aufbau der Registrierungs- und Login-Screens mit nativer SQLite Datenbank. | Branch: `archive/screens-v1.0-initial` | Flask Official Documentation |
-| **UX-Fixes & Route-Guarding**<br>Einbau von Redirects für eingeloggte User und Frontend-Validatoren (z.B. Semester Minimum). | Commits im `main`-Branch (Trunk-Based Development) | WTForms Documentation |
-| **Security & Form Validation**<br>Implementierung von `werkzeug.security` (Password Hashing) und Formular-Validierung (CSRF-Schutz via WTForms). | Siehe Validierungs-Logik in `forms.py` und Hash-Generierung in der `/register` Route (`app.py`). | [Werkzeug Security API](https://werkzeug.palletsprojects.com/en/3.0.x/utils/#module-werkzeug.security) |
-| **Relationales Datenbank-Design**<br>Aufbau der komplexen 1:1 und 1:n Beziehungen zwischen `User`, `StudentProfile`, `ProfessorProfile` sowie Fakultäten. | Siehe Model-Definitionen und Foreign-Keys in der `db.py` | SQLAlchemy Relationship Patterns |
+| **Architektur-Upgrade (Version 1.1)**<br>Refaktorierung des Codes auf SQLAlchemy, WTForms Validatoren und Session-Logik. | [Branch: feature/screens-v1.1](https://github.com/petrovvvic/team2_thesis_match/tree/feature/screens-v1.1)<br>Commit: `feat: Vollständiges Update 1.1 - Neue Architektur, HTML-Profile & JS-Fix` | [SQLAlchemy 2.0 Docs](https://docs.sqlalchemy.org/en/20/),<br>[Flask-WTF Docs](https://flask-wtf.readthedocs.io/) |
+| **Initiale Prototypen (Version 1.0)**<br>Erster Aufbau der Registrierungs- und Login-Screens mit nativer SQLite Datenbank. | [Branch: archive/screens-v1.0-initial](https://github.com/petrovvvic/team2_thesis_match/tree/archive/screens-v1.0-initial)<br>Commit: `feat: Version 1.0 - Screens 1a, 1b und 7 voll funktionsfähig...` | [Flask Official Documentation](https://flask.palletsprojects.com/) |
+| **UX-Fixes & Route-Guarding**<br>Einbau von Redirects für eingeloggte User und Frontend-Validatoren (z.B. Semester Minimum). | Commits im `main`-Branch:<br>`fix: Routing issues`<br>`Semester fix (negative integers)`<br>`fix: Fachbereich anpassung -> Prof Profile` | [WTForms Validators](https://wtforms.readthedocs.io/en/3.0.x/validators/) |
+| **Security & Form Validation**<br>Implementierung von `werkzeug.security` (Password Hashing) und Formular-Validierung. | Siehe Hash-Generierung in der `/register` Route (`app.py`). | [Werkzeug Security API](https://werkzeug.palletsprojects.com/en/3.0.x/utils/#module-werkzeug.security) |
+| **Relationales Datenbank-Design**<br>Aufbau der komplexen 1:1 und 1:n Beziehungen zwischen `User` und Profilen. | Siehe Model-Definitionen in der `db.py` | [SQLAlchemy Relationships](https://docs.sqlalchemy.org/en/20/orm/relationships.html) |
 
 ---
 
