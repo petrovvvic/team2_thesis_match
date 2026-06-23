@@ -22,16 +22,17 @@
             </div>
         </div>
         
-            <div class="col-md-3">
-                <div class="bg-white p-3 rounded shadow-sm text-center">
-                    <h5 class="mb-1">{{ dashboard_requests|length }}</h5>
-                    <small class="text-muted">Alle Anfragen</small>
+            <div class="row g-3 mb-4">
+                <div class="col-6">
+                    <div class="bg-danger bg-opacity-10 p-3 rounded shadow-sm text-center h-100">
+                        <h5 class="mb-1">{{ dashboard_requests|length }}</h5>
+                        <small class="text-muted">Alle Anfragen</small>
+                    </div>
                 </div>
-            </div>
 
             {% for status, count in status_counts.items() %}
-                <div class="col-md-3 mb-2">
-                    <div class="bg-white p-3 rounded shadow-sm text-center">
+                <div class="col-6">
+                    <div class="bg-white p-3 rounded shadow-sm text-center h-100">
                         <h5 class="mb-1">{{ count }}</h5>
                         <small class="text-muted">{{ status }}</small>
                     </div>
