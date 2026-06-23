@@ -18,8 +18,8 @@ Diese Design Challenge basiert auf zwei kurzen Umfragen unter Studierenden (n=10
 
 ## [Raw Material]
 
-# Umfrage Studierende (n=10)
-# Umfrage Professor (n=5)
+Umfrage Studierende (n=10)
+Umfrage Professor (n=5)
 
 [List / link / paste any material that you created or referenced while working on the **Design Challenge** definition.
 
