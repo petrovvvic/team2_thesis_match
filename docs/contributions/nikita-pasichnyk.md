@@ -60,32 +60,11 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 
 ## 3. Design Decisions that I led
 
-*(Hinweis: Um den Lesefluss der Prüfenden zu gewährleisten und den Kontext zu wahren, wurden die detaillierten Erläuterungen abweichend vom Template direkt in dieses Dokument integriert, anstatt in separate Unterordner ausgelagert zu werden.)*
-
-### DD #01: Datenbank-Interaktion (ORM vs. Raw SQL)
-* **Option A:** Direkte Ausführung von rohen SQL-Queries über das `sqlite3` Modul in der `app.py` (Mein initialer Ansatz in Version 1.0 zur simplen Darstellung und für Team-Tests).
-* **Option B:** Nutzung des Object-Relational Mappers (ORM) SQLAlchemy.
-* **Entscheidung:** Wir als Team haben uns für Option B entschieden. Rohe SQL-Befehle führten zu unübersichtlichem Code, als die Aufteilung in Professoren- und Studenten-Profile notwendig wurde. SQLAlchemy bot nativen Schutz gegen SQL-Injection durch parametrisierte Queries und erlaubte objektorientiertes Arbeiten.
-
-### DD #02: Komplexitätsreduktion im Professoren-Profil
-* **Option A:** Ein kombiniertes Auswahlfeld (Dropdown), das die maximale Anzahl der Plätze und den Status bündelt. Mein initialer Entwicklungsansatz zur Vermeidung inkonsistenter Datenbankzustände.
-* **Option B:** Eine simple, binäre Checkbox ("Anfragen erhalten?"), während auf die exakte Zählung von Plätzen im MVP verzichtet wird.
-* **Entscheidung:** Obwohl Option A technisch vollständig implementiert war, habe ich den Code nach Team-Feedback aktiv auf Option B refaktorisiert. Die Abfrage von exakten Kapazitäten verkompliziert das Profil unnötig. Diese Entscheidung beweist, dass agile Entwicklung und User Experience Vorrang vor bereits geschriebenem Code haben.
-
-### DD #03: "Frictionless Onboarding" vs. Dynamisches JavaScript
-* **Option A:** Abfrage der `Facheinheit` direkt im Registrierungsformular. Da dieses Feld nur für Professoren relevant ist, hätte es mittels Custom JavaScript dynamisch ein- und ausgeblendet werden müssen.
-* **Option B:** Verschiebung der Abfrage in das spätere Profil-Dashboard und radikale Kürzung der Pflichtfelder im Anmeldeprozess (Frictionless Onboarding).
-* **Entscheidung:** Ich habe mich für Option B entschieden. Option A hätte zwingend den Einsatz von JavaScript erfordert, was gegen die Projektrichtlinien ("Forbidden Technology") verstoßen hätte. Die technische Compliance hatte absolute Priorität. Spezifische Profil-Eigenschaften werden nun sicher erst nach dem initialen Login im rollenspezifischen Profil-Bereich erhoben.
-
-### DD #04: Wahrung der referenziellen Integrität (Foreign Keys)
-* **Option A:** Speichern von Null-Werten (z.B. Default `0` aus dem HTML-Select-Feld) für irrelevante Relationen (z.B. Facheinheit bei Studenten).
-* **Option B:** Serverseitige Konvertierung von ungenutzten Default-Werten in SQL-konforme `NULL`-Werte.
-* **Entscheidung:** Ich wählte Option B. Das blinde Übernehmen von Frontend-Werten (`0`) hätte in SQLAlchemy zu Foreign-Key-Fehlern geführt, da keine Facheinheit mit der ID `0` existiert. Durch Backend-Validierung (`form.facheinheit_id.data or None`) wird die Datenbankstruktur sauber gehalten.
-
-### DD #05: Sicherheitskonzept der Authentifizierung
-* **Option A:** Klartext-Passwörter im Prototypen (MVP) für schnelleres Testing im Team.
-* **Option B:** Direkte Implementierung kryptografischer Hash-Funktionen (`werkzeug.security`).
-* **Entscheidung:** Entscheidung für Option B. Obwohl Option A den Entwicklungsstart beschleunigt hätte, wollte ich "Security by Design" etablieren. Ein nachträglicher Wechsel hätte zudem alle bisher angelegten Test-Accounts invalidiert.
+1. [DD #06 — Datenbank-Interaktion (ORM vs. Raw SQL)](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-06.md)
+2. [DD #07 — Komplexitätsreduktion im Professoren-Profil](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-07.md)
+3. [DD #08 — "Frictionless Onboarding" vs. Dynamisches JavaScript](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-08.md)
+4. [DD #09 — Wahrung der referenziellen Integrität (Foreign Keys)](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-09.md)
+5. [DD #10 — Sicherheitskonzept der Authentifizierung](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-10.md)
 
 ---
 
