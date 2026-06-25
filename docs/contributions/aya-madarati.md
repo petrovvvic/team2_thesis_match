@@ -74,10 +74,10 @@ Mir ist weiterhin bewusst, dass ich, sofern ich zur Erstellung dieser Arbeit KI-
 | # | AI Tool | Purpose of Use | Affected Sections (Code + Docs) | Remarks, Procedure, Prompts |
 | :-- | :-- | :-- | :-- | :-- |
 | 01 | Perplexity AI | Erklärung von Flask-Konzepten: Routen, `render_template`, GET vs. POST, `url_for` | `app.py` | Gefragt, wie man in Python eine App-Route erstellt und zwischen den Seiten navigiert |
-| 02 | Claude (Anthropic, claude.ai) | Erklärung von WTForms-Feldern: `SearchField`, `SelectField`, `Optional` | `forms.py` | Gefragt, was die Unterschiede zwischen den WTForms-Feldern sind und wofür sie jeweils verwendet werden |
-| 03 | Claude (Anthropic, claude.ai) | Erklärung von Jinja2-Konzepten: `for`, `if` | `feed.html`, `profile-detail.html`, `base.html` | Gefragt, wie Jinja2-Schleifen und Blöcke funktionieren |
-| 04 | Claude (Anthropic, claude.ai) | Debugging: Fehlermeldungen erklärt (`IndentationError`, `backref`-Konflikt, `NoForeignKeysError`) | `app.py`, `db.py` | Fehlermeldung eingefügt, Ursache erklärt bekommen |
-| 05 | Claude (Anthropic, claude.ai) | Erklärung von SQLAlchemy-Konzepten: `back_populates`, `db.session.execute`, `db.select` | `db.py`, `app.py` | Gefragt, wie Datenbankbeziehungen in SQLAlchemy funktionieren. Grundlage für eigene Implementierung |
+| 02 | Claude (Anthropic) | Erklärung von WTForms-Feldern: `SearchField`, `SelectField`, `Optional` | `forms.py` | Gefragt, was die Unterschiede zwischen den WTForms-Feldern sind und wofür sie jeweils verwendet werden |
+| 03 | Claude (Anthropic) | Erklärung von Jinja2-Konzepten: `for`, `if` | `feed.html`, `profile-detail.html`, `base.html` | Gefragt, wie Jinja2-Schleifen und Blöcke funktionieren |
+| 04 | Claude (Anthropic) | Debugging: Fehlermeldungen erklärt (`IndentationError`, `backref`-Konflikt, `NoForeignKeysError`) | `app.py`, `db.py` | Fehlermeldung eingefügt, Ursache erklärt bekommen |
+| 05 | Claude (Anthropic) | Erklärung von SQLAlchemy-Konzepten: `back_populates`, `db.session.execute`, `db.select` | `db.py`, `app.py` | Gefragt, wie Datenbankbeziehungen in SQLAlchemy funktionieren. Grundlage für eigene Implementierung |
 | 06 | ChatGPT (OpenAI) | Unterstützung bei der Erklärung der HWR-Datenbankstruktur | `db.py` | Hilfe beim Verständnis der Struktur von HWR (Fachbereiche, Facheinheiten, Professoren, Studierende und Studiengänge) und deren Beziehungen im Datenbankmodell |
 | 07 | ChatGPT (OpenAI) | Formulierungshilfe und sprachliche Überarbeitung | Dokumentation | Unterstützung bei Grammatik, Rechtschreibung und besserer Formulierung |
-| 08 | Claude (Anthropic, claude.ai) | Brainstorming und Ideenfindung für die App-Konzeption | Dokumentation | Unterstützung beim Entwickeln und Bewerten von Ideen |
+| 08 | Claude (Anthropic) | Brainstorming und Ideenfindung für die App-Konzeption | Dokumentation | Unterstützung beim Entwickeln und Bewerten von Ideen |
