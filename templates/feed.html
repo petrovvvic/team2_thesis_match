@@ -35,6 +35,7 @@
 <div class="card-body d-flex flex-column">
 <!-- prof daten werden aus db abgerufen-->
 <h5 class="card-title">{{ prof.user.first_name}} {{ prof.user.last_name }}</h5>
+<p class="card-text">{% if prof.facheinheit %}{{ prof.facheinheit.name }}{% endif %}</p>
 <p class="card-text">{% if prof.facheinheit %}{{ prof.facheinheit.faculty.name }}{% endif %}</p>
 <p class="card-text">{{ prof.research_areas or '' }}</p>
 <a href="{{ url_for('view_professor', id=prof.user_id)}}" class="btn btn-primary mt-auto">Profil ansehen</a>
