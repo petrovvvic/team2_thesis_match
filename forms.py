@@ -83,6 +83,9 @@ class RequestForm(FlaskForm):
         coerce=int,
         validators=[DataRequired()]
     )
+
+    examiner_role = SelectField('Anfrage als*', choices=[('erst', 'Erstprüfer/in'), ('zweit', 'Zweitprüfer/in')], validators=[DataRequired()])
+
     proposed_title = StringField(
         'Arbeitstitel der Bachelorarbeit*',
         validators=[DataRequired(), Length(max=200)]

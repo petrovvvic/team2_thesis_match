@@ -272,6 +272,7 @@ def create_request():
         new_request = SupervisionRequest(
             student_id=user.id,
             professor_id=selected_professor.id,
+            examiner_role=form.examiner_role.data,
             proposed_title=form.proposed_title.data.strip(),
             short_description=form.short_description.data.strip(),
             preferred_period=form.preferred_period.data.strip(),

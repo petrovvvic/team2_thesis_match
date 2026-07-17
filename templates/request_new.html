@@ -17,6 +17,14 @@
                         <div class="text-danger small">{{ error }}</div>
                     {% endfor %}
                 </div>
+                
+                <div class="mb-3">
+                     {{ form.examiner_role.label(class="form-label") }}
+                     {{ form.examiner_role(class="form-select") }}
+                     {% for error in form.examiner_role.errors %}
+                       <div class="text-danger small">{{ error }}</div>
+                     {% endfor %}
+                </div>
 
                 <div class="mb-3">
                     {{ form.proposed_title.label(class="form-label") }}
