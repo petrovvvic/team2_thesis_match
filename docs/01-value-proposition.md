@@ -26,14 +26,13 @@ Eine Plattform wo Professoren der HWR aktiv Betreuungsangebote einstellen (Theme
 
 **Registrierung & Login:** Studierende und Professoren registrieren sich mit ihrer HWR-E-Mail. Die Plattform erkennt automatisch die Rolle und zeigt nur relevante Inhalte an.
 
-**Professor/in-Feed:** durchsuchbare Übersicht aller Professoren die aktiv Betreuungsplätze anbieten, filterbar nach Fachbereich und Themenfeld.--> Kein Überblick wer Betreuungen anbietet.
+**Professor/in-Feed:** durchsuchbare Übersicht aller Professoren die aktiv Betreuungsplätze anbieten, filterbar nach Facheinheit und Verfügbarkeit.
 
-**Profil-Detailseite:** jeder Professor/in hat eine Profilseite mit Themenfeldern, Anforderungen und aktuell verfügbaren Plätzen. 
+**Profil-Detailseite:** jeder Professor/in hat eine Profilseite mit Themenfeldern, Anforderungen und aktuellem Verfügbarkeitsstatus.
 
 **Anfrage-Flow:** Studis stellen eine strukturierte Anfrage mit Thema, Typ, Zeitraum und Kurzbeschreibung direkt über die Plattform
 
-**Meine Anfragen:** Studierende sehen alle gesendeten Anfragen 
-  mit aktuellem Status
+**Meine Anfragen:** Studierende sehen alle gesendeten Anfragen mit aktuellem Status
 
 **Betreuer-Dashboard:** Professoren sehen alle eingegangenen Anfragen übersichtlich und können annehmen oder ablehnen und ihren Status verwalten  
 
@@ -59,7 +58,7 @@ Der Canvas fasst zusammen, welche Aufgaben, Frustrationen und Ziele (Customer Pr
 | Customer Profile | Value Map (App) |
 | --- | --- |
 | **Customer Jobs:** passende Betreuung finden, Thema fachlich klären, Anfrage stellen, Überblick behalten | **Products & Services:** Professor-Feed, Profil-Detailseite, strukturierte Anfrage, „Meine Anfragen", Chat |
-| **Pains:** kennt keine passenden Professor:innen, keine Info zu Themen/Kapazität, lange Wartezeit, mehrfache Absagen, Zeitverlust durch fachlich unpassende Themen | **Pain Relievers:** Feed zeigt Professor:innen, Themenfelder und Verfügbarkeit vorab; Filter nach Fachbereich; strukturierte Anfrage verhindert Missverständnisse; Statusübersicht |
+| **Pains:** kennt keine passenden Professor:innen, keine Info zu Themen/Kapazität, lange Wartezeit, mehrfache Absagen, Zeitverlust durch fachlich unpassende Themen | **Pain Relievers:** Feed zeigt Professor:innen, Themenfelder und Verfügbarkeit vorab; Filter nach Facheinheit; strukturierte Anfrage verhindert Missverständnisse; Statusübersicht |
 | **Gains:** schnell eine passende Betreuung, Transparenz über Verfügbarkeit, weniger Absagen | **Gain Creators:** gezielte, passende Anfragen; schnellere Rückmeldung; kein E-Mail-Chaos |
 
 ### Professor:innen (sekundäres Segment)
@@ -75,7 +74,7 @@ Der Canvas fasst zusammen, welche Aufgaben, Frustrationen und Ziele (Customer Pr
 ### Studi sucht einen Betreuer
 
 1. **Registrierung:** Studi gibt Name, HWR-E-Mail, Passwort ein und wählt Rolle "Studierende/r"
-2. **Professor-Feed:** Studi sieht alle verfügbaren Betreuer, filtert nach Fachbereich
+2. **Professor-Feed:** Studi sieht alle verfügbaren Betreuer, filtert nach Facheinheit und Verfügbarkeit
 3. **Profil-Detailseite:** Studi klickt auf einen Professorprofil, liest Themenfelder und Anforderungen
 4. **Anfrage-Flow:** Studi füllt strukturierte Anfrage aus (Thema, Zeitplan, Kurzbeschreibung) und sendet ab
 5. **Meine Anfragen:** Studi verfolgt den Status seiner Anfrage
