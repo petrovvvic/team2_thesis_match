@@ -121,6 +121,46 @@ class RequestForm(FlaskForm):
     submit = SubmitField('Anfrage senden')
 
 
+class RequestEditForm(FlaskForm):
+    examiner_role = SelectField(
+        'Anfrage als*',
+        choices=[
+            ('erst', 'Erstprüfer/in'),
+            ('zweit', 'Zweitprüfer/in')
+        ],
+        validators=[DataRequired()]
+    )
+
+    proposed_title = StringField(
+        'Arbeitstitel der Bachelorarbeit*',
+        validators=[
+            DataRequired(),
+            Length(max=200)
+        ]
+    )
+
+    short_description = TextAreaField(
+        'Kurzbeschreibung*',
+        validators=[
+            DataRequired(),
+            Length(max=1000)
+        ],
+        render_kw={'rows': 5}
+    )
+
+    preferred_period = StringField(
+        'Gewünschter Betreuungszeitraum*',
+        validators=[
+            DataRequired(),
+            Length(max=100)
+        ]
+    )
+
+    submit = SubmitField('Änderungen speichern')
+class RequestWithdrawForm(FlaskForm):
+    submit = SubmitField('Anfrage zurückziehen')
+
+
 class RequestStatusForm(FlaskForm):
     accept = SubmitField('Annehmen')
     reject = SubmitField('Ablehnen')

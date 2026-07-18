@@ -1,6 +1,8 @@
 import os
 import uuid
 
+from datetime import timezone
+from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 from flask import (Flask, render_template, redirect, url_for, request, session,
                    flash, jsonify, send_from_directory, abort)
@@ -8,7 +10,7 @@ from flask_bootstrap import Bootstrap5
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
-from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, RequestStatusForm, ProfSearchForm
+from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, RequestEditForm, RequestWithdrawForm, RequestStatusForm, ProfSearchForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest, RequestStatusHistory,
                 RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram, insert_sample)
 
@@ -31,6 +33,18 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 db.init_app(app)
 bootstrap = Bootstrap5(app)
+
+
+@app.template_filter('berlin_datetime')
+def berlin_datetime(value):
+    if value is None:
+        return ''
+
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+
+    berlin_time = value.astimezone(ZoneInfo('Europe/Berlin'))
+    return berlin_time.strftime('%d.%m.%Y %H:%M')
 
 with app.app_context():
     db.create_all()
@@ -295,6 +309,91 @@ def create_request():
 
     return render_template('request_new.html', form=form, user=user)
 
+
+@app.route('/requests/<int:request_id>/edit', methods=['GET', 'POST'])
+def edit_request(request_id):
+    user = _current_user()
+
+    if not user:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
+
+    supervision_request = db.session.get(SupervisionRequest, request_id)
+
+    if supervision_request is None:
+        abort(404)
+
+    if user.role != 'student' or supervision_request.student_id != user.id:
+        abort(403)
+
+    if supervision_request.status != 'submitted':
+        flash('Nur offene Anfragen können bearbeitet werden.', 'warning')
+        return redirect(url_for('dashboard'))
+
+    form = RequestEditForm(obj=supervision_request)
+
+    if form.validate_on_submit():
+        supervision_request.examiner_role = form.examiner_role.data
+        supervision_request.proposed_title = form.proposed_title.data.strip()
+        supervision_request.short_description = form.short_description.data.strip()
+        supervision_request.preferred_period = form.preferred_period.data.strip()
+        db.session.commit()
+
+        flash('Betreuungsanfrage wurde erfolgreich aktualisiert.', 'success')
+        return redirect(url_for('dashboard'))
+
+    return render_template(
+        'request_edit.html',
+        form=form,
+        user=user,
+        supervision_request=supervision_request
+    )
+
+
+@app.route('/requests/<int:request_id>/withdraw', methods=['GET', 'POST'])
+def withdraw_request(request_id):
+    user = _current_user()
+
+    if not user:
+        flash('Access denied. Please log in first.', 'danger')
+        return redirect(url_for('login'))
+
+    supervision_request = db.session.get(SupervisionRequest, request_id)
+
+    if supervision_request is None:
+        abort(404)
+
+    if user.role != 'student' or supervision_request.student_id != user.id:
+        abort(403)
+
+    if supervision_request.status != 'submitted':
+        flash('Nur offene Anfragen können zurückgezogen werden.', 'warning')
+        return redirect(url_for('dashboard'))
+
+    form = RequestWithdrawForm()
+
+    if form.validate_on_submit():
+        supervision_request.status = 'withdrawn'
+
+        db.session.add(RequestStatusHistory(
+            request_id=supervision_request.id,
+            old_status='submitted',
+            new_status='withdrawn',
+            changed_by=user.id
+        ))
+
+        db.session.commit()
+        flash('Betreuungsanfrage wurde erfolgreich zurückgezogen.', 'success')
+        return redirect(url_for('dashboard'))
+
+    return render_template(
+        'request_withdraw.html',
+        form=form,
+        user=user,
+        supervision_request=supervision_request
+    )
+
+
 @app.route('/requests/<int:request_id>/status', methods=['POST'])
 def update_request_status(request_id):
     user = _current_user()
@@ -371,6 +470,7 @@ def update_request_status(request_id):
 
     flash(flash_message, flash_category)
     return redirect(url_for('dashboard'))
+
 
 @app.route('/chats')
 def chats():

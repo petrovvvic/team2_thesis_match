@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="bg-white p-4 rounded shadow-sm">
+
+            <h2 class="mb-3">Anfrage zurückziehen</h2>
+
+            <p>
+                Möchtest du diese Betreuungsanfrage wirklich zurückziehen?
+            </p>
+
+            <div class="border rounded p-3 mb-3">
+                <strong>{{ supervision_request.proposed_title }}</strong>
+
+                <div class="text-muted mt-1">
+                    Professor/in:
+                    {{ supervision_request.professor.first_name }}
+                    {{ supervision_request.professor.last_name }}
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                Die Anfrage wird nicht gelöscht, sondern erhält den Status
+                „withdrawn“. Sie kann danach nicht mehr bearbeitet werden.
+            </div>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="d-flex justify-content-between">
+                    <a
+                        href="{{ url_for('dashboard') }}"
+                        class="btn btn-outline-secondary"
+                    >
+                        Abbrechen
+                    </a>
+
+                    {{ form.submit(class_='btn btn-danger') }}
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
