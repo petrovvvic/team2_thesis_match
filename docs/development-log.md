@@ -65,3 +65,27 @@ How I checked it:
 - I created a test supervision request.
 - The request appeared on the dashboard with status `submitted`.
 - I restored `instance/thesis_match.sqlite` afterward so local test data was not committed.
+
+## 2026-07-18 — Password security: SECRET_KEY via .env + password policy
+
+Branch:
+- main (trunk-based, after pulling first)
+
+What changed:
+- Removed the hardcoded `SECRET_KEY` from `app.py`; it is now loaded from a local `.env` file via `python-dotenv`. If the variable is missing, the app fails fast on startup with a `RuntimeError` and a clear instruction (instead of silently falling back to an insecure default).
+- Generated a new key (rotation — the old one was exposed in the git history).
+- Added `.env` to `.gitignore`, created `.env.example` as a template, and added the configuration step to the README.
+- Added a password policy in `forms.py`: 8–24 characters with at least one uppercase letter, one lowercase letter, one digit and one special character (custom validator `password_complexity`); the requirements are shown as help text below the field.
+- Hardened session cookies (`SESSION_COOKIE_HTTPONLY`, `SESSION_COOKIE_SAMESITE='Lax'`).
+
+Why:
+- The `SECRET_KEY` signs session cookies; hardcoded in the repo, anyone with repo access could forge sessions (see DD-11).
+- Until now, `123456` was a valid password (see DD-12).
+
+How I checked it:
+- Started the app without a `.env` → it aborts with a clear error message; with `.env` → starts normally.
+- My existing session was invalidated after the key rotation (expected — proof that the new key is active).
+- Tested registration with weak passwords → one specific error message per violated rule; with a strong password → registration and login succeed.
+- Checked the password hash in the database (`scrypt:…`, no plaintext).
+- Restored `instance/thesis_match.sqlite` afterward with `git restore` so that no test data gets committed.
+- Verified with `git status` that `.env` does not show up.
