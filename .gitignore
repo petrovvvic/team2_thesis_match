@@ -10,3 +10,9 @@ venv/
 
 # macos nutzlose daten
 .DS_Store
+
+# Secrets — niemals committen
+.env
+
+# Lokale Datenbank + Uploads
+instance/

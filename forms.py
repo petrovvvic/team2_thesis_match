@@ -1,17 +1,36 @@
+import re
+
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, IntegerField, BooleanField, SearchField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, InputRequired, NumberRange
+from wtforms.validators import (DataRequired, Email, Length, EqualTo, Optional, InputRequired, NumberRange, ValidationError)
 
 MESSAGE_MAX_CHARS = 1000
 ATTACHMENT_MAX_BYTES = 5 * 1024 * 1024  # 5 MB
+
+def password_complexity(form, field):
+    password = field.data or ''
+    if not re.search(r'[A-Z]', password):
+        raise ValidationError('Das Passwort muss mindestens einen Großbuchstaben enthalten.')
+    if not re.search(r'[a-z]', password):
+        raise ValidationError('Das Passwort muss mindestens einen Kleinbuchstaben enthalten.')
+    if not re.search(r'\d', password):
+        raise ValidationError('Das Passwort muss mindestens eine Zahl enthalten.')
+    if not re.search(r'[^A-Za-z0-9]', password):
+        raise ValidationError('Das Passwort muss mindestens ein Sonderzeichen enthalten.')
 
 # Screen 1a: Registrierung
 class RegistrationForm(FlaskForm):
     first_name = StringField('Vorname*', validators=[DataRequired(), Length(min=2, max=50)])
     last_name = StringField('Nachname*', validators=[DataRequired(), Length(min=2, max=50)])
     email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(), Email()])
-    password = PasswordField('Passwort*', validators=[DataRequired(), Length(min=6)])
+    password = PasswordField('Passwort*', validators=[
+        DataRequired(),
+        Length(min=8, max=24, message='Das Passwort muss 8 bis 24 Zeichen lang sein.'),
+        password_complexity,
+        ],
+        description = 'Mindestens 8 Zeichen, mit Groß- und Kleinbuchstaben, einer Zahl und einem Sonderzeichen.'
+    )
     confirm_password = PasswordField('Passwort Bestätigen*', validators=[DataRequired(), EqualTo('password')])
     role = SelectField('An der HWR bin ich...*', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
     submit = SubmitField('Register')

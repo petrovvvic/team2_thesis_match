@@ -24,9 +24,15 @@ Voraussetzung: **Python 3** muss installiert sein. Komplette Einrichtung in unte
    ```
    pip install -r requirements.txt
    ```
-5. App starten:
+5. Konfiguration anlegen — `.env.example` zu `.env` kopieren und eigenen `SECRET_KEY` generieren:
    ```
-   flask --app app run
+   cp .env.example .env
+   python -c "import secrets; print(secrets.token_hex(32))"
+   ```
+   (Windows: `copy .env.example .env`)
+6. App starten:
+   ```
+   flask --app app run 
    ```
    Danach im Browser `http://127.0.0.1:5000` öffnen.
    (macOS: Port 5000 ist oft durch AirPlay belegt — dann `flask --app app run --port 5050` und `http://127.0.0.1:5050`.)

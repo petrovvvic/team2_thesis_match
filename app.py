@@ -1,6 +1,7 @@
 import os
 import uuid
 
+from dotenv import load_dotenv
 from flask import (Flask, render_template, redirect, url_for, request, session,
                    flash, jsonify, send_from_directory, abort)
 from flask_bootstrap import Bootstrap5
@@ -11,10 +12,17 @@ from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProf
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest, RequestStatusHistory,
                 RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram, insert_sample)
 
+load_dotenv()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'ein-super-geheimes-passwort'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+if not app.config['SECRET_KEY']:
+    raise RuntimeError(
+        'SECRET_KEY ist nicht gesetzt. Bitte .env anlegen (siehe .env.example / README).'
+    )
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///thesis_match.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SESSION_COOKIE_HTTPONLY'] = True   # kein Zugriff per JavaScript (Schutz bei XSS)
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Cookie wird bei fremden Cross-Site-POSTs nicht mitgesendet
 
 # PDF uploads: files live in instance/uploads, only metadata goes in the DB.
 app.config['UPLOAD_FOLDER'] = os.path.join(app.instance_path, 'uploads')
