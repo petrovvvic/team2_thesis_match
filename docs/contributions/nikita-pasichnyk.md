@@ -65,6 +65,8 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 3. [DD #08 — "Frictionless Onboarding" vs. Dynamisches JavaScript](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-08.md)
 4. [DD #09 — Wahrung der referenziellen Integrität (Foreign Keys)](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-09.md)
 5. [DD #10 — Sicherheitskonzept der Authentifizierung](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-10.md)
+6. [DD #11 — Secrets-Management: SECRET_KEY als Umgebungsvariable](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-11.md)
+7. [DD #12 — Passwort-Policy bei der Registrierung](https://github.com/petrovvvic/team2_thesis_match/blob/main/docs/design-decisions/dd-12.md)
 
 ---
 
@@ -77,6 +79,7 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 | **UX-Fixes & Route-Guarding**<br>Einbau von Redirects für eingeloggte User und Frontend-Validatoren (z.B. Semester Minimum). | Commits im `main`-Branch:<br>`fix: Routing issues`<br>`Semester fix (negative integers)`<br>`fix: Fachbereich anpassung -> Prof Profile` | [WTForms Validators](https://wtforms.readthedocs.io/en/3.0.x/validators/) |
 | **Security & Form Validation**<br>Implementierung von `werkzeug.security` (Password Hashing) und Formular-Validierung. | Siehe Hash-Generierung in der `/register` Route (`app.py`). | [Werkzeug Security API](https://werkzeug.palletsprojects.com/en/3.0.x/utils/#module-werkzeug.security) |
 | **Relationales Datenbank-Design**<br>Aufbau der komplexen 1:1 und 1:n Beziehungen zwischen `User` und Profilen. | Siehe Model-Definitionen in der `db.py` | [SQLAlchemy Relationships](https://docs.sqlalchemy.org/en/20/orm/relationships.html) |
+| **Passwort-Sicherheit & Secrets-Management (Finale Abgabe)**<br>`SECRET_KEY` in Umgebungsvariable ausgelagert (`.env` + Fail-fast, Key-Rotation), Passwort-Policy mit eigenem WTForms-Validator, Session-Cookie-Härtung. | Commit im `main`-Branch:<br>`feat: Passwort-Sicherheit — SECRET_KEY via .env (Fail-fast) + Passwort-Policy bei Registrierung` | [Flask Config Handling](https://flask.palletsprojects.com/en/stable/config/),<br>[python-dotenv](https://pypi.org/project/python-dotenv/),<br>[The Twelve-Factor App — Config](https://12factor.net/config),<br>[NIST SP 800-63B](https://pages.nist.gov/800-63-3/sp800-63b.html) |
 
 ---
 
@@ -89,3 +92,4 @@ Wie so vieles beim Programmieren, war der Weg dorthin kein gerader Strich, sonde
 | 03 | Gemini | Strukturierung der Dokumentation | `nikita-pasichnyk.md` | Unterstützung bei der Formatierung der Markdown-Tabelle und Ausformulierung technischer Design-Entscheidungen für das Kolloquium. |
 | 04 | DeepSeek | Logik-Optimierung und Query-Design | `app.py` (Filterlogik im `/feed` und API-Abfragen) | Einsatz zur Optimierung der Python-Suchlogik (`suchbegriff in f"{prof.user.first_name}..."`) und Evaluierung von SQLAlchemy-Listenabfragen. |
 | 05 | DeepSeek | Security Best-Practices & Architektur | `app.py`, `db.py` | Recherche-Prompts bezüglich Best-Practices für die Handhabung von `werkzeug.security` Hashes beim Registrierungsprozess und strukturelle Trennung von DB-Models. |
+| 06 | Deep Seek | Review für Secrets-Management und Passwort-Policy; Entwürfe für DD-11/DD-12, Development-Log-Eintrag und README-Abschnitt | `app.py`, `forms.py`, `.env.example`, `.gitignore`, `README.md`, `docs/` | Anleitung für eine erfolgreiche Implementierung für Secrets-Management und Passwort-Policy auf Basis des Ist-Codes; anschließend Diff, Doku-Entwürfe gegenprüfen lassen und redaktionell überarbeitet. |
