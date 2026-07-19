@@ -100,3 +100,61 @@ Warum:
 
 Wie ich es geprüft habe:
 - PDF > 5 MB hochgeladen → wird mit Hinweis „max. 5 MB" abgelehnt; kleinere PDF → Upload erfolgreich.
+
+## 2026-07-18 — Bearbeiten und Zurückziehen von Betreuungsanfragen hinzugefügt
+
+Branch:
+- main
+
+Was geändert wurde:
+- In `app.py` Routen zum Bearbeiten und Zurückziehen von Betreuungsanfragen ergänzt.
+- Die Formularlogik in `forms.py` für das Bearbeiten bestehender Anfragen erweitert.
+- Das neue Template `templates/request_edit.html` für die Bearbeitungsseite erstellt.
+- Das neue Template `templates/request_withdraw.html` als Bestätigungsseite für das Zurückziehen erstellt.
+- Im Dashboard die Buttons „Anfrage bearbeiten“ und „Anfrage zurückziehen“ für offene Anfragen ergänzt.
+- Berechtigungsprüfungen hinzugefügt, damit Studierende nur ihre eigenen Anfragen bearbeiten oder zurückziehen können.
+- Das Bearbeiten und Zurückziehen auf Anfragen mit dem Status `submitted` beschränkt.
+- Beim Zurückziehen wird der Status der Anfrage auf `withdrawn` geändert.
+
+Warum:
+- Studierende sollen fehlerhafte oder noch nicht vollständige Angaben nach dem Absenden korrigieren können.
+- Studierende benötigen außerdem die Möglichkeit, eine nicht mehr gewünschte Anfrage zurückzuziehen.
+- Bereits angenommene, abgelehnte oder zurückgezogene Anfragen sollen nicht nachträglich verändert werden können.
+- Die Bestätigungsseite verhindert, dass eine Anfrage versehentlich zurückgezogen wird.
+
+Wie ich es geprüft habe:
+- App lokal mit `python -m flask --app app run` gestartet.
+- Als Student eingeloggt und eine neue Betreuungsanfrage erstellt.
+- Die Bearbeitungsseite über das Dashboard geöffnet.
+- Die Angaben der Anfrage geändert und geprüft, dass die aktualisierten Daten anschließend im Dashboard angezeigt werden.
+- Die Seite zum Zurückziehen geöffnet und den Vorgang bestätigt.
+- Geprüft, dass der Status anschließend als `withdrawn` gespeichert und angezeigt wird.
+- Kontrolliert, dass eine zurückgezogene Anfrage nicht mehr bearbeitet oder erneut zurückgezogen werden kann.
+- Die Änderungen mit `git diff`, `git diff --check` und `git status` überprüft.
+- Lokale Testdaten anschließend mit `git restore instance/thesis_match.sqlite` zurückgesetzt.
+
+## 2026-07-19 — Prüferrolle im Dashboard angezeigt
+
+Branch:
+- main
+
+Was geändert wurde:
+- `templates/dashboard.html` erweitert.
+- Bei jeder Betreuungsanfrage wird nun angezeigt, ob die Anfrage als Erstprüfer/in oder Zweitprüfer/in gestellt wurde.
+- Die Prüferrolle wird sowohl im Dashboard für Studierende als auch im Dashboard für Professorinnen und Professoren angezeigt.
+- Falls bei einem Datensatz keine Prüferrolle vorhanden ist, wird „Nicht angegeben“ angezeigt.
+
+Warum:
+- Beim manuellen Testen des Anfrage-Flows wurde festgestellt, dass die ausgewählte Prüferrolle zwar in `examiner_role` gespeichert, aber im Dashboard nicht angezeigt wurde.
+- Professorinnen und Professoren müssen erkennen können, ob sie als Erstprüfer/in oder Zweitprüfer/in angefragt wurden.
+- Studierende sollen ebenfalls nachvollziehen können, für welche Prüferrolle sie eine Anfrage gestellt haben.
+
+Wie ich es geprüft habe:
+- Den neuesten Stand von `main` mit `git fetch origin` und `git pull --rebase origin main` übernommen.
+- Die Anwendung lokal gestartet und den Anfrage-Flow als Student sowie als Professor getestet.
+- Eine Anfrage mit ausgewählter Prüferrolle erstellt.
+- Geprüft, dass Erstprüfer/in beziehungsweise Zweitprüfer/in im Student-Dashboard korrekt angezeigt wird.
+- Anschließend als angefragter Professor eingeloggt und die Anzeige im Professoren-Dashboard kontrolliert.
+- Eine Anfrage angenommen und geprüft, dass die Prüferrolle auch nach der Statusänderung sichtbar bleibt.
+- Die Änderung mit `git diff`, `git diff --check` und `git status` überprüft.
+- Lokale Testdaten anschließend mit `git restore instance/thesis_match.sqlite` zurückgesetzt.
