@@ -15,4 +15,4 @@ venv/
 .env
 
 # Lokale Datenbank + Uploads
-instance/
+# instance/ -> Einfacher für Demo und Testen, daher wird db nicht ignored

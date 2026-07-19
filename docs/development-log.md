@@ -1,91 +1,102 @@
-# Development Log
+# Entwicklungs-Log
 
-## Removed old raw SQL database files
+## Alte rohe SQL-Datenbankdateien entfernt
 
 Branch:
 - remove-old-sql-database-folder
 
-What changed:
-- Removed database/schema.sql
-- Removed database/seed.sql
+Was geändert wurde:
+- `database/schema.sql` entfernt
+- `database/seed.sql` entfernt
 
-the reason why:
-- The application uses SQLAlchemy models in db.py.
-- The old raw SQL files were no longer the source of truth for the database model.
-- The app still uses SQLite through SQLAlchemy.
+Warum:
+- Die Anwendung nutzt die SQLAlchemy-Models in `db.py`.
+- Die alten rohen SQL-Dateien waren nicht mehr die maßgebliche Quelle (Source of Truth) für das Datenbankmodell.
+- Die App greift weiterhin über SQLAlchemy auf SQLite zu.
 
-How I checked it:
-- I used git status to check the current branch and see which files changed.
-- I used git diff --stat origin/main..HEAD to confirm that only the old SQL files were removed.
+Wie ich es geprüft habe:
+- Mit `git status` den aktuellen Branch und die geänderten Dateien geprüft.
+- Mit `git diff --stat origin/main..HEAD` bestätigt, dass nur die alten SQL-Dateien entfernt wurden.
 
-## 2026-06-18 — Added basic role-based dashboard
-
-Branch:
-
-* feature/db-dashboard-basics
-
-What changed:
-
-* I added a new `/dashboard` route in `app.py`
-* Then added a dashboard navigation link in `templates/base.html`
-* CAfter that i created the new template `templates/dashboard.html`
-
-Why:
-
-* Students and professors need a central overview of their supervision requests.
-* The dashboard shows different request data depending on the logged-in user's role.
-* The implementation uses the existing `SupervisionRequest` model and does not change the database schema.
-
-How I checked it:
-
-* I installed the project requirements in the virtual environment.
-* I ran the app locally with `python -m flask --app app run --debug`.
-* I registered and logged in as a student.
-* I opened the dashboard page and confirmed that it loaded correctly.
-* I restored the local SQLite database file afterward using `git restore instance/thesis_match.sqlite`so that my test user data was not committed.
-
-## 2026-06-18 — Added supervision request creation flow
+## 2026-06-18 — Rollenbasiertes Dashboard (Grundgerüst) hinzugefügt
 
 Branch:
 - feature/db-dashboard-basics
 
-What changed:
-- Added a request form in `forms.py`
-- Added the `/requests/new` route in `app.py`
-- Added `templates/request_new.html`
-- Added a dashboard button for students to create a new request
+Was geändert wurde:
+- Neue Route `/dashboard` in `app.py` hinzugefügt
+- Dashboard-Navigationslink in `templates/base.html` ergänzt
+- Neues Template `templates/dashboard.html` erstellt
 
-Why:
-- Students need a way to create supervision requests from the web app.
-- The request is saved through the existing `SupervisionRequest` SQLAlchemy model.
+Warum:
+- Studierende und Professor:innen brauchen eine zentrale Übersicht ihrer Betreuungsanfragen.
+- Das Dashboard zeigt je nach Rolle des eingeloggten Nutzers unterschiedliche Anfragedaten.
+- Die Umsetzung nutzt das bestehende `SupervisionRequest`-Model und ändert das Datenbankschema nicht.
 
-How I checked it:
-- I ran the app locally with `python -m flask --app app run --debug`.
-- I opened the dashboard as a student.
-- I created a test supervision request.
-- The request appeared on the dashboard with status `submitted`.
-- I restored `instance/thesis_match.sqlite` afterward so local test data was not committed.
+Wie ich es geprüft habe:
+- Projekt-Abhängigkeiten in der virtuellen Umgebung installiert.
+- App lokal mit `python -m flask --app app run --debug` gestartet.
+- Als Studierende:r registriert und eingeloggt.
+- Die Dashboard-Seite geöffnet und bestätigt, dass sie korrekt lädt.
+- Danach die lokale SQLite-Datei mit `git restore instance/thesis_match.sqlite` zurückgesetzt, damit meine Test-Nutzerdaten nicht committet werden.
 
-## 2026-07-18 — Password security: SECRET_KEY via .env + password policy
+## 2026-06-18 — Erstellungs-Flow für Betreuungsanfragen hinzugefügt
 
 Branch:
-- main (trunk-based, after pulling first)
+- feature/db-dashboard-basics
 
-What changed:
-- Removed the hardcoded `SECRET_KEY` from `app.py`; it is now loaded from a local `.env` file via `python-dotenv`. If the variable is missing, the app fails fast on startup with a `RuntimeError` and a clear instruction (instead of silently falling back to an insecure default).
-- Generated a new key (rotation — the old one was exposed in the git history).
-- Added `.env` to `.gitignore`, created `.env.example` as a template, and added the configuration step to the README.
-- Added a password policy in `forms.py`: 8–24 characters with at least one uppercase letter, one lowercase letter, one digit and one special character (custom validator `password_complexity`); the requirements are shown as help text below the field.
-- Hardened session cookies (`SESSION_COOKIE_HTTPONLY`, `SESSION_COOKIE_SAMESITE='Lax'`).
+Was geändert wurde:
+- Anfrage-Formular in `forms.py` hinzugefügt
+- Route `/requests/new` in `app.py` hinzugefügt
+- `templates/request_new.html` hinzugefügt
+- Dashboard-Button für Studierende zum Erstellen einer neuen Anfrage ergänzt
 
-Why:
-- The `SECRET_KEY` signs session cookies; hardcoded in the repo, anyone with repo access could forge sessions (see DD-11).
-- Until now, `123456` was a valid password (see DD-12).
+Warum:
+- Studierende brauchen einen Weg, Betreuungsanfragen direkt in der Web-App zu erstellen.
+- Die Anfrage wird über das bestehende `SupervisionRequest`-SQLAlchemy-Model gespeichert.
 
-How I checked it:
-- Started the app without a `.env` → it aborts with a clear error message; with `.env` → starts normally.
-- My existing session was invalidated after the key rotation (expected — proof that the new key is active).
-- Tested registration with weak passwords → one specific error message per violated rule; with a strong password → registration and login succeed.
-- Checked the password hash in the database (`scrypt:…`, no plaintext).
-- Restored `instance/thesis_match.sqlite` afterward with `git restore` so that no test data gets committed.
-- Verified with `git status` that `.env` does not show up.
+Wie ich es geprüft habe:
+- App lokal mit `python -m flask --app app run --debug` gestartet.
+- Dashboard als Studierende:r geöffnet.
+- Eine Test-Betreuungsanfrage erstellt.
+- Die Anfrage erschien im Dashboard mit Status `submitted`.
+- Danach `instance/thesis_match.sqlite` zurückgesetzt, damit lokale Testdaten nicht committet werden.
+
+## 2026-07-18 — Passwort-Sicherheit: SECRET_KEY via .env + Passwort-Policy
+
+Branch:
+- main (trunk-based, nach vorherigem Pull)
+
+Was geändert wurde:
+- Den fest im Code stehenden `SECRET_KEY` aus `app.py` entfernt; er wird jetzt über eine lokale `.env`-Datei via `python-dotenv` geladen. Fehlt die Variable, bricht die App beim Start sofort mit einem `RuntimeError` und klarer Anweisung ab (statt still auf einen unsicheren Default zurückzufallen).
+- Einen neuen Key generiert (Rotation — der alte war in der Git-Historie exponiert).
+- `.env` zur `.gitignore` hinzugefügt, `.env.example` als Vorlage erstellt und den Konfigurationsschritt in die README aufgenommen.
+- Eine Passwort-Policy in `forms.py` ergänzt: 8–24 Zeichen mit mindestens einem Groß-, einem Kleinbuchstaben, einer Ziffer und einem Sonderzeichen (eigener Validator `password_complexity`); die Anforderungen werden als Hilfetext unter dem Feld angezeigt.
+- Session-Cookies gehärtet (`SESSION_COOKIE_HTTPONLY`, `SESSION_COOKIE_SAMESITE='Lax'`).
+
+Warum:
+- Der `SECRET_KEY` signiert die Session-Cookies; fest im Repo könnte jede:r mit Repo-Zugriff Sessions fälschen (siehe DD-11).
+- Bisher war `123456` ein gültiges Passwort (siehe DD-12).
+
+Wie ich es geprüft habe:
+- App ohne `.env` gestartet → bricht mit klarer Fehlermeldung ab; mit `.env` → startet normal.
+- Meine bestehende Session war nach der Key-Rotation ungültig (erwartet — Beleg, dass der neue Key aktiv ist).
+- Registrierung mit schwachen Passwörtern getestet → je verletzter Regel eine spezifische Fehlermeldung; mit starkem Passwort → Registrierung und Login erfolgreich.
+- Den Passwort-Hash in der Datenbank geprüft (`scrypt:…`, kein Klartext).
+- Danach `instance/thesis_match.sqlite` mit `git restore` zurückgesetzt, damit keine Testdaten committet werden.
+- Mit `git status` verifiziert, dass `.env` nicht auftaucht.
+
+## 2026-07-18 — Upload-Limit für PDF-Anhänge auf 5 MB begrenzt
+
+Branch:
+- main
+
+Was geändert wurde:
+- PDF-Uploads im Chat auf max. 5 MB begrenzt: `FileSize`-Validator in `forms.py` (freundliche Meldung) plus `MAX_CONTENT_LENGTH = 5 MB` in `app.py` als harten Backstop.
+- 413-Fehlerhandler ergänzt, der bei zu großen Dateien eine verständliche Meldung zeigt statt der rohen Fehlerseite.
+
+Warum:
+- Sehr große Uploads sollen Speicher und Server nicht unnötig belasten; PDFs für Nachrichten/Exposés sind klein.
+
+Wie ich es geprüft habe:
+- PDF > 5 MB hochgeladen → wird mit Hinweis „max. 5 MB" abgelehnt; kleinere PDF → Upload erfolgreich.

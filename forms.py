@@ -21,25 +21,25 @@ def password_complexity(form, field):
 
 # Screen 1a: Registrierung
 class RegistrationForm(FlaskForm):
-    first_name = StringField('Vorname*', validators=[DataRequired(), Length(min=2, max=50)])
-    last_name = StringField('Nachname*', validators=[DataRequired(), Length(min=2, max=50)])
-    email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(), Email()])
+    first_name = StringField('Vorname*', validators=[DataRequired(message='Dieses Feld ist erforderlich.'), Length(min=2, max=50, message='Muss zwischen 2 und 50 Zeichen lang sein.')])
+    last_name = StringField('Nachname*', validators=[DataRequired(message='Dieses Feld ist erforderlich.'), Length(min=2, max=50, message='Muss zwischen 2 und 50 Zeichen lang sein.')])
+    email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(message='Dieses Feld ist erforderlich.'), Email(message='Bitte eine gültige E-Mail-Adresse eingeben.')])
     password = PasswordField('Passwort*', validators=[
-        DataRequired(),
+        DataRequired(message='Dieses Feld ist erforderlich.'),
         Length(min=8, max=24, message='Das Passwort muss 8 bis 24 Zeichen lang sein.'),
         password_complexity,
         ],
         description = 'Mindestens 8 Zeichen, mit Groß- und Kleinbuchstaben, einer Zahl und einem Sonderzeichen.'
     )
-    confirm_password = PasswordField('Passwort Bestätigen*', validators=[DataRequired(), EqualTo('password')])
-    role = SelectField('An der HWR bin ich...*', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired()])
+    confirm_password = PasswordField('Passwort Bestätigen*', validators=[DataRequired(message='Dieses Feld ist erforderlich.'), EqualTo('password', message='Die Passwörter müssen übereinstimmen.')])
+    role = SelectField('An der HWR bin ich...*', choices=[('student', 'Student'), ('professor', 'Professor')], validators=[DataRequired(message='Bitte eine Rolle auswählen.')])
     submit = SubmitField('Register')
 
 
 # Screen 1b: Login
 class LoginForm(FlaskForm):
-    email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(), Email()])
-    password = PasswordField('Passwort*', validators=[DataRequired()])
+    email = StringField('HWR E-Mail Addresse*', validators=[DataRequired(message='Dieses Feld ist erforderlich.'), Email(message='Bitte eine gültige E-Mail-Adresse eingeben.')])
+    password = PasswordField('Passwort*', validators=[DataRequired(message='Dieses Feld ist erforderlich.')])
     submit = SubmitField('Login')
 
 
@@ -47,21 +47,21 @@ class LoginForm(FlaskForm):
 class ProfessorProfileForm(FlaskForm):
     facheinheit_id = SelectField('Facheinheit', coerce=int, validators=[Optional()])
     title = StringField('Akademische(r) Titel', validators=[Optional()])
-    research_areas = TextAreaField('Forschungsbereich(e)', validators=[Optional(), Length(max=500)])
-    requirements = TextAreaField('Voraussetzungen für Studierende', validators=[Optional(), Length(max=500)])
+    research_areas = TextAreaField('Forschungsbereich(e)', validators=[Optional(), Length(max=500, message='Maximal 500 Zeichen erlaubt.')])
+    requirements = TextAreaField('Voraussetzungen für Studierende', validators=[Optional(), Length(max=500, message='Maximal 500 Zeichen erlaubt.')])
     accepting_requests = BooleanField('Anfragen erhalten?')
     submit = SubmitField('Update Profile')
 
 # Screen 7: Profil Student
 class StudentProfileForm(FlaskForm):
-    matriculation_number = StringField('Matrikelnummer', validators=[Optional(), Length(max=20)])
+    matriculation_number = StringField('Matrikelnummer', validators=[Optional(), Length(max=20, message='Maximal 20 Zeichen erlaubt.')])
     degree_program_id = SelectField('Studiengang', coerce=int, validators=[Optional()])
     semester = IntegerField('Aktuelles Semester',validators=[Optional(),NumberRange(min=1, message="Das Semester muss mindestens 1 sein.")],render_kw={'min': 1})
-    study_focus = TextAreaField('Studienschwerpunkt / Interessen', validators=[Optional(), Length(max=200)])
+    study_focus = TextAreaField('Studienschwerpunkt / Interessen', validators=[Optional(), Length(max=200, message='Maximal 200 Zeichen erlaubt.')])
     submit = SubmitField('Update Profile')
 
 
-# Chat: Nachricht im Anfrage-Verlauf sendenf
+# Chat: Nachricht im Anfrage-Verlauf senden
 class MessageForm(FlaskForm):
     message_text = TextAreaField(
         f'Nachricht (max. {MESSAGE_MAX_CHARS} Zeichen)',
@@ -100,23 +100,23 @@ class RequestForm(FlaskForm):
     professor_id = SelectField(
         'Professor/in auswählen*',
         coerce=int,
-        validators=[DataRequired()]
+        validators=[DataRequired(message='Bitte eine:n Professor:in auswählen.')]
     )
 
-    examiner_role = SelectField('Anfrage als*', choices=[('erst', 'Erstprüfer/in'), ('zweit', 'Zweitprüfer/in')], validators=[DataRequired()])
+    examiner_role = SelectField('Anfrage als*', choices=[('erst', 'Erstprüfer/in'), ('zweit', 'Zweitprüfer/in')], validators=[DataRequired(message='Bitte eine Prüfer-Rolle auswählen.')])
 
     proposed_title = StringField(
         'Arbeitstitel der Bachelorarbeit*',
-        validators=[DataRequired(), Length(max=200)]
+        validators=[DataRequired(message='Dieses Feld ist erforderlich.'), Length(max=200, message='Maximal 200 Zeichen erlaubt.')]
     )
     short_description = TextAreaField(
         'Kurzbeschreibung*',
-        validators=[DataRequired(), Length(max=1000)],
+        validators=[DataRequired(message='Dieses Feld ist erforderlich.'), Length(max=1000, message='Maximal 1000 Zeichen erlaubt.')],
         render_kw={'rows': 5}
     )
     preferred_period = StringField(
         'Gewünschter Betreuungszeitraum*',
-        validators=[DataRequired(), Length(max=100)]
+        validators=[DataRequired(message='Dieses Feld ist erforderlich.'), Length(max=100, message='Maximal 100 Zeichen erlaubt.')]
     )
     submit = SubmitField('Anfrage senden')
 
@@ -128,22 +128,22 @@ class RequestEditForm(FlaskForm):
             ('erst', 'Erstprüfer/in'),
             ('zweit', 'Zweitprüfer/in')
         ],
-        validators=[DataRequired()]
+        validators=[DataRequired(message='Bitte eine Prüfer-Rolle auswählen.')]
     )
 
     proposed_title = StringField(
         'Arbeitstitel der Bachelorarbeit*',
         validators=[
-            DataRequired(),
-            Length(max=200)
+            DataRequired(message='Dieses Feld ist erforderlich.'),
+            Length(max=200, message='Maximal 200 Zeichen erlaubt.')
         ]
     )
 
     short_description = TextAreaField(
         'Kurzbeschreibung*',
         validators=[
-            DataRequired(),
-            Length(max=1000)
+            DataRequired(message='Dieses Feld ist erforderlich.'),
+            Length(max=1000, message='Maximal 1000 Zeichen erlaubt.')
         ],
         render_kw={'rows': 5}
     )
@@ -151,8 +151,8 @@ class RequestEditForm(FlaskForm):
     preferred_period = StringField(
         'Gewünschter Betreuungszeitraum*',
         validators=[
-            DataRequired(),
-            Length(max=100)
+            DataRequired(message='Dieses Feld ist erforderlich.'),
+            Length(max=100, message='Maximal 100 Zeichen erlaubt.')
         ]
     )
 

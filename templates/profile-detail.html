@@ -17,7 +17,7 @@
 
 {% if session.get('user_role') == 'student' %}
 {% if prof.accepting_requests == 1 %}
- <a href="{{ url_for('create_request') }}" class="btn btn-primary">
+ <a href="{{ url_for('create_request', professor_id=prof.user_id) }}" class="btn btn-primary">
 Anfrage stellen
 </a>
 {% else %}

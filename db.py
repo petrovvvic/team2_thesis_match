@@ -23,8 +23,7 @@ class Facheinheit(db.Model):
 
     faculty = db.relationship('Faculty', back_populates='facheinheiten')
     professors = db.relationship('ProfessorProfile', back_populates='facheinheit')
-    thesis_topics = db.relationship('ThesisTopic', back_populates='facheinheit')
-    
+
 
 class DegreeProgram(db.Model):
     __tablename__ = 'degree_programs'
@@ -129,23 +128,6 @@ class Attachment(db.Model):
 
     uploader = db.relationship('User', foreign_keys=[uploaded_by])
 
-# Themen für Thesissschreiben
-class ThesisTopic(db.Model):
-    __tablename__ = 'thesis_topics'
-    id = db.Column(db.Integer, primary_key=True)
-    professor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    facheinheit_id = db.Column(db.Integer, db.ForeignKey('facheinheiten.id'), nullable=True)
-    title = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    requirements = db.Column(db.Text, nullable=True)
-    topic_area = db.Column(db.String(100), nullable=False)
-    status = db.Column(db.String(20), nullable=False, default='open')
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
-
-    professor = db.relationship('User', foreign_keys=[professor_id])
-    facheinheit = db.relationship('Facheinheit', back_populates='thesis_topics')
-  
 
 class RequestStatusHistory(db.Model):
     __tablename__ = 'request_status_history'

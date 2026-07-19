@@ -28,7 +28,7 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Cookie wird bei fremden Cross-S
 
 # PDF uploads: files live in instance/uploads, only metadata goes in the DB.
 app.config['UPLOAD_FOLDER'] = os.path.join(app.instance_path, 'uploads')
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024 # max 10 mb dateien
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # harter Backstop 5 MB; freundliche Meldung via FileSize (forms.py) + 413-Handler
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 db.init_app(app)
@@ -103,7 +103,7 @@ def register():
 
         db.session.commit()
         session['just_registered'] = True
-        flash('Registration successful! You can now log in.', 'success')
+        flash('Registrierung erfolgreich! Du kannst dich jetzt einloggen.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
@@ -115,13 +115,9 @@ def logout():
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
-    if 'user_id' not in session:
-        flash('Access denied. Please log in first.', 'danger')
-        return redirect(url_for('login'))
-
-    user = db.session.execute(db.select(User).filter_by(id=session['user_id'])).scalar_one_or_none()
+    user = _current_user()
     if not user:
-        session.clear()
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
     if user.role == 'professor':
@@ -142,7 +138,7 @@ def profile():
                 profile_data.accepting_requests = 0
 
             db.session.commit()
-            flash('Professor profile successfully updated!', 'success')
+            flash('Professorenprofil erfolgreich aktualisiert!', 'success')
             return redirect(url_for('profile'))
 
         elif request.method == 'GET':
@@ -190,7 +186,7 @@ def profile():
                 profile_data.faculty_id = selected_program.faculty_id
 
             db.session.commit()
-            flash('Student profile successfully updated!', 'success')
+            flash('Studierendenprofil erfolgreich aktualisiert!', 'success')
             return redirect(url_for('profile'))
 
         elif request.method == 'GET':
@@ -211,9 +207,10 @@ def _current_user():
 def dashboard():
     user = _current_user()
     if not user:
-        flash('Access denied. Please log in first.', 'danger')
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
+    requests_q = None
     if user.role == 'student':
         requests_q = db.select(SupervisionRequest).where(
             SupervisionRequest.student_id == user.id
@@ -222,10 +219,10 @@ def dashboard():
         requests_q = db.select(SupervisionRequest).where(
             SupervisionRequest.professor_id == user.id
         ).order_by(SupervisionRequest.updated_at.desc())
-    else:
-        requests_q = db.select(SupervisionRequest).where(False)
 
-    dashboard_requests = db.session.execute(requests_q).scalars().all()
+    dashboard_requests = (
+        db.session.execute(requests_q).scalars().all() if requests_q is not None else []
+    )
 
     status_forms = {}
 
@@ -254,7 +251,7 @@ def dashboard():
 def create_request():
     user = _current_user()
     if not user:
-        flash('Access denied. Please log in first.', 'danger')
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
     if user.role != 'student':
@@ -283,6 +280,11 @@ def create_request():
 
     if not professors:
         flash('Aktuell sind keine Professor/innen für Anfragen verfügbar.', 'info')
+
+    if request.method == 'GET':
+        preselected = request.args.get('professor_id', type=int)
+        if preselected in [choice[0] for choice in form.professor_id.choices]:
+            form.professor_id.data = preselected
 
     if form.validate_on_submit():
         selected_professor = db.session.get(User, form.professor_id.data)
@@ -315,7 +317,7 @@ def edit_request(request_id):
     user = _current_user()
 
     if not user:
-        flash('Access denied. Please log in first.', 'danger')
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
     supervision_request = db.session.get(SupervisionRequest, request_id)
@@ -355,7 +357,7 @@ def withdraw_request(request_id):
     user = _current_user()
 
     if not user:
-        flash('Access denied. Please log in first.', 'danger')
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
     supervision_request = db.session.get(SupervisionRequest, request_id)
@@ -399,7 +401,7 @@ def update_request_status(request_id):
     user = _current_user()
 
     if not user:
-        flash('Access denied. Please log in first.', 'danger')
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
     if user.role != 'professor':
@@ -476,7 +478,7 @@ def update_request_status(request_id):
 def chats():
     user = _current_user()
     if not user:
-        flash('Access denied. Please log in first.', 'danger')
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
     requests_q = db.select(SupervisionRequest).where(
@@ -492,7 +494,7 @@ def chats():
 def chat(request_id):
     user = _current_user()
     if not user:
-        flash('Access denied. Please log in first.', 'danger')
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
     sup_request = db.session.get(SupervisionRequest, request_id)
@@ -541,7 +543,7 @@ def chat(request_id):
 def download_attachment(attachment_id):
     user = _current_user()
     if not user:
-        flash('Access denied. Please log in first.', 'danger')
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
 
     attachment = db.session.get(Attachment, attachment_id)
@@ -559,8 +561,6 @@ def download_attachment(attachment_id):
         download_name=attachment.original_filename,
     )
 
-
-## API ANFRAGE BESTE PROFS TODO: MEISTGEFRAGTE THEMEB
 
 @app.route('/api/top-supervisors')
 def api_top_supervisors():
@@ -599,8 +599,8 @@ def api_top_supervisors():
 
 @app.route('/feed/', methods=['GET', 'POST'])
 def feed():
-    if 'user_id' not in session:
-        flash('Access denied. Please log in first.', 'danger')
+    if not _current_user():
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
         return redirect(url_for('login'))
     form = ProfSearchForm()
 
@@ -635,11 +635,17 @@ def feed():
 
 @app.route('/professor/<int:id>')
 def view_professor(id):
+    if not _current_user():
+        flash('Zugriff verweigert. Bitte zuerst einloggen.', 'danger')
+        return redirect(url_for('login'))
     prof = db.session.get(ProfessorProfile, id)
     if not prof:
         abort(404)
     return render_template('profile-detail.html', prof=prof)
 
+
+
+##### Diese Route ist nur für Einfügen der Facheinheiten fürs Demo. Sie ist nicht funktional, aber sehr bequem, um db auszufüllen für das Anschauen des Projektes
 @app.route('/insert/sample')
 def run_insert_sample():
     insert_sample()
@@ -652,3 +658,9 @@ def not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     return render_template('500.html'), 500
+
+@app.errorhandler(413)
+def file_too_large(e):
+    # Greift, wenn eine Datei die MAX_CONTENT_LENGTH überschreitet.
+    flash('Die Datei ist zu groß. Bitte lade eine PDF mit maximal 5 MB hoch.', 'danger')
+    return redirect(request.referrer or url_for('chats'))

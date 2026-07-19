@@ -1,23 +1,19 @@
-# Data Model
-
-
+# Datenmodell
 
 ![erm](https://github.com/petrovvvic/team2_thesis_match/raw/main/docs/assets/images/Screenshot%202026-06-21%20205638.png)
 
+Die Anwendung nutzt **SQLite** als Datenbanktechnologie und **Flask-SQLAlchemy** als ORM-Schicht.
+Die Datenbankdatei liegt unter `instance/thesis_match.sqlite`.
 
+Die SQLAlchemy-Model-Klassen sind in `db.py` definiert. Diese Klassen sind die maßgebliche Quelle (Source of Truth) für die aktuelle Datenbankstruktur.
 
-The application uses SQLite as the database technology and Flask-SQLAlchemy as the ORM layer.  
-The database file is located in `instance/thesis_match.sqlite`.
-
-The SQLAlchemy model classes are defined in `db.py`. These classes are the source of truth for the current database structure.
-
-## Main entities
+## Zentrale Entitäten
 
 ### User
 
-The `User` model stores the login and account data for both students and professors.
+Das `User`-Model speichert Login- und Account-Daten für Studierende und Professor:innen.
 
-Important fields:
+Wichtige Felder:
 - `id`
 - `email`
 - `password_hash`
@@ -27,18 +23,18 @@ Important fields:
 - `account_status`
 - `created_at`
 
-The `role` field separates students and professors.
+Das Feld `role` unterscheidet Studierende und Professor:innen.
 
-Relationships:
-- One user can have one `StudentProfile`
-- One user can have one `ProfessorProfile`
-- A user can be connected to many supervision requests as student or professor
+Beziehungen:
+- Ein User hat ein `StudentProfile`
+- Ein User hat ein `ProfessorProfile`
+- Ein User kann als Studierende:r oder Professor:in mit vielen Betreuungsanfragen verbunden sein
 
 ### StudentProfile
 
-The `StudentProfile` model stores student-specific profile information.
+Das `StudentProfile`-Model speichert studierendenspezifische Profildaten.
 
-Important fields:
+Wichtige Felder:
 - `user_id`
 - `matriculation_number`
 - `faculty_id`
@@ -46,16 +42,16 @@ Important fields:
 - `semester`
 - `study_focus`
 
-Relationships:
-- Belongs to one `User`
-- Can reference one `Faculty`
-- Can reference one `DegreeProgram`
+Beziehungen:
+- Gehört zu einem `User`
+- Kann eine `Faculty` referenzieren
+- Kann einen `DegreeProgram` referenzieren
 
 ### ProfessorProfile
 
-The `ProfessorProfile` model stores professor-specific profile information.
+Das `ProfessorProfile`-Model speichert professorspezifische Profildaten.
 
-Important fields:
+Wichtige Felder:
 - `user_id`
 - `facheinheit_id`
 - `title`
@@ -64,61 +60,61 @@ Important fields:
 - `max_supervisions`
 - `accepting_requests`
 
-Relationships:
-- Belongs to one `User`
-- Can reference one `Facheinheit`
+Beziehungen:
+- Gehört zu einem `User`
+- Kann eine `Facheinheit` referenzieren
 
 ### Faculty
 
-The `Faculty` model stores faculties so users do not enter faculty names manually.
+Das `Faculty`-Model speichert die Fachbereiche, damit Nutzer keine Fachbereichsnamen manuell eingeben müssen.
 
-Important fields:
+Wichtige Felder:
 - `id`
 - `code`
 - `name`
 - `created_at`
 
-Relationships:
-- One faculty can have many degree programs
-- One faculty can have many Facheinheiten
-- Student profiles reference a faculty directly; professor profiles reference a faculty indirectly via their Facheinheit
+Beziehungen:
+- Ein Fachbereich hat viele Studiengänge
+- Ein Fachbereich hat viele Facheinheiten
+- Studierendenprofile referenzieren einen Fachbereich direkt; Professorenprofile indirekt über ihre Facheinheit
 
 ### DegreeProgram
 
-The `DegreeProgram` model stores study programs connected to a faculty.
+Das `DegreeProgram`-Model speichert Studiengänge, die zu einem Fachbereich gehören.
 
-Important fields:
+Wichtige Felder:
 - `id`
 - `faculty_id`
 - `name`
 - `degree`
 
-Relationships:
-- Belongs to one `Faculty`
-- Can be referenced by student profiles
+Beziehungen:
+- Gehört zu einem `Faculty`
+- Kann von Studierendenprofilen referenziert werden
 
 ### Facheinheit
 
-The `Facheinheit` model stores the academic units (sub-departments) within a faculty. Professors are assigned to a Facheinheit, and the professor feed can be filtered by it.
+Das `Facheinheit`-Model speichert die akademischen Einheiten (Untereinheiten) innerhalb eines Fachbereichs. Professor:innen sind einer Facheinheit zugeordnet, und der Professor-Feed lässt sich danach filtern.
 
-Important fields:
+Wichtige Felder:
 - `id`
 - `faculty_id`
 - `name`
 
-Relationships:
-- Belongs to one `Faculty`
-- Can be referenced by many professor profiles
-- Can be referenced by many thesis topics
+Beziehungen:
+- Gehört zu einem `Faculty`
+- Kann von vielen Professorenprofilen referenziert werden
 
 ### SupervisionRequest
 
-The `SupervisionRequest` model represents a student request to a professor for bachelor thesis supervision.
+Das `SupervisionRequest`-Model repräsentiert die Anfrage einer/eines Studierenden an eine:n Professor:in zur Betreuung der Bachelorarbeit.
 
-Important fields:
+Wichtige Felder:
 - `id`
 - `student_id`
 - `professor_id`
+- `examiner_role`
 - `proposed_title`
 - `short_description`
 - `preferred_period`
@@ -126,34 +122,34 @@ Important fields:
 - `created_at`
 - `updated_at`
 
-Relationships:
-- Belongs to one student user
-- Belongs to one professor user
-- Can have many request messages
-- Can have many attachments
-- Can have status history entries
+Beziehungen:
+- Gehört zu einem Studierenden-User
+- Gehört zu einem Professor-User
+- Kann viele Nachrichten (`RequestMessage`) haben
+- Kann viele Anhänge (`Attachment`) haben
+- Kann Einträge in der Status-Historie haben
 
 ### RequestMessage
 
-The `RequestMessage` model stores messages in the request-related chat.
+Das `RequestMessage`-Model speichert die Nachrichten im anfragebezogenen Chat.
 
-Important fields:
+Wichtige Felder:
 - `id`
 - `request_id`
 - `sender_id`
 - `message_text`
 - `created_at`
 
-Relationships:
-- Belongs to one `SupervisionRequest`
-- Belongs to one sender user
-- Can have attachments
+Beziehungen:
+- Gehört zu einer `SupervisionRequest`
+- Gehört zu einem sendenden User
+- Kann Anhänge haben
 
 ### Attachment
 
-The `Attachment` model stores metadata for uploaded PDF files.
+Das `Attachment`-Model speichert die Metadaten zu hochgeladenen PDF-Dateien.
 
-Important fields:
+Wichtige Felder:
 - `id`
 - `request_id`
 - `message_id`
@@ -165,33 +161,13 @@ Important fields:
 - `file_size`
 - `created_at`
 
-Only metadata is stored in the database. The actual uploaded PDF files are stored in the application upload folder.
-
-### ThesisTopic
-
-The `ThesisTopic` model stores thesis topics proposed by professors.
-
-Important fields:
-- `id`
-- `professor_id`
-- `facheinheit_id`
-- `title`
-- `description`
-- `requirements`
-- `topic_area`
-- `status`
-- `created_at`
-- `updated_at`
-
-Relationships:
-- Belongs to one professor user
-- Can reference one `Facheinheit`
+Es werden nur die **Metadaten** in der Datenbank gespeichert. Die eigentlichen PDF-Dateien liegen im Upload-Ordner der Anwendung.
 
 ### RequestStatusHistory
 
-The `RequestStatusHistory` model stores status changes for supervision requests.
+Das `RequestStatusHistory`-Model speichert die Statusänderungen von Betreuungsanfragen.
 
-Important fields:
+Wichtige Felder:
 - `id`
 - `request_id`
 - `old_status`
@@ -200,36 +176,33 @@ Important fields:
 - `comment`
 - `created_at`
 
-Relationships:
-- Belongs to one `SupervisionRequest`
-- Stores which user changed the status
+Beziehungen:
+- Gehört zu einer `SupervisionRequest`
+- Speichert, welcher User den Status geändert hat
 
-
-## ER diagram
+## ER-Diagramm
 
 ```mermaid
 erDiagram
-    USERS ||--o| STUDENT_PROFILES : has
-    USERS ||--o| PROFESSOR_PROFILES : has
+    USERS ||--o| STUDENT_PROFILES : hat
+    USERS ||--o| PROFESSOR_PROFILES : hat
 
-    FACULTIES ||--o{ DEGREE_PROGRAMS : contains
-    FACULTIES ||--o{ FACHEINHEITEN : contains
-    FACULTIES ||--o{ STUDENT_PROFILES : selected_by
-    DEGREE_PROGRAMS ||--o{ STUDENT_PROFILES : selected_by
-    FACHEINHEITEN ||--o{ PROFESSOR_PROFILES : selected_by
-    FACHEINHEITEN ||--o{ THESIS_TOPICS : categorized_by
+    FACULTIES ||--o{ DEGREE_PROGRAMS : enthaelt
+    FACULTIES ||--o{ FACHEINHEITEN : enthaelt
+    FACULTIES ||--o{ STUDENT_PROFILES : gewaehlt_von
+    DEGREE_PROGRAMS ||--o{ STUDENT_PROFILES : gewaehlt_von
+    FACHEINHEITEN ||--o{ PROFESSOR_PROFILES : gewaehlt_von
 
     USERS ||--o{ SUPERVISION_REQUESTS : student
     USERS ||--o{ SUPERVISION_REQUESTS : professor
 
-    SUPERVISION_REQUESTS ||--o{ REQUEST_MESSAGES : contains
-    USERS ||--o{ REQUEST_MESSAGES : sends
+    SUPERVISION_REQUESTS ||--o{ REQUEST_MESSAGES : enthaelt
+    USERS ||--o{ REQUEST_MESSAGES : sendet
 
-    SUPERVISION_REQUESTS ||--o{ ATTACHMENTS : has
-    REQUEST_MESSAGES ||--o{ ATTACHMENTS : may_have
-    USERS ||--o{ ATTACHMENTS : uploads
+    SUPERVISION_REQUESTS ||--o{ ATTACHMENTS : hat
+    REQUEST_MESSAGES ||--o{ ATTACHMENTS : kann_haben
+    USERS ||--o{ ATTACHMENTS : laedt_hoch
 
-    USERS ||--o{ THESIS_TOPICS : creates
-    SUPERVISION_REQUESTS ||--o{ REQUEST_STATUS_HISTORY : has
-    USERS ||--o{ REQUEST_STATUS_HISTORY : changes
+    SUPERVISION_REQUESTS ||--o{ REQUEST_STATUS_HISTORY : hat
+    USERS ||--o{ REQUEST_STATUS_HISTORY : aendert
 ```
