@@ -72,7 +72,16 @@
                                 {{ other_user.first_name }}
                                 {{ other_user.last_name }}
                             </p>
-
+                            <p class="mb-1 text-muted">
+                                Prüferrolle:
+                                {% if req.examiner_role == 'erst' %}
+                                    Erstprüfer/in
+                                {% elif req.examiner_role == 'zweit' %}
+                                    Zweitprüfer/in
+                                {% else %}
+                                    Nicht angegeben
+                                {% endif %}
+                            </p>
                             <small class="text-muted">
                                 Aktualisiert:
                                 {{ req.updated_at|berlin_datetime }}
