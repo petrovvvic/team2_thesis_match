@@ -26,7 +26,7 @@ Eine Plattform wo Professoren der HWR aktiv Betreuungsangebote einstellen (Theme
 
 **Registrierung & Login:** Studierende und Professoren registrieren sich mit ihrer HWR-E-Mail. Die Plattform erkennt automatisch die Rolle und zeigt nur relevante Inhalte an.
 
-**Professor/in-Feed:** durchsuchbare Übersicht aller Professoren die aktiv Betreuungsplätze anbieten, filterbar nach Facheinheit und Verfügbarkeit.
+**Professor/in-Feed:** durchsuchbare Übersicht aller Professoren die aktiv Betreuungsplätze anbieten. Suche nach Name oder Forschungsbereich, filterbar nach Facheinheit und Verfügbarkeit.
 
 **Profil-Detailseite:** jeder Professor/in hat eine Profilseite mit Themenfeldern, Anforderungen und aktuellem Verfügbarkeitsstatus.
 
@@ -129,7 +129,8 @@ Bestehende Nutzer/in loggen sich mit E-Mail und Passwort ein.
 ## Screen 2 — Professor-Feed
 
 Durchsuchbare Übersicht aller Professorinnen und Professoren der HWR, die aktiv 
-Betreuung anbieten. Filterbar nach Facheinheit und Verfügbarkeit. 
+Betreuung anbieten. Suchfeld durchsucht Name und Forschungsbereiche, zusätzlich 
+filterbar nach Facheinheit und Verfügbarkeit. 
 Jede Karte zeigt Name, Facheinheit, Fachbereich und Forschungsbereiche.
 
 ![Screen 2](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201412.png)
