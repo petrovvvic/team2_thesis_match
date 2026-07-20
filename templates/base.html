@@ -51,8 +51,8 @@
         
         <ul class="navbar-nav me-auto">
                 {% if 'user_id' in session %}
-                    {{ render_nav_item('feed', 'Professoren') }}
                     {{ render_nav_item('dashboard', 'Dashboard') }}
+                    {{ render_nav_item('feed', 'Professoren') }}
                     {{ render_nav_item('profile', 'Mein Profil') }}
                     {{ render_nav_item('chats', 'Meine Chats') }}
 
