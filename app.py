@@ -34,6 +34,17 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 db.init_app(app)
 bootstrap = Bootstrap5(app)
 
+STATUS_LABELS = {
+    'submitted': 'Ausstehend',
+    'accepted': 'Angenommen',
+    'rejected': 'Abgelehnt',
+    'withdrawn': 'Zurückgezogen',
+}
+
+@app.template_filter('status_de')
+def status_de(value):
+    return STATUS_LABELS.get(value, value)
+
 
 @app.template_filter('berlin_datetime')
 def berlin_datetime(value):

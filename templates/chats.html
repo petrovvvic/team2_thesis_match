@@ -14,7 +14,7 @@
                        class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
                             <h6 class="mb-1">{{ c.proposed_title }}</h6>
-                            <span class="badge bg-secondary align-self-start">{{ c.status }}</span>
+                            <span class="badge bg-secondary align-self-start">{{ c.status | status_de }}</span>
                         </div>
                         <p class="mb-1 text-muted">
                             mit {{ partner.first_name }} {{ partner.last_name }}

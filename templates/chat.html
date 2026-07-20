@@ -12,7 +12,7 @@
             <h4 class="mb-1">{{ sup_request.proposed_title }}</h4>
             <p class="text-muted mb-2">
                 Gespräch mit {{ partner.first_name }} {{ partner.last_name }}
-                <span class="badge bg-secondary">{{ sup_request.status }}</span>
+                <span class="badge bg-secondary">{{ sup_request.status | status_de }}</span>
             </p>
             <p class="mb-0"><small class="text-muted">{{ sup_request.short_description }}</small></p>
         </div>
