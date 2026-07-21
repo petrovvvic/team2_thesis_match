@@ -115,6 +115,7 @@ Geplante Kernfunktionen:
 
 # Target Scope & UI Screens
 
+
 ---
 ## Screen 1a — Registrieren
 
@@ -184,6 +185,10 @@ Studierende und Professorinnen/Professoren können zu jeder Betreuungsanfrage di
 ## API — Top-Betreuer Rangliste
 
 Rankt die meistgefragten Professorinnen und Professoren nach Anfragevolumen. Abrufbar direkt über die URL
+
+
+
+
 
 
 
