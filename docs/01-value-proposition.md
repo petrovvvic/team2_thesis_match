@@ -112,6 +112,9 @@ Geplante Kernfunktionen:
 
 
 
+# Target Scope & UI Screens
+
+---
 ## Screen 1a — Registrieren
 
 Neue Nutzer/in registrieren sich mit Name, HWR-E-Mail, Passwort und Rollenauswahl.
@@ -128,55 +131,49 @@ Bestehende Nutzer/in loggen sich mit E-Mail und Passwort ein.
 
 ## Screen 2 — Professor-Feed
 
-Durchsuchbare Übersicht aller Professorinnen und Professoren der HWR, die aktiv 
-Betreuung anbieten. Suchfeld durchsucht Name und Forschungsbereiche, zusätzlich 
-filterbar nach Facheinheit und Verfügbarkeit. 
-Jede Karte zeigt Name, Facheinheit, Fachbereich und Forschungsbereiche.
+Durchsuchbare Übersicht aller Professorinnen und Professoren der HWR die aktiv 
+Betreuungsplätze anbieten. Filterbar nach Fachbereich. 
+Jede Karte zeigt Name, Fachbereich und freie Plätze.
 
-![Screen 2](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201412.png)
+![Screen 2](https://github.com/petrovvvic/team2_thesis_match/blob/9ea398e4b7b7fdba98ae8ce9374aaba406ff6ee5/docs/assets/images/Screenshot%202026-07-20%20133058.png)
 
 ## Screen 3 — Profil-Detailseite
 
-Jeder Professor/in hat eine eigene Seite mit Themengebieten, 
-Anforderungen und Verfügbarkeitsstatus. 
-Direkte Möglichkeit eine Anfrage zu stellen.
+Jeder Professor/in hat eine eigene Seite mit Themenfeldern, Anforderungen und Verfügbarkeitsstatus. Direkte Möglichkeit eine Anfrage zu stellen.
 
-![Screen 3 - Profil-Detailseite](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201428.png)
+![Screen 3 - Profil-Detailseite](https://github.com/petrovvvic/team2_thesis_match/blob/9ea398e4b7b7fdba98ae8ce9374aaba406ff6ee5/docs/assets/images/Screenshot%202026-07-20%20133136.png)
 
 
 ## Screen 4 — Anfrage-Flow
 
-Studierende füllen ein strukturiertes Formular aus mit Prüfer-Rolle 
-(Erst-/Zweitprüfer:in), Arbeitstitel, Kurzbeschreibung und Zeitraum. Nach Absenden erscheint 
-eine Bestätigung.
+Studierende füllen ein strukturiertes Formular aus mit Thema, Typ, Zeitraum und Kurzbeschreibung. Nach Absenden erscheint eine Bestätigung.
 
-![Screen 3 - Anfrage-Flow](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201446.png)
+![Screen 4 - Anfrage-Flow](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201446.png)
 
+---
 
+## Screen 5 — Studis-Dashboard
 
-## Screen 5 — Meine Anfragen
+Studierende sehen alle ihre gesendeten Anfragen mit aktuellem Status (ausstehend oder angenommen).
 
-Studierende sehen alle ihre gesendeten Anfragen mit aktuellem Status (z. B. eingereicht, angenommen, abgelehnt, zurückgezogen) und können sie bearbeiten oder zurückziehen.
-
-![Screen 4](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-19%20095225.png)
+![Screen 5](https://github.com/petrovvvic/team2_thesis_match/blob/9ea398e4b7b7fdba98ae8ce9374aaba406ff6ee5/docs/assets/images/Screenshot%202026-07-20%20133205.png)
 
 ## Screen 6 — Betreuer-Dashboard
 
 Professorinnen und Professoren sehen alle eingegangenen Anfragen mit Statistik. Jede Anfrage kann direkt angenommen oder abgelehnt werden.
 
-![Screen 6 - Betreuer-Dashboard](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-19%20095259.png)
-
-
+![Screen 6 - Betreuer-Dashboard](https://github.com/petrovvvic/team2_thesis_match/blob/9ea398e4b7b7fdba98ae8ce9374aaba406ff6ee5/docs/assets/images/Screenshot%202026-07-20%20133226.png)
+---
 
 ## Screen 7 — Profil
 
-Alle Nutzer sehen ihr Profil. Professorinnen und Professoren können zusätzlich Facheinheit, Forschungsbereiche, Anforderungen und ihre Verfügbarkeit verwalten und jederzeit aktualisieren.
+Alle Nutzer sehen ihr Profil. Professorinnen und Professoren können zusätzlich Themenfelder, Anforderungen und Kapazitäten verwalten und jederzeit aktualisieren.
 
 ![Screen 7](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-19%20095348.png)
 
+---
 
-
-## Screen 8 — Top-Betreuer Rangliste
+##  "Screen" 8 - API — Top-Betreuer Rangliste
 
 API-gestützte Rangliste der meistgefragten Professorinnen und Professoren nach Anfragevolumen. 
 
