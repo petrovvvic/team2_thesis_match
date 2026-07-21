@@ -45,7 +45,7 @@ Voraussetzung: **Python 3** muss installiert sein. Komplette Einrichtung in unte
 # Demo-Zugang
 
 - **Professor:innen-Accounts:** Passwort `demo1234` (z. B. `anna.schneider@hwr-berlin.de`, `thomas.becker@hwr-berlin.de`).
-- **Studierende:r:** am einfachsten selbst registrieren (ist Teil des Happy Path, s. u.).
+- **Studierende:r:** am einfachsten selbst registrieren (ist Teil des Happy Path, s. u. Sonst: max.mustermann@stud.hwr-berlin.de, Passwort `demo1234`).
 
 # Happy Path (zum Durchklicken)
 
