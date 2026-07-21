@@ -163,6 +163,7 @@ Studierende sehen alle ihre gesendeten Anfragen mit aktuellem Status (ausstehend
 Professorinnen und Professoren sehen alle eingegangenen Anfragen mit Statistik. Jede Anfrage kann direkt angenommen oder abgelehnt werden.
 
 ![Screen 6 - Betreuer-Dashboard](https://github.com/petrovvvic/team2_thesis_match/blob/9ea398e4b7b7fdba98ae8ce9374aaba406ff6ee5/docs/assets/images/Screenshot%202026-07-20%20133226.png)
+
 ---
 
 ## Screen 7 — Profil
