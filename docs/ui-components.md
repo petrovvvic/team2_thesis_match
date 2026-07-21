@@ -64,19 +64,9 @@ Alle Nutzer sehen ihr Profil. Professorinnen und Professoren können zusätzlich
 
 ---
 
-## Screen 8 — Top-Betreuer Rangliste
+## API — Top-Betreuer Rangliste
 
 API-gestützte Rangliste der meistgefragten Professorinnen und Professoren nach Anfragevolumen. 
-
-![Screen 8 - Rangliste](https://raw.githubusercontent.com/petrovvvic/team2_thesis_match/main/docs/assets/images/Screenshot%202026-05-17%20201545.png)
-
----
-
-## Screen 9 — Top-Betreuer Rangliste
-
-Studierende und Professorinnen/Professoren können zu jeder Betreuungsanfrage direkt Nachrichten austauschen und PDF-Anhänge versenden.
-
-![Screen 8 - Rangliste](https://github.com/petrovvvic/team2_thesis_match/blob/9ea398e4b7b7fdba98ae8ce9374aaba406ff6ee5/docs/assets/images/Screenshot%202026-07-20%20133252.png)
 
 
 
