@@ -5,37 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Thesis Match{% endblock %}</title>
     {{ bootstrap.load_css() }}
-    <style>
-    :root {
-        --bs-primary: #C8102E;
-        --bs-primary-rgb: 200, 16, 46;
-    }
-
-    .btn-primary,
-    .btn-secondary,
-    .btn-outline-secondary {
-        background-color: #C8102E !important;
-        border-color: #C8102E !important;
-        color: #fff !important;
-    }
-
-    .btn-primary:hover,
-    .btn-secondary:hover,
-    .btn-outline-secondary:hover {
-        background-color: #a50d26 !important;
-        border-color: #a50d26 !important;
-        color: #fff !important;
-    }
-
-    .btn-primary:disabled,
-    .btn-secondary:disabled,
-    .btn-outline-secondary:disabled {
-        background-color: #C8102E !important;
-        border-color: #C8102E !important;
-        opacity: 0.5;
-        color: #fff !important;
-    }
-</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-light">

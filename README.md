@@ -30,20 +30,17 @@ Voraussetzung: **Python 3** muss installiert sein. Komplette Einrichtung in unte
    python -c "import secrets; print(secrets.token_hex(32))"
    ```
    (Windows: `copy .env.example .env`)
-6. App starten:
+6. **Optional – Datenbank befüllen** (vor dem Erststart ausführen, um die Demodaten zu bekommen. falls die DB leer ist, nach dem `.env`-Schritt):
+   ```
+   flask --app app seed
+   ```
+   Legt Fachbereich, Facheinheiten, Studiengänge und Demo-Accounts an. Mehrfaches Ausführen erzeugt keine Duplikate.
+7. App starten:
    ```
    flask --app app run 
    ```
    Danach im Browser `http://127.0.0.1:5000` öffnen.
    (macOS: Port 5000 ist oft durch AirPlay belegt — dann `flask --app app run --port 5050` und `http://127.0.0.1:5050`.)
-
-Die mitgelieferte Datenbank (`instance/thesis_match.sqlite`) enthält bereits Demo-Daten (u. a. 17 Professor:innen, Fachbereich, Facheinheiten, Studiengänge), sodass der Feed direkt befüllt ist.
-
-**Optional – Referenzdaten neu befüllen** (falls die DB leer ist):
-```
-python seed_data.py        # Studiengänge (FB1)
-```
-Die Facheinheiten werden über `insert_sample()` in `db.py` gesetzt.
 
 # Demo-Zugang
 

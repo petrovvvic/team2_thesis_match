@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from forms import RegistrationForm, LoginForm, ProfessorProfileForm, StudentProfileForm, MessageForm, RequestForm, RequestEditForm, RequestWithdrawForm, RequestStatusForm, ProfSearchForm
 from db import (db, User, StudentProfile, ProfessorProfile, SupervisionRequest, RequestStatusHistory,
-                RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram, insert_sample)
+                RequestMessage, Attachment, Faculty, Facheinheit, DegreeProgram)
 
 load_dotenv()
 app = Flask(__name__)
@@ -61,16 +61,23 @@ with app.app_context():
     db.create_all()
 
 
+@app.cli.command('seed')
+def seed_command():
+    #Referenz- und Demo-Daten anlegen (idempotent): flask --app app seed
+    from seed import seed_all
+    seed_all()
+
+
 @app.route('/')
 def index():
-    if 'user_id' in session:
+    if _current_user():
         return redirect(url_for('feed'))
     return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if 'user_id' in session:
+    if _current_user():
         return redirect(url_for('feed'))
     form = LoginForm()
     if form.validate_on_submit():
@@ -90,7 +97,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if 'user_id' in session:
+    if _current_user():
         return redirect(url_for('feed'))
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -655,12 +662,6 @@ def view_professor(id):
     return render_template('profile-detail.html', prof=prof)
 
 
-
-##### Diese Route ist nur für Einfügen der Facheinheiten fürs Demo. Sie ist nicht funktional, aber sehr bequem, um db auszufüllen für das Anschauen des Projektes
-@app.route('/insert/sample')
-def run_insert_sample():
-    insert_sample()
-    return 'Facheinheiten wurden eingefügt.'
 
 @app.errorhandler(404)
 def not_found(e):
