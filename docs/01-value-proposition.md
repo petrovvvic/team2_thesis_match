@@ -173,7 +173,7 @@ Alle Nutzer sehen ihr Profil. Professorinnen und Professoren können zusätzlich
 
 ---
 
-##  "Screen" 8 - Chatt
+##  Screen 8 - Chatt
 
 Studierende und Professorinnen/Professoren können zu jeder Betreuungsanfrage direkt Nachrichten austauschen und PDF-Anhänge versenden.
 
