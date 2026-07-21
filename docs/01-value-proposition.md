@@ -137,7 +137,7 @@ Durchsuchbare Übersicht aller Professorinnen und Professoren der HWR die aktiv
 Betreuungsplätze anbieten. Filterbar nach Fachbereich. 
 Jede Karte zeigt Name, Fachbereich und freie Plätze.
 
-![Screen 1b](https://github.com/petrovvvic/team2_thesis_match/blob/ec2a49e0ff9e1f67516a1b63b1b775df6b1a23ec/docs/assets/images/Screenshot%202026-07-20%20133058.png)
+![Screen 1b](https://github.com/petrovvvic/team2_thesis_match/blob/32153396648665ba5b7e7cfdb2f71e3502d28489/docs/assets/images/Screenshot%202026-07-20%20133058.png)
 
 
 ----
